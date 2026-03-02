@@ -1,0 +1,46 @@
+/* Floating container */
+.bottom-nav {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 40px;
+    padding: 20px 40px;
+    background: rgba(40, 44, 52, 0.8);
+    backdrop-filter: blur(20px);
+    border-radius: 30px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+    z-index: 1000;
+}
+
+/* Each button */
+.bottom-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 18px 24px;
+    border-radius: 18px;
+    text-decoration: none;
+    color: #d1d1d1;
+    transition: 0.3s ease;
+    min-width: 90px;
+}
+
+.bottom-item i {
+    font-size: 20px;
+}
+
+/* Hover */
+.bottom-item:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: white;
+}
+
+/* Active state */
+.bottom-item.active {
+    background-color: rgba(255, 255, 255, 0.08);
+    color: white;
+}

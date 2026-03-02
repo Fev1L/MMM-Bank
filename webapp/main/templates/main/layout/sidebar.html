@@ -3,22 +3,12 @@
 
 {% get_links as links %}
 
-<div class="d-flex flex-column flex-shrink-0 p-3 text-bg-dark" style="width: 280px; height: 100vh;">
-    <a href="/main/static" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none gap-2">
-      <img src="{% static 'main/img/django_logo.svg' %}" alt="Logo" width="40">
-      <span class="fs-4">Django app</span>
-    </a>
-    <hr>
-    <ul class="nav nav-pills flex-column mb-auto">
-
-        {% for link in links %}
-            <li class="nav-item">
-                <a href="{{ link.href }}" class="nav-link {% if request.path == link.href %}active{% else %}text-white{% endif %}" aria-current="page">
-                    <i class="fa-solid {{ link.icon }}"></i>&nbsp;<span>{{ link.name }}</span>
-                </a>
-            </li>
-        {% endfor %}
-        
-    </ul>
-    <hr>
-  </div>
+<div class="bottom-nav">
+    {% for link in links %}
+        <a href="{{ link.href }}" 
+           class="bottom-item {% if request.path == link.href %}active{% endif %}">
+            <i class="fa-solid {{ link.icon }}"></i>
+            <span>{{ link.name }}</span>
+        </a>
+    {% endfor %}
+</div>
