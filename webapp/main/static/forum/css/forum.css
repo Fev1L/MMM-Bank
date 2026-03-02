@@ -24,7 +24,7 @@
     padding: 18px 24px;
     border-radius: 18px;
     text-decoration: none;
-    color: #d1d1d1;
+    color: #636262;
     transition: 0.3s ease;
     min-width: 90px;
 }
@@ -42,5 +42,137 @@
 /* Active state */
 .bottom-item.active {
     background-color: rgba(255, 255, 255, 0.08);
-    color: white;
+    color: rgb(93, 57, 237);
+}
+/* ////////////////////////////////////////////////////// */
+.stats-wrapper {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.stat-card {
+    border: 2px solid rgb(255, 255, 255);
+    border-radius: 20px;
+    padding: 30px;
+    color: #ffffff;
+    transition: 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(93, 57, 237);
+}
+
+.stat-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.stat-top i {
+    font-size: 20px;
+    color: #cfcfcf;
+}
+
+.stat-title {
+    font-size: 14px;
+    color: #9aa0a6;
+    margin-bottom: 8px;
+}
+
+.stat-card h2 {
+    font-size: 26px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.badge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.badge.positive {
+    background: rgba(50, 200, 120, 0.15);
+    color: #4ade80;
+}
+
+.badge.negative {
+    background: rgba(255, 80, 80, 0.15);
+    color: #f87171;
+}
+/* ////////////////////////////////////////////////////// */
+.cards-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.card {
+  border: 2px solid (255, 255, 255);
+  border-radius: 20px;
+  padding: 24px;
+  transition: 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(93, 57, 237);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.card-title {
+  font-size: 14px;
+  color: #9ca3af;
+}
+
+.card-icon {
+  width: 36px;
+  height: 24px;
+}
+
+.card-balance {
+  font-size: 26px;
+  font-weight: bold;
+  color: #ffffff;
+  margin-bottom: 20px;
+}
+
+.card-info {
+  margin-bottom: 16px;
+}
+
+.label {
+  display: block;
+  font-size: 12px;
+  color: #6b7280;
+  margin-bottom: 4px;
+}
+
+.number {
+  color: #ffffff;
+  font-size: 14px;
+}
+
+.card-change {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.positive {
+  color: #22c55e;
+}
+
+.negative {
+  color: #ef4444;
 }
