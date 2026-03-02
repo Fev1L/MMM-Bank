@@ -1,0 +1,49 @@
+{% load static %}
+{% load sidebar_links %}
+
+{% get_links as links %}
+
+<div class="d-flex flex-column flex-shrink-0 p-3 text-bg-dark" style="width: 280px; height: 100vh;">
+    <a href="/main/static" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none gap-2">
+      <img src="{% static 'main/img/django_logo.svg' %}" alt="Logo" width="40">
+      <span class="fs-4">Django app</span>
+    </a>
+    <hr>
+    <ul class="nav nav-pills flex-column mb-auto">
+
+        {% for link in links %}
+            <li class="nav-item">
+                <a href="{{ link.href }}" class="nav-link {% if request.path == link.href %}active{% else %}text-white{% endif %}" aria-current="page">
+                    <i class="fa-solid {{ link.icon }}"></i>&nbsp;<span>{{ link.name }}</span>
+                </a>
+            </li>
+        {% endfor %}
+        
+    </ul>
+    <hr>
+    {% if request.user.is_authenticated %}
+    <div class="dropdown">
+      <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+        <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
+        <strong>{{ request.user.username }}</strong>
+      </a>
+      <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
+        <li><a class="dropdown-item" href="#">New project...</a></li>
+        <li><a class="dropdown-item" href="#">Settings</a></li>
+        <li><a class="dropdown-item" href="#">Profile</a></li>
+        <li><hr class="dropdown-divider"></li>
+        <li>
+          <form method="POST" action="/logout">
+            {% csrf_token %}
+            <button class="dropdown-item btn btn-link" type="submit">Logout</button>
+          </form>
+        </li>
+      </ul>
+    </div>
+    {% else %}
+    <div>
+      <a class="btn btn-primary" href="/login">Login</a>
+      <a class="btn btn-info" href="/register">Register</a>
+    </div>
+    {% endif %}
+  </div>
