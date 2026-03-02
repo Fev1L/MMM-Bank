@@ -17,16 +17,56 @@
     <link rel="stylesheet" href="{% static 'forum/css/forum.css' %}">
 </head>
 <body>
-<div class="d-flex flex-nowrap">
-    {% include 'main/layout/sidebar.html' %}
-    <main class="py-5">
-        <div class="container-sm" style="min-width: 997px">
-            <!-- Blok zawierający zawartość, definiowaną przez wyświetlany widok-->
-            {% block content %}
-            {% endblock%}
+    <!-- HEADER -->
+    <header class="bg-secondary-subtle border-bottom">
+        <div class="container-fluid px-4 py-3 d-flex justify-content-between align-items-center">
+            
+            <!-- Logo -->
+            <div class="d-flex align-items-center gap-2">
+                <i class="fa-solid fa-building-columns fs-4"></i>
+                <span class="fw-bold fs-5">MMM Bank</span>
+            </div>
+
+            <!-- Profile -->
+            <div class="d-flex align-items-center gap-3">
+                {% if request.user.is_authenticated %}
+                <div class="dropdown">
+                <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
+                    <strong>{{ request.user.username }}</strong>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
+                    <li><a class="dropdown-item" href="#">New project...</a></li>
+                    <li><a class="dropdown-item" href="#">Settings</a></li>
+                    <li><a class="dropdown-item" href="#">Profile</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                    <form method="POST" action="/logout">
+                        {% csrf_token %}
+                        <button class="dropdown-item btn btn-link" type="submit">Logout</button>
+                    </form>
+                    </li>
+                </ul>
+                </div>
+                {% else %}
+                <div>
+                <a class="btn btn-primary" href="/login">Login</a>
+                <a class="btn btn-info" href="/register">Register</a>
+                </div>
+                {% endif %}
+            </div>
+
         </div>
-    </main>
-</div>
-    
+    </header>
+
+    <div class="d-flex flex-nowrap">
+        {% include 'main/layout/sidebar.html' %}
+        <main class="py-5">
+            <div class="container-sm" style="min-width: 997px">
+                {% block content %}
+                {% endblock %}
+            </div>
+        </main>
+    </div>
 </body>
 </html>
