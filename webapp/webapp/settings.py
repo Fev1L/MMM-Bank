@@ -41,8 +41,9 @@ INSTALLED_APPS = [
 
     # custom apps
     'main',
-    'news',
-    'forum',
+    'more',
+    'credits',
+    'deposites',
 ]
 
 MIDDLEWARE = [ # now default, used for verification/modification processing data from requests

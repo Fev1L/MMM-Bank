@@ -22,7 +22,5 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls), # default, part of django
-    path('', include('main.urls')),
-    path('news/', include('news.urls')), 
-    path('forum/', include('forum.urls')) #delegating authority to an internal application to forum.urls that is needed to be created
+    path('', include('main.urls'))
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

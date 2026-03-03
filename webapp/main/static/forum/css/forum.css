@@ -109,13 +109,15 @@
 .cards-section {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 24px;
+  gap: 30px;
+  margin-top: 40px;
 }
 
 .card {
-  border: 2px solid (255, 255, 255);
+  border: 2px solid rgb(255, 255, 255);
   border-radius: 20px;
-  padding: 24px;
+  padding: 30px;
+  color: #ffffff;
   transition: 0.3s ease;
 }
 
