@@ -7,44 +7,43 @@
         <h1 style="font-size: 50px;">Welcome back, <strong>{{ request.user.username }}</strong></h1>
         <p>Here's your financial overview</p>
 
-        <div class="stats-wrapper">
-            <div class="stat-card">
-                <div class="stat-top">
-                    <i class="fa-solid fa-arrow-trend-up"></i>
-                    <span class="badge positive">+12.5%</span>
+        <section class="stats-wrapper">
+                <div class="stat-card">
+                    <div class="stat-top">
+                        <i class="fa-solid fa-arrow-trend-up"></i>
+                        <span class="badge positive">+12.5%</span>
+                    </div>
+                    <p class="stat-title">Total Income</p>
+                    <h2>$12,845.00</h2>
                 </div>
-                <p class="stat-title">Total Income</p>
-                <h2>$12,845.00</h2>
-            </div>
 
-            <div class="stat-card">
-                <div class="stat-top">
-                    <i class="fa-solid fa-arrow-trend-down"></i>
-                    <span class="badge negative">-8.3%</span>
+                <div class="stat-card">
+                    <div class="stat-top">
+                        <i class="fa-solid fa-arrow-trend-down"></i>
+                        <span class="badge negative">-8.3%</span>
+                    </div>
+                    <p class="stat-title">Total Expenses</p>
+                    <h2>$8,234.50</h2>
                 </div>
-                <p class="stat-title">Total Expenses</p>
-                <h2>$8,234.50</h2>
-            </div>
 
-            <div class="stat-card">
-                <div class="stat-top">
-                    <i class="fa-solid fa-bullseye"></i>
-                    <span class="badge positive">73% reached</span>
+                <div class="stat-card">
+                    <div class="stat-top">
+                        <i class="fa-solid fa-bullseye"></i>
+                        <span class="badge positive">73% reached</span>
+                    </div>
+                    <p class="stat-title">Savings Goal</p>
+                    <h2>$15,000.00</h2>
                 </div>
-                <p class="stat-title">Savings Goal</p>
-                <h2>$15,000.00</h2>
-            </div>
 
-            <div class="stat-card">
-                <div class="stat-top">
-                    <i class="fa-solid fa-dollar-sign"></i>
-                    <span class="badge positive">+15.7%</span>
+                <div class="stat-card">
+                    <div class="stat-top">
+                        <i class="fa-solid fa-dollar-sign"></i>
+                        <span class="badge positive">+15.7%</span>
+                    </div>
+                    <p class="stat-title">Investments</p>
+                    <h2>$24,567.89</h2>
                 </div>
-                <p class="stat-title">Investments</p>
-                <h2>$24,567.89</h2>
-            </div>
-
-        </div>
+        </section>
 
         <h1 style="font-size: 30px; margin-top: 50px;">Your Cards</h1>
         <section class="cards-section">
@@ -54,7 +53,7 @@
                     <div class="card-icon"><i class="fa-solid fa-credit-card"></i></div>
                 </div>
 
-                <div class="card-balance">$12,845.50</div>
+                <div class="card-balance">${{ balance }}</div>
 
                 <div class="card-info">
                     <span class="label">Account Number</span>

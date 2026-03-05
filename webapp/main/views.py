@@ -7,7 +7,9 @@ from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 def index(request):
-    return render(request, 'main/index.html')
+    account = request.user.account
+    balance = account.balance
+    return render(request, 'main/index.html', {"balance": balance})
 
 # Using the Django authentication system (Django Documentation)
 # https://docs.djangoproject.com/en/5.1/topics/auth/default/
