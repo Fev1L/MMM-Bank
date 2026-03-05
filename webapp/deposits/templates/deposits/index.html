@@ -1,7 +1,45 @@
 {% extends 'Deposits/layout/layout.html' %}
 
-{% block title%}Homepage{% endblock %}
+{% block title %}Deposits{% endblock %}
 
-{% block content%}
-<h1>Deposits</h1>
+{% block content %}
+
+<div style="
+font-family:Arial;
+background:#f4f6fb;
+padding:40px;
+display:flex;
+justify-content:center;
+">
+
+<div style="
+background:white;
+padding:30px;
+border-radius:10px;
+width:300px;
+text-align:center;
+box-shadow:0 5px 15px rgba(0,0,0,0.1);
+">
+
+<h2>My Savings</h2>
+
+<div style="font-size:32px;margin:15px 0;font-weight:bold;">
+$0
+</div>
+
+<button onclick="alert('Deposit opened!')" style="
+padding:10px 20px;
+border:none;
+background:#5b6cff;
+color:white;
+border-radius:6px;
+cursor:pointer;
+">
+Open Deposit
+</button>
+
+</div>
+
+</div>
+
 {% endblock %}
