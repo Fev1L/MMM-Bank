@@ -1,3 +1,4 @@
+# credits endpoint ready
 from django.http import HttpResponse
 
 
