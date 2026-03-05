@@ -1,0 +1,37 @@
+{% extends 'main/layout/clean_layout.html' %}
+ 
+{% block title%}Log in{% endblock %}
+ 
+{% block content%}
+ <div class="d-flex align-items-center justify-content-center px-4" style="height: 80vh">
+     <div style="max-width: 500px" class="w-100">
+         <h1>Log in</h1>
+         {% if messages %}
+         <div class="alert alert-danger" role="alert">
+           <ul class="mb-0">
+             {% for message in messages %}
+            <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+             {% endfor %}
+           </ul>
+         </div>
+         
+         {% endif %}
+         <form method="POST" action="/login">
+             {% csrf_token %}
+ 
+             <div class="mb-3">
+               <label for="username" class="form-label">Username</label>
+               <input type="text" class="form-control" id="username" name="username" aria-describedby="username" required>
+             </div>
+ 
+             <div class="mb-3">
+               <label for="password" class="form-label">Password</label>
+               <input type="password" class="form-control" id="password" name="password" required>
+             </div>
+ 
+             <button type="submit" class="btn btn-primary btn-block">Log in</button>
+           </form>
+     </div>
+ </div>
+ 
+ {% endblock %}

@@ -31,7 +31,7 @@ INSTALLED_APPS = [
     'main',
     'more',
     'credits',
-    'deposites',
+    'deposits',
 ]
 
 MIDDLEWARE = [ # now default, used for verification/modification processing data from requests

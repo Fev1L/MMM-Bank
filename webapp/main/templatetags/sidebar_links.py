@@ -13,12 +13,12 @@ def get_links():
         'href': '/credits',
         'icon': 'fa-chart-pie',
     }, {
-        'name': 'Deposites',
-        'href': '/deposites',
+        'name': 'Deposits',
+        'href': '/deposits',
         'icon': 'fa-money-bill-1',
     }, {
         'name': 'More',
-        'href': '../more',
+        'href': '/more',
         'icon': 'fa-ellipsis',
     }]
     

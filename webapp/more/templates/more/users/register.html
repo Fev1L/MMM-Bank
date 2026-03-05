@@ -1,0 +1,33 @@
+{% extends 'main/layout/clean_layout.html' %}
+ 
+ {% block title%}Register{% endblock %}
+ 
+ {% block content%}
+ <div class="d-flex align-items-center justify-content-center px-4" style="height: 80vh">
+     <div style="max-width: 500px" class="w-100">
+         <h1>Register</h1>
+         <form method="POST" action="/register">
+             {% csrf_token %}
+ 
+             <div class="mb-3">
+               <label for="username" class="form-label">Username</label>
+               <input type="text" class="form-control" id="username" name="username" aria-describedby="username" required>
+             </div>
+ 
+             <div class="mb-3">
+               <label for="email" class="form-label">Email address</label>
+               <input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp" required>
+               <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+             </div>
+ 
+             <div class="mb-3">
+               <label for="password" class="form-label">Password</label>
+               <input type="password" class="form-control" id="password" name="password" required>
+             </div>
+ 
+             <button type="submit" class="btn btn-primary btn-block">Register</button>
+           </form>
+     </div>
+ </div>
+ 
+ {% endblock %}
