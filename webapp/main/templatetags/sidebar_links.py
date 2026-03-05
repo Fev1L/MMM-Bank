@@ -18,7 +18,7 @@ def get_links():
         'icon': 'fa-money-bill-1',
     }, {
         'name': 'More',
-        'href': '/more',
+        'href': '../more',
         'icon': 'fa-ellipsis',
     }]
     
