@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.http import HttpResponse
 
-def index(request):
-    return render(request, 'credits/index.html')
+
+def credits_list(request):
+    return HttpResponse("Credits module working")
