@@ -48,12 +48,10 @@ pip install -r requirements.txt
 5. Run migrations:
 ```console
 python manage.py migrate
-```
-or
-```console
-python3 manage.py migrate
+python3 manage.py migrate #if python not working
 ```
 6. Start the development server:
 ```console
 python manage.py runserver
+python3 manage.py runserver #if python not working
 ```
