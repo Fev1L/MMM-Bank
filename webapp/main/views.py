@@ -4,12 +4,18 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages #to show message back for errors
 from django.contrib.auth.decorators import login_required
+from .models import Transaction
 
 # Create your views here.
 def index(request):
     account = request.user.account
     balance = account.balance
-    return render(request, 'main/index.html', {"balance": balance})
+    transactions = Transaction.objects.all().order_by('-created_at')
+    imrt = {
+        "balance" : balance,
+        "transactions" : transactions
+    }
+    return render(request, 'main/index.html', imrt)
 
 # Using the Django authentication system (Django Documentation)
 # https://docs.djangoproject.com/en/5.1/topics/auth/default/

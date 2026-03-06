@@ -14,7 +14,7 @@
                         <span class="badge positive">+12.5%</span>
                     </div>
                     <p class="stat-title">Total Income</p>
-                    <h2>$12,845.00</h2>
+                    <h2>WIP</h2>
                 </div>
 
                 <div class="stat-card">
@@ -23,7 +23,7 @@
                         <span class="badge negative">-8.3%</span>
                     </div>
                     <p class="stat-title">Total Expenses</p>
-                    <h2>$8,234.50</h2>
+                    <h2>WIP</h2>
                 </div>
 
                 <div class="stat-card">
@@ -32,7 +32,7 @@
                         <span class="badge positive">73% reached</span>
                     </div>
                     <p class="stat-title">Savings Goal</p>
-                    <h2>$15,000.00</h2>
+                    <h2>WIP</h2>
                 </div>
 
                 <div class="stat-card">
@@ -41,7 +41,7 @@
                         <span class="badge positive">+15.7%</span>
                     </div>
                     <p class="stat-title">Investments</p>
-                    <h2>$24,567.89</h2>
+                    <h2>WIP</h2>
                 </div>
         </section>
 
@@ -69,7 +69,7 @@
                     <div class="card-icon"><i class="fa-solid fa-credit-card"></i></div>
                 </div>
 
-                <div class="card-balance">$24,567.89</div>
+                <div class="card-balance">WIP</div>
 
                 <div class="card-info">
                     <span class="label">Account Number</span>
@@ -85,7 +85,7 @@
                     <div class="card-icon"><i class="fa-solid fa-credit-card"></i></div>
                 </div>
 
-                <div class="card-balance">$3,421.00</div>
+                <div class="card-balance">WIP</div>
 
                 <div class="card-info">
                     <span class="label">Account Number</span>
@@ -96,114 +96,8 @@
             </div>
         </section>
 
-        <section class="transactions">
-            <div class="transactions-header">
-                <h2>Recent Transactions</h2>
-                <a href="#" class="view-all">View All</a>
-            </div>
+        {% include 'main/layout/transaction.html' %}
 
-            <div class="transaction-list">
-
-                <div class="transaction-item">
-                <div class="transaction-left">
-                    <div class="icon"></div>
-                    <div>
-                    <div class="title">Amazon Purchase</div>
-                    <div class="category">Shopping</div>
-                    </div>
-                </div>
-                <div class="transaction-right negative">
-                    <div class="amount">- $124.99</div>
-                    <div class="date">Today, 2:30 PM</div>
-                </div>
-                </div>
-
-                <div class="transaction-item">
-                <div class="transaction-left">
-                    <div class="icon income"></div>
-                    <div>
-                    <div class="title">Salary Deposit</div>
-                    <div class="category">Income</div>
-                    </div>
-                </div>
-                <div class="transaction-right positive">
-                    <div class="amount">+ $4,250.00</div>
-                    <div class="date">Today, 9:00 AM</div>
-                </div>
-                </div>
-
-                <div class="transaction-item">
-                <div class="transaction-left">
-                    <div class="icon income"></div>
-                    <div>
-                    <div class="title">Salary Deposit</div>
-                    <div class="category">Income</div>
-                    </div>
-                </div>
-                <div class="transaction-right positive">
-                    <div class="amount">+ $4,250.00</div>
-                    <div class="date">Today, 9:00 AM</div>
-                </div>
-                </div>
-
-                <div class="transaction-item">
-                <div class="transaction-left">
-                    <div class="icon income"></div>
-                    <div>
-                    <div class="title">Salary Deposit</div>
-                    <div class="category">Income</div>
-                    </div>
-                </div>
-                <div class="transaction-right positive">
-                    <div class="amount">+ $4,250.00</div>
-                    <div class="date">Today, 9:00 AM</div>
-                </div>
-                </div>
-
-                <div class="transaction-item">
-                <div class="transaction-left">
-                    <div class="icon income"></div>
-                    <div>
-                    <div class="title">Salary Deposit</div>
-                    <div class="category">Income</div>
-                    </div>
-                </div>
-                <div class="transaction-right positive">
-                    <div class="amount">+ $4,250.00</div>
-                    <div class="date">Today, 9:00 AM</div>
-                </div>
-                </div>
-
-                <div class="transaction-item">
-                <div class="transaction-left">
-                    <div class="icon income"></div>
-                    <div>
-                    <div class="title">Salary Deposit</div>
-                    <div class="category">Income</div>
-                    </div>
-                </div>
-                <div class="transaction-right positive">
-                    <div class="amount">+ $4,250.00</div>
-                    <div class="date">Today, 9:00 AM</div>
-                </div>
-                </div>
-
-                <div class="transaction-item">
-                <div class="transaction-left">
-                    <div class="icon income"></div>
-                    <div>
-                    <div class="title">Salary Deposit</div>
-                    <div class="category">Income</div>
-                    </div>
-                </div>
-                <div class="transaction-right positive">
-                    <div class="amount">+ $4,250.00</div>
-                    <div class="date">Today, 9:00 AM</div>
-                </div>
-                </div>
-
-            </div>
-        </section>
     {% else %}
         <h1 style="font-size: 50px;">ЗАЛОГІНСЯ А ТО САЙТ НЕ ДОКІНЦЯ БУДЕ ПРАЦЮВАТИ!!!!</h1>
     {% endif %}

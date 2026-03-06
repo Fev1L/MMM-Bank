@@ -1,0 +1,38 @@
+{% load static %}
+
+<!--<div class="bottom-nav">-->
+<!--    {% for link in links %}-->
+<!--        <a href="{{ link.href }}" -->
+<!--           class="bottom-item {% if request.path == link.href %}active{% endif %}">-->
+<!--            <i class="fa-solid {{ link.icon }}"></i>-->
+<!--            <span>{{ link.name }}</span>-->
+<!--        </a>-->
+<!--    {% endfor %}-->
+<!--</div>-->
+
+<section class="transactions">
+    <div class="transactions-header">
+        <h2>Recent Transactions</h2>
+        <a href="#" class="view-all">View All</a>
+    </div>
+
+    <div class="transaction-list">
+        {% for transaction in transactions %}
+            <div class="transaction-item">
+            <div class="transaction-left">
+                <div class="icon"></div>
+                <div>
+                <div class="title">WIP TITLE</div>
+                <div class="category">WIP CATEGORY</div>
+                </div>
+            </div>
+            <div class="transaction-right
+            {% if transaction.amount > 0 %} positive {%  else %} negative {% endif %}">
+                <div class="amount">{{ transaction.amount }}</div>
+                <div class="date">{{ transaction.created_at }}</div>
+            </div>
+            </div>
+
+        {% endfor %}
+    </div>
+</section>
