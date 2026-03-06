@@ -19,18 +19,18 @@
     <div class="transaction-list">
         {% for transaction in transactions %}
             <div class="transaction-item">
-            <div class="transaction-left">
-                <div class="icon"></div>
-                <div>
-                <div class="title">WIP TITLE</div>
-                <div class="category">WIP CATEGORY</div>
+                <div class="transaction-left">
+                    <div class="icon"></div>
+                    <div>
+                        <div class="title">WIP TITLE</div>
+                        <div class="category">WIP CATEGORY</div>
+                    </div>
                 </div>
-            </div>
-            <div class="transaction-right
-            {% if transaction.amount > 0 %} positive {%  else %} negative {% endif %}">
-                <div class="amount">{{ transaction.amount }}</div>
-                <div class="date">{{ transaction.created_at }}</div>
-            </div>
+                <div class="transaction-right
+                    {% if transaction.amount > 0 %} positive {%  else %} negative {% endif %}">
+                    <div class="amount">{{ transaction.amount }}</div>
+                    <div class="date">{{ transaction.created_at }}</div>
+                </div>
             </div>
 
         {% endfor %}

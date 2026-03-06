@@ -1,3 +1,24 @@
+body {
+    margin: 0;
+    min-height: 100vh;
+
+    background: linear-gradient(
+        120deg,
+        #120a2f,
+        #090517,
+        #000000,
+        #090517,
+        #120a2f
+    );
+
+    background-size: 600% 600%;
+    animation: gradientMove 25s ease infinite;
+}
+@keyframes gradientMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
 /* Floating container */
 .bottom-nav {
     position: fixed;
@@ -55,6 +76,9 @@
 .stat-card {
     border: 2px solid rgb(255, 255, 255);
     border-radius: 20px;
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     padding: 30px;
     color: #ffffff;
     transition: 0.3s ease;
@@ -116,6 +140,9 @@
 .card {
   border: 2px solid rgb(255, 255, 255);
   border-radius: 20px;
+  background: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   padding: 30px;
   color: #ffffff;
   transition: 0.3s ease;
@@ -184,6 +211,9 @@
   border-radius: 20px;
   padding: 24px;
   margin-top: 40px;
+  background: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .transactions-header {
@@ -215,17 +245,22 @@
 }
 
 .transaction-item {
+  border: 2px solid rgb(255, 255, 255);
+  border-radius: 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #2d2d2d;
+  background: rgba(255, 255, 255, 1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   padding: 16px;
   border-radius: 16px;
   transition: 0.2s ease;
 }
 
 .transaction-item:hover {
-  background: #263042;
+  transform: translateY(-5px);
+  border-color: rgba(93, 57, 237);
 }
 
 .transaction-left {

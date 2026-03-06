@@ -8,14 +8,17 @@ from .models import Transaction
 
 # Create your views here.
 def index(request):
-    account = request.user.account
-    balance = account.balance
-    transactions = Transaction.objects.all().order_by('-created_at')
-    imrt = {
-        "balance" : balance,
-        "transactions" : transactions
-    }
-    return render(request, 'main/index.html', imrt)
+    if request.user.is_authenticated:
+        account = request.user.account
+        balance = account.balance
+        transactions = Transaction.objects.all().order_by('-created_at')
+        imrt = {
+            "balance" : balance,
+            "transactions" : transactions
+        }
+        return render(request, 'main/index.html', imrt)
+    else:
+        return render(request, 'main/index.html')
 
 # Using the Django authentication system (Django Documentation)
 # https://docs.djangoproject.com/en/5.1/topics/auth/default/

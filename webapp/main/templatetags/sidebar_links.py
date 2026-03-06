@@ -10,15 +10,15 @@ def get_links():
         'icon': 'fa-credit-card',
     },{
         'name': 'Credits',
-        'href': '/credits',
+        'href': '/credits/',
         'icon': 'fa-chart-pie',
     }, {
         'name': 'Deposits',
-        'href': '/deposits',
+        'href': '/deposits/',
         'icon': 'fa-money-bill-1',
     }, {
         'name': 'More',
-        'href': '/more',
+        'href': '/more/',
         'icon': 'fa-ellipsis',
     }]
     

@@ -1,6 +1,6 @@
 {% extends 'main/layout/layout.html' %}
 
-{% block title%}Homepage{% endblock %}
+{% block title%}{{ request.user.username }} Account {% endblock %}
 
 {% block content%}
     {% if request.user.is_authenticated %}
