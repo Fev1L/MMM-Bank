@@ -1,27 +1,37 @@
-from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
-from django.contrib import messages #to show message back for errors
-from django.contrib.auth.decorators import login_required
-from .models import Transaction, Card
+from django.contrib import messages
+from .models import Transaction
 
-# Create your views here.
 def index(request):
     if request.user.is_authenticated:
         account = request.user.account
+        balance = account.balance
         transactions = Transaction.objects.all().order_by('-created_at')
+        total_income = 0
+        for transaction in transactions:
+            if transaction.type == Transaction.DEPOSIT:
+                total_income += transaction.amount
+        total_expenses = 0
+        for transaction in transactions:
+            if transaction.type == Transaction.WITHDRAW:
+                total_expenses += transaction.amount
+        saving_goal = 0
+        investments = 0
         imrt = {
-            "balance" : account.balance,
+            "balance" : balance,
             "transactions" : transactions,
-            "card" : account.card,
+            "card": account.card,
+            "total_income" : total_income,
+            "total_expenses" : total_expenses,
+            "saving_goal" : saving_goal,
+            "investments" : investments,
         }
         return render(request, 'main/index.html', imrt)
     else:
         return render(request, 'main/index.html')
 
-# Using the Django authentication system (Django Documentation)
-# https://docs.djangoproject.com/en/5.1/topics/auth/default/
 def login_user(request):
     if request.user.is_authenticated:
         return redirect('home')

@@ -14,7 +14,7 @@
                         <span class="badge positive">+12.5%</span>
                     </div>
                     <p class="stat-title">Total Income</p>
-                    <h2>WIP</h2>
+                    <h2>${{ total_income }}</h2>
                 </div>
 
                 <div class="stat-card">
@@ -23,7 +23,7 @@
                         <span class="badge negative">-8.3%</span>
                     </div>
                     <p class="stat-title">Total Expenses</p>
-                    <h2>WIP</h2>
+                    <h2>${{ total_expenses }}</h2>
                 </div>
 
                 <div class="stat-card">
@@ -32,7 +32,7 @@
                         <span class="badge positive">73% reached</span>
                     </div>
                     <p class="stat-title">Savings Goal</p>
-                    <h2>WIP</h2>
+                    <h2>${{ saving_goal }}</h2>
                 </div>
 
                 <div class="stat-card">
@@ -41,7 +41,7 @@
                         <span class="badge positive">+15.7%</span>
                     </div>
                     <p class="stat-title">Investments</p>
-                    <h2>WIP</h2>
+                    <h2>${{ investments }}</h2>
                 </div>
         </section>
 
@@ -59,8 +59,7 @@
                     <span class="label">Account Number</span>
                     <span class="number">{{ card.masked_number }}</span>
                 </div>
-
-                <div class="card-change positive">+5.2%</div>
+                <div class="card-change">{{ card.type }}</div>
             </div>
 
             <div class="card">

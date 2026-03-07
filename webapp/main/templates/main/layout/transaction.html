@@ -17,7 +17,10 @@
                 </div>
                 <div class="transaction-right
                     {% if transaction.type == 'deposit' %} positive {%  else %} negative {% endif %}">
-                    <div class="amount">{{ transaction.amount }}</div>
+                    <div class="amount">
+                        {% if transaction.type == 'deposit' %} ${{ transaction.amount }}
+                        {%  else %} -${{ transaction.amount }}
+                        {% endif %}</div>
                     <div class="date">{{ transaction.created_at }}</div>
                 </div>
             </div>
