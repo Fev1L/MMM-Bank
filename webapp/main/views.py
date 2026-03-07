@@ -4,17 +4,17 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages #to show message back for errors
 from django.contrib.auth.decorators import login_required
-from .models import Transaction
+from .models import Transaction, Card
 
 # Create your views here.
 def index(request):
     if request.user.is_authenticated:
         account = request.user.account
-        balance = account.balance
         transactions = Transaction.objects.all().order_by('-created_at')
         imrt = {
-            "balance" : balance,
-            "transactions" : transactions
+            "balance" : account.balance,
+            "transactions" : transactions,
+            "card" : account.card,
         }
         return render(request, 'main/index.html', imrt)
     else:
