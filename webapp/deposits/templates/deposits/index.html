@@ -4,42 +4,85 @@
 
 {% block content %}
 
-<div style="
-font-family:Arial;
-background:#f4f6fb;
-padding:40px;
-display:flex;
-justify-content:center;
-">
+<style>
 
-<div style="
-background:white;
-padding:30px;
-border-radius:10px;
-width:300px;
-text-align:center;
-box-shadow:0 5px 15px rgba(0,0,0,0.1);
-">
+.page{
+font-family: Arial;
+background:#f2f2f2;
+min-height:100vh;
+}
 
-<h2>My Savings</h2>
-
-<div style="font-size:32px;margin:15px 0;font-weight:bold;">
-$0
-</div>
-
-<button onclick="alert('Deposit opened!')" style="
-padding:10px 20px;
-border:none;
-background:#5b6cff;
+.header{
+background:linear-gradient(180deg,#0f4ea8,#4a8edb);
 color:white;
-border-radius:6px;
-cursor:pointer;
-">
+padding:40px 20px;
+text-align:center;
+border-bottom-left-radius:25px;
+border-bottom-right-radius:25px;
+}
+
+.cards{
+padding:20px;
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:20px;
+}
+
+.card{
+background:white;
+border-radius:20px;
+padding:25px;
+box-shadow:0 5px 15px rgba(0,0,0,0.08);
+font-weight:600;
+font-size:18px;
+text-decoration:none;
+color:black;
+display:block;
+transition:0.2s;
+}
+
+.card:hover{
+transform:scale(1.03);
+}
+
+.big{
+grid-column:span 2;
+}
+
+.icon{
+font-size:30px;
+margin-bottom:10px;
+}
+
+</style>
+
+<div class="page">
+
+<div class="header">
+<h2>Savings</h2>
+<p>You can open a deposit or create a savings jar</p>
+</div>
+
+<div class="cards">
+
+<a href="{% url 'open_deposit' %}" class="card big">
+<div class="icon">💰</div>
 Open Deposit
-</button>
+</a>
+
+<a href="{% url 'piggy_bank' %}" class="card">
+<div class="icon">🐷</div>
+Create Piggy Bank
+</a>
+
+<a href="{% url 'buy_bonds' %}" class="card">
+<div class="icon">📈</div>
+Buy Bonds
+</a>
 
 </div>
 
 </div>
+
 
 {% endblock %}
