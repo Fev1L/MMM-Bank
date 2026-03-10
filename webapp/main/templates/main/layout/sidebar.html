@@ -3,12 +3,57 @@
 
 {% get_links as links %}
 
-<div class="bottom-nav">
-    {% for link in links %}
-        <a href="{{ link.href }}" 
-           class="bottom-item {% if request.path == link.href %}active{% endif %}">
+<div class="sidebar">
+    <div class="sidebar-logo">
+        <span style="color: white;">MMM Bank</span>
+    </div>
+    <div class="sidebar-user">
+        {% if request.user.is_authenticated %}
+
+        <div class="dropdown">
+            <a href="#" class="user-avatar" data-bs-toggle="dropdown">
+                <img src="https://github.com/mdo.png" width="36" height="36" class="rounded-circle">
+            </a>
+
+            <ul class="dropdown-menu dropdown-menu-dark shadow">
+                <li class="px-3 py-2 text-white">
+                    <strong>{{ request.user.username }}</strong>
+                </li>
+
+                <li><hr class="dropdown-divider"></li>
+
+                <li><a class="dropdown-item" href="#">Profile</a></li>
+                <li><a class="dropdown-item" href="#">Settings</a></li>
+
+                <li><hr class="dropdown-divider"></li>
+
+                <li>
+                    <form method="POST" action="/logout">
+                        {% csrf_token %}
+                        <button class="dropdown-item btn btn-link text-start" type="submit">
+                            Logout
+                        </button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+
+        {% else %}
+
+        <div class="sidebar-auth">
+            <a class="btn btn-primary btn-sm w-100 mb-2" href="/login">Login</a>
+            <a class="btn btn-outline-light btn-sm w-100" href="/register">Register</a>
+        </div>
+
+        {% endif %}
+    </div>
+    <div class="sidebar-links">
+        {% for link in links %}
+        <a href="{{ link.href }}"
+           class="sidebar-item {% if request.path == link.href %}active{% endif %}">
             <i class="fa-solid {{ link.icon }}"></i>
             <span>{{ link.name }}</span>
         </a>
-    {% endfor %}
+        {% endfor %}
+    </div>
 </div>
