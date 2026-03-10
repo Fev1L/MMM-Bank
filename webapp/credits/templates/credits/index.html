@@ -1,7 +1,62 @@
-{% extends 'credits/layout/layout.html' %}
+{% block content %}
 
-{% block title%}Homepage{% endblock %}
-
-{% block content%}
 <h1>Credits</h1>
+
+<div class="credit-card">
+
+    <div class="card-header">
+        <span>MMM</span>
+    </div>
+
+    {% if credit %}
+        <div class="balance">
+            ${{ credit.amount }}
+        </div>
+
+        <div class="credit-info">
+            <p>Client: {{ credit.client_name }}</p>
+            <p>Interest rate: {{ credit.interest_rate }}%</p>
+        </div>
+    {% else %}
+        <div class="balance">
+            $0
+        </div>
+
+        <p>No active credits</p>
+    {% endif %}
+
+</div>
+
 {% endblock %}
+<style>
+
+.credit-card{
+    width:420px;
+    height:200px;
+    background: linear-gradient(135deg,#6c4df6,#8e79ff);
+    border-radius:20px;
+    padding:25px;
+    color:white;
+    font-family:Arial;
+    box-shadow:0 10px 25px rgba(0,0,0,0.2);
+}
+
+.card-header{
+    display:flex;
+    justify-content:flex-end;
+    font-size:20px;
+    font-weight:bold;
+}
+
+.balance{
+    font-size:40px;
+    font-weight:bold;
+    margin-top:40px;
+}
+
+.credit-info{
+    margin-top:15px;
+    font-size:14px;
+}
+
+</style>

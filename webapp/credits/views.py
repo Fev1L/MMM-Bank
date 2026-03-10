@@ -1,6 +1,11 @@
-# credits endpoint ready
-from django.http import HttpResponse
+from django.shortcuts import render
+from .models import Credit
 
+def index(request):
+    credit = Credit.objects.first()
 
-def credits_list(request):
-    return HttpResponse("Credits module working")
+    context = {
+        "credit": credit
+    }
+
+    return render(request, "credits/index.html", context)
