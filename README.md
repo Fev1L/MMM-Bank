@@ -9,7 +9,6 @@
 MMM-Bank is designed as a **visually engaging and interactive banking interface** with the following highlights:
 
 - **Animated gradient background:** smooth, dynamic, and “alive” visuals.
-- **Glassmorphism UI:** semi-transparent, blurred panels for a modern look.
 - **Realistic backend simulation:** Django-powered backend with user accounts and transactions.
 - **Responsive & clean design:** built with HTML, CSS, and Bootstrap.
 - **Educational project:** perfect for learning web development and backend integration.
@@ -21,7 +20,6 @@ MMM-Bank is designed as a **visually engaging and interactive banking interface*
 - Python 3.x  
 - Django Framework  
 - HTML, CSS, Bootstrap  
-- Glassmorphism & animated gradient backgrounds
 
 ---
 
@@ -38,6 +36,9 @@ cd MMM-Bank
 3. Create and activate virtual environment:
 ```console
 python -m venv .venv
+python3 -m venv .venv #if python not working
+```
+```console
 source .venv/bin/activate   # Linux / Mac
 .venv\Scripts\activate   #windows
 ```
