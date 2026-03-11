@@ -4,7 +4,6 @@
 
 {% block content%}
     {% if request.user.is_authenticated %}
-    <div class="dashboard">
         <div class="row g-5">
             <div class="col">
                 <h1 style="font-size: 30px;">MMM Balance </h1>
@@ -60,7 +59,7 @@
                 {% include 'main/layout/cards.html' %}
             </div>
         </div>
-    </div>
+
         
     {% else %}
         <h1 style="font-size: 50px;">ЗАЛОГІНСЯ А ТО САЙТ НЕ ДОКІНЦЯ БУДЕ ПРАЦЮВАТИ!!!!</h1>
