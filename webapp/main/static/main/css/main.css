@@ -216,6 +216,7 @@ body {
 
 .view-all {
   font-size: 0.9rem;
+  text-decoration-line: none;
 }
 
 .transaction-list {
@@ -242,6 +243,7 @@ body {
   display: flex;
   align-items: center;
   gap: 2%;
+  min-width: 0;
 }
 
 .icon {
@@ -256,7 +258,9 @@ body {
 }
 
 .title {
-  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .category {
