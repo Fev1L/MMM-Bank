@@ -1,33 +1,47 @@
 {% extends 'main/layout/users_layout.html' %}
- 
- {% block title%}Register{% endblock %}
- 
- {% block content%}
- <div class="d-flex align-items-center justify-content-center px-4" style="height: 80vh">
-     <div style="max-width: 500px" class="w-100">
-         <h1>Register</h1>
-         <form method="POST" action="/register">
-             {% csrf_token %}
- 
-             <div class="mb-3">
-               <label for="username" class="form-label">Username</label>
-               <input type="text" class="form-control" id="username" name="username" aria-describedby="username" required>
-             </div>
- 
-             <div class="mb-3">
-               <label for="email" class="form-label">Email address</label>
-               <input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp" required>
-               <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
-             </div>
- 
-             <div class="mb-3">
-               <label for="password" class="form-label">Password</label>
-               <input type="password" class="form-control" id="password" name="password" required>
-             </div>
- 
-             <button type="submit" class="btn btn-primary btn-block">Register</button>
-           </form>
-     </div>
- </div>
- 
- {% endblock %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+
+<div class="login-page">
+
+    <div class="login-card">
+
+        <h1>Create account</h1>
+        <p class="login-subtitle">Start using your digital bank</p>
+
+        <form method="POST" action="/register">
+            {% csrf_token %}
+
+            <div class="input-group">
+                <i class="fa-solid fa-user"></i>
+                <input type="text" name="username" placeholder="Username" required>
+            </div>
+
+            <div class="input-group">
+                <i class="fa-solid fa-envelope"></i>
+                <input type="email" name="email" placeholder="Email address" required>
+            </div>
+
+            <div class="input-group">
+                <i class="fa-solid fa-lock"></i>
+                <input type="password" name="password" placeholder="Password" required>
+            </div>
+
+            <button type="submit" class="login-btn">
+                Create account
+            </button>
+
+        </form>
+
+        <div class="login-footer">
+            Already have an account?
+            <a href="/login">Log in</a>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -5,7 +5,7 @@ register = template.Library()
 @register.simple_tag
 def get_links():
     return [{
-        'name': 'Cards',
+        'name': 'Summary',
         'href': '/',
         'icon': 'fa-credit-card',
     },{

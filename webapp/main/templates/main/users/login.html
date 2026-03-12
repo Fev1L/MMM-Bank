@@ -1,37 +1,46 @@
 {% extends 'main/layout/users_layout.html' %}
- 
-{% block title%}Log in{% endblock %}
- 
-{% block content%}
- <div class="d-flex align-items-center justify-content-center px-4" style="height: 80vh">
-     <div style="max-width: 500px" class="w-100">
-         <h1>Log in</h1>
-         {% if messages %}
-         <div class="alert alert-danger" role="alert">
-           <ul class="mb-0">
-             {% for message in messages %}
-            <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-             {% endfor %}
-           </ul>
-         </div>
-         
-         {% endif %}
-         <form method="POST" action="/login">
-             {% csrf_token %}
- 
-             <div class="mb-3">
-               <label for="username" class="form-label">Username</label>
-               <input type="text" class="form-control" id="username" name="username" aria-describedby="username" required>
-             </div>
- 
-             <div class="mb-3">
-               <label for="password" class="form-label">Password</label>
-               <input type="password" class="form-control" id="password" name="password" required>
-             </div>
- 
-             <button type="submit" class="btn btn-primary btn-block">Log in</button>
-           </form>
-     </div>
- </div>
- 
- {% endblock %}
+
+{% block title %}MMMog in{% endblock %}
+
+{% block content %}
+
+<div class="login-page">
+    <div class="login-card">
+        <h1>Welcome back</h1>
+        <p class="login-subtitle">MMMog in to your account</p>
+
+        {% if messages %}
+        <div class="login-error">
+            <ul>
+                {% for message in messages %}
+                <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+        <form method="POST" action="/login">
+            {% csrf_token %}
+            <div class="input-group">
+                <i class="fa-solid fa-user"></i>
+                <input type="text" name="username" placeholder="Username" required>
+            </div>
+
+            <div class="input-group">
+                <i class="fa-solid fa-lock"></i>
+                <input type="password" name="password" placeholder="Password" required>
+            </div>
+
+            <button type="submit" class="login-btn">
+                Log in
+            </button>
+        </form>
+        <div class="login-footer">
+            Don’t have an account?
+            <a href="/register">Create one</a>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

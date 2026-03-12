@@ -608,3 +608,117 @@ a:hover {
   font-size:1.2rem;
   letter-spacing:2px;
 }
+
+/* LOGIN PAGE */
+
+.login-page{
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+
+  background:linear-gradient(
+          135deg,
+          #5b3df5,
+          #7b61ff,
+          #a594ff
+  );
+}
+
+/* CARD */
+
+.login-card{
+  width:100%;
+  max-width:420px;
+
+  padding:3rem;
+
+  border-radius:1.5rem;
+
+  background:rgba(255,255,255,0.2);
+  backdrop-filter:blur(20px);
+
+  color:white;
+  box-shadow:0 20px 60px rgba(0,0,0,0.25);
+}
+
+.login-card h1{
+  font-size:2rem;
+  margin-bottom:0.3rem;
+}
+
+.login-subtitle{
+  opacity:0.8;
+  margin-bottom:2rem;
+}
+
+/* INPUT */
+
+.input-group{
+  position:relative;
+  margin-bottom:1.2rem;
+}
+
+.input-group i{
+  position:absolute;
+  left:12px;
+  top:50%;
+  transform:translateY(-50%);
+  opacity:0.7;
+  color:black;
+}
+
+.input-group input{
+  width:100%;
+  padding:0.7rem 0.7rem 0.7rem 2.2rem;
+
+  border-radius:0.7rem !important;
+  border:none;
+
+  outline:none;
+}
+
+/* BUTTON */
+
+.login-btn{
+  width:100%;
+  padding:0.7rem;
+
+  border:none;
+  border-radius:0.8rem;
+
+  background:white;
+  color:#5b3df5;
+
+  font-weight:600;
+
+  cursor:pointer;
+  transition:0.25s;
+}
+
+.login-btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 10px 20px rgba(0,0,0,0.25);
+}
+
+/* FOOTER */
+
+.login-footer{
+  margin-top:1.5rem;
+  font-size:0.9rem;
+}
+
+.login-footer a{
+  color:white;
+  font-weight:600;
+  text-decoration:none;
+}
+
+/* ERROR */
+
+.login-error{
+  background:rgba(255,80,80,0.2);
+  padding:0.6rem;
+  border-radius:0.6rem;
+  margin-bottom:1rem;
+}
