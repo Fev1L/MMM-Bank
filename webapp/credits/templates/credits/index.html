@@ -1,7 +1,503 @@
 {% extends 'main/layout/layout.html' %}
 
-{% block title%}Homepage{% endblock %}
+{% block title %}Credits{% endblock %}
 
-{% block content%}
-<h1>Credits</h1>
+{% block content %}
+
+<div class="page">
+
+    <h2 style="margin-bottom: 15px;">
+        Credit status
+    </h2>
+
+    <div style="max-width: 350px;">
+
+        <div class="card balance-card" style="padding: 10px 10px;">
+
+            <div class="card-top">
+                <span class="card-title"></span>
+                <h2 style="font-size: 22px;">MMM</h2>
+            </div>
+
+            <div class="card-bottom">
+                <div class="card-balance" style="font-size: 45px;">
+                    $0
+                </div>
+            </div>
+
+        </div>
+
+
+        <!-- BUTTONS -->
+
+        <div style="
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+            max-width: 350px;
+        ">
+
+            <div style="
+                flex: 1;
+                background: #eeeeee;
+                border-radius: 25px;
+                padding: 10px 15px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 8px;
+                cursor: pointer;
+                transition: 0.2s;
+            "
+                 onmouseover="this.style.transform='translateY(-3px)'"
+                 onmouseout="this.style.transform='translateY(0)'"
+            >
+                💸 Pay extra
+            </div>
+
+
+            <div style="
+                flex: 1;
+                background: #eeeeee;
+                border-radius: 25px;
+                padding: 10px 15px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 8px;
+                cursor: pointer;
+                transition: 0.2s;
+            "
+                 onmouseover="this.style.transform='translateY(-3px)'"
+                 onmouseout="this.style.transform='translateY(0)'"
+            >
+                💰 Take out a loan
+            </div>
+
+        </div>
+
+
+        <div style="
+            margin-left: 400px;
+            margin-top: -235px;
+            width: 400px;
+        ">
+
+            <h2 style="margin-bottom: 20px;">
+                Available loans
+            </h2>
+
+            <div style="
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+            ">
+
+                <!-- Small -->
+
+                <div style="
+                    background: linear-gradient(90deg,#5b3df5,#8a7be0);
+                    color: white;
+                    border-radius: 20px;
+                    padding: 18px;
+                    text-align: center;
+                    cursor: pointer;
+                    transition: 0.2s;
+                "
+                     onmouseover="this.style.transform='scale(1.03)'"
+                     onmouseout="this.style.transform='scale(1)'"
+                >
+
+                    <div style="font-size:16px;">
+                        Small loan
+                    </div>
+
+                    <div style="font-size:50px; font-weight:600;">
+                        $500
+                    </div>
+
+                </div>
+
+
+                <!-- Medium -->
+
+                <div style="
+                    background: linear-gradient(90deg,#4b2fd6,#7c6ce0);
+                    color: white;
+                    border-radius: 20px;
+                    padding: 18px;
+                    text-align: center;
+                    cursor: pointer;
+                    transition: 0.2s;
+                "
+                     onmouseover="this.style.transform='scale(1.03)'"
+                     onmouseout="this.style.transform='scale(1)'"
+                >
+
+                    <div style="font-size:16px;">
+                        Medium loan
+                    </div>
+
+                    <div style="font-size:50px; font-weight:600;">
+                        $2000
+                    </div>
+
+                </div>
+
+
+                <!-- Big -->
+
+                <div style="
+                    background: linear-gradient(90deg,#3c25b8,#6e5de0);
+                    color: white;
+                    border-radius: 20px;
+                    padding: 18px;
+                    text-align: center;
+                    cursor: pointer;
+                    transition: 0.2s;
+                "
+                     onmouseover="this.style.transform='scale(1.03)'"
+                     onmouseout="this.style.transform='scale(1)'"
+                >
+
+                    <div style="font-size:16px;">
+                        Big loan
+                    </div>
+
+                    <div style="font-size:50px; font-weight:600;">
+                        $5000
+                    </div>
+
+                </div>
+
+
+                <!-- Max -->
+
+                <div style="
+                    background: linear-gradient(90deg,#2d1ea8,#5f4fe0);
+                    color: white;
+                    border-radius: 20px;
+                    padding: 18px;
+                    text-align: center;
+                    cursor: pointer;
+                    transition: 0.2s;
+                "
+                     onmouseover="this.style.transform='scale(1.03)'"
+                     onmouseout="this.style.transform='scale(1)'"
+                >
+
+                    <div style="font-size:16px;">
+                        Max limit
+                    </div>
+
+                    <div style="font-size:50px; font-weight:600;">
+                        $10000
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div style="
+    position: absolute;
+    left: 980px;
+    top: 75px;
+    width: 500px;
+">
+
+    <h2 style="margin-bottom: 15px;">
+        Active loan
+    </h2>
+
+
+    <div style="
+        background: linear-gradient(90deg,#3c25b8,#7c6ce0);
+        color: white;
+        border-radius: 20px;
+        padding: 20px;
+    ">
+
+        <div style="font-size:18px;">
+            💲Car loan
+        </div>
+
+        <div style="
+            font-size:28px;
+            font-weight:600;
+            margin-top:5px;
+        ">
+            $2000
+        </div>
+
+        <div style="margin-top:15px;font-size:14px;">
+            Left: $1500
+        </div>
+
+        <div style="font-size:14px;">
+            Monthly: $100
+        </div>
+
+        <div style="font-size:14px;">
+            Status: Active
+        </div>
+
+    </div>
+
+
+
+    <!-- NEW BLOCK -->
+
+    <div style="
+        margin-top:20px;
+        background:white;
+        padding:18px;
+        border-radius:20px;
+        box-shadow:0 8px 20px rgba(0,0,0,0.06);
+    ">
+
+        <div style="
+            display:flex;
+            justify-content:space-between;
+            margin-bottom:10px;
+        ">
+
+            <h3>Loan activity</h3>
+
+            <span style="color:#3b6cff;cursor:pointer;">
+                View all
+            </span>
+
+        </div>
+
+
+
+        <div style="display:flex;justify-content:space-between;margin-top:10px;">
+
+            <div>
+                Payment
+                <div style="font-size:12px;color:gray;">
+                    Monthly
+                </div>
+            </div>
+
+            <div style="text-align:right;">
+                <div style="color:red;">
+                    -$100
+                </div>
+
+                <div style="font-size:12px;color:gray;">
+                    7 Mar 2026
+                </div>
+            </div>
+
+        </div>
+
+
+
+        <div style="display:flex;justify-content:space-between;margin-top:12px;">
+
+            <div>
+                Interest
+                <div style="font-size:12px;color:gray;">
+                    Loan fee
+                </div>
+            </div>
+
+            <div style="text-align:right;">
+                <div style="color:red;">
+                    -$20
+                </div>
+
+                <div style="font-size:12px;color:gray;">
+                    6 Mar 2026
+                </div>
+            </div>
+
+        </div>
+
+
+
+        <div style="display:flex;justify-content:space-between;margin-top:12px;">
+
+            <div>
+                Loan received
+                <div style="font-size:12px;color:gray;">
+                    Car loan
+                </div>
+            </div>
+
+            <div style="text-align:right;">
+                <div style="color:green;">
+                    +$2000
+                </div>
+
+                <div style="font-size:12px;color:gray;">
+                    5 Mar 2026
+                </div>
+            </div>
+
+        </div>
+
+
+
+        <div style="display:flex;justify-content:space-between;margin-top:12px;">
+
+            <div>
+                Extra payment
+                <div style="font-size:12px;color:gray;">
+                    Manual
+                </div>
+            </div>
+
+            <div style="text-align:right;">
+                <div style="color:red;">
+                    -$200
+                </div>
+
+                <div style="font-size:12px;color:gray;">
+                    3 Mar 2026
+                </div>
+            </div>
+
+        </div>
+
+
+
+        <div style="display:flex;justify-content:space-between;margin-top:12px;">
+
+            <div>
+                Payment
+                <div style="font-size:12px;color:gray;">
+                    Monthly
+                </div>
+            </div>
+
+            <div style="text-align:right;">
+                <div style="color:red;">
+                    -$100
+                </div>
+
+                <div style="font-size:12px;color:gray;">
+                    2 Mar 2026
+                </div>
+            </div>
+
+        </div>
+
+
+
+        <div style="display:flex;justify-content:space-between;margin-top:12px;">
+
+            <div>
+                Extra payment
+                <div style="font-size:12px;color:gray;">
+                    Manual
+                </div>
+            </div>
+
+            <div style="text-align:right;">
+                <div style="color:red;">
+                    -$200
+                </div>
+
+                <div style="font-size:12px;color:gray;">
+                    4 Mar 2026
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<div style="
+    margin-top:-400px;
+    width:380px;
+    background:white;
+    padding:18px;
+    border-radius:20px;
+    box-shadow:0 8px 20px rgba(0,0,0,0.06);
+    min-height:350px;
+">
+
+    <h3 style="margin-bottom:12px;">
+        🏦 Credit info
+    </h3>
+
+
+    <div style="
+        display:grid;
+        grid-template-columns:1fr 1fr;
+        gap:10px;
+    ">
+
+
+        <div class="info-box">
+            📊 Score: Normal<br>
+            💳 Limit: $5000<br>
+            🤝 Trust: Medium
+        </div>
+
+
+        <div class="info-box">
+            📜 Interest: 5%<br>
+            ✔ Extra pay<br>
+            ✔ No penalty
+        </div>
+
+
+        <div class="info-box">
+            📈 History<br>
+            ✔ $500 paid<br>
+            ✔ $2000 paid
+        </div>
+
+
+        <div class="info-box">
+            🏦 MMM Bank<br>
+            👥 Clients: 256 389<br>
+            ⭐ Since 2024
+        </div>
+
+
+        <div class="info-box">
+            ⏱ Next payment<br>
+            Date: 25 May<br>
+            Amount: $100
+        </div>
+
+
+        <div class="info-box">
+            📉 Debt stats<br>
+            Total: $2000<br>
+            Left: $1500
+        </div>
+
+
+        <div class="info-box">
+            🔒 Account<br>
+            Status: Active<br>
+            Level: Normal
+        </div>
+
+
+        <div class="info-box">
+            📊 Bank rating<br>
+            ⭐⭐⭐⭐⭐<br>
+            Trusted client
+        </div>
+
+
+    </div>
+
+</div>
 {% endblock %}
