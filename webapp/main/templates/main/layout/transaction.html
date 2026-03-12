@@ -1,15 +1,15 @@
 {% load static %}
 <section class="transactions">
     <div class="transactions-header">
-        <h1 style="font-size: 30px;">Recent Activity</h1>
-        <a href="#" class="view-all">View All</a>
+        <h2>Recent Activity</h2>
+        <a href="#" class="view-all">More</a>
     </div>
 
     <div class="transaction-list">
         {% for transaction in transactions %}
             <div class="transaction-item">
                 <div class="transaction-left">
-                    <div class="icon"></div>
+                    <div class="icon"><i class="fa-solid fa-paper-plane"></i></div>
                     <div>
                         <div class="title">{{ transaction.title }}</div>
                         <div class="category">{{ transaction.category }}</div>
