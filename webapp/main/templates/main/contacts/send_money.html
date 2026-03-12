@@ -1,0 +1,17 @@
+{% extends 'main/layout/layout.html' %}
+
+{% block title%}{{ request.user.username }} Account {% endblock %}
+
+{% block content%}
+  <h2>Send Money to {{ friend.username }}</h2>
+    {% if error %}
+    <p style="color:red">{{ error }}</p>
+    {% endif %}
+    <form method="post">
+      {% csrf_token %}
+      <label>Amount:</label>
+      <input type="number" step="0.01" name="amount" required>
+      <button type="submit">Send</button>
+    </form>
+  <a href="{% url 'contacts_list' %}">Back to contacts</a>
+{% endblock %}

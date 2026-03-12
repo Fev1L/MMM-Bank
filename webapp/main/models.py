@@ -4,7 +4,6 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.core.exceptions import ValidationError
 from django.db import transaction
-import random
 
 class Account(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -13,30 +12,16 @@ class Account(models.Model):
     def __str__(self):
         return f"{self.user.username} account"
 
-class Card(models.Model):
-    account = models.OneToOneField(Account, on_delete=models.CASCADE)
 
-    VISA = "visa"
-    MASTERCARD = "mastercard"
-    AMERICAN_EXPRESS = "american_express"
-    CARD_TYPE = [
-        (VISA, "Visa"),
-        (MASTERCARD, "Mastercard"),
-        (AMERICAN_EXPRESS, "American Express"),
-    ]
+class Contact(models.Model):
+    owner = models.ForeignKey(User, related_name='contacts', on_delete=models.CASCADE)
+    friend = models.ForeignKey(User, related_name='friend_of', on_delete=models.CASCADE)
 
-    card_number = models.CharField(max_length=16)
-    expiry_month = models.IntegerField()
-    expiry_year = models.IntegerField()
-    cvv = models.CharField(max_length=3)
-    type = models.CharField(max_length=20, choices=CARD_TYPE)
+    class Meta:
+        unique_together = ('owner', 'friend')
 
     def __str__(self):
-        return f"Card ****{self.card_number[-4:]}"
-
-    @property
-    def masked_number(self):
-        return f"•••• {self.card_number[-4:]}"
+        return f"{self.owner.username} -> {self.friend.username}"
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
@@ -83,11 +68,3 @@ class Transaction(models.Model):
 def create_account(sender, instance, created, **kwargs):
     if created:
         Account.objects.create(user=instance)
-        Card.objects.create(
-            account=Account,
-            card_number=str(random.randint(1000000000000000, 9999999999999999)),
-            expiry_month=12,
-            expiry_year=2030,
-            cvv=str(random.randint(100, 999)),
-            type="visa"
-        )
