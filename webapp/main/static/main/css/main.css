@@ -395,6 +395,10 @@ a:hover {
   transform: translateY(-0.4rem);
 }
 /* CONTACTS */
+.contacts-page{
+  padding:2rem;
+}
+
 .contacts {
   border-radius: 1.5rem;
   padding: 2%;
@@ -437,8 +441,22 @@ a:hover {
 .contact-avatar{
   width:40px;
   height:40px;
+
   border-radius:12px;
-  object-fit:cover;
+
+  background:linear-gradient(
+          135deg,
+          #5b3df5,
+          #7b61ff
+  );
+
+  color:white;
+
+  display:flex;
+  justify-content:center;
+  align-items:center;
+
+  font-weight:600;
 }
 
 .contact-name{
@@ -450,9 +468,71 @@ a:hover {
   color:#9ca3af;
 }
 
+.contact-email{
+  font-size:0.8rem;
+  color:#6b7280;
+}
+
+.send-link{
+  color:#2563eb;
+  text-decoration:none;
+  font-weight:500;
+}
+
 .contact-actions{
   display:flex;
   gap:1rem;
+}
+
+.contact-btn{
+  padding:0.5rem 1rem;
+  border-radius:0.7rem;
+  text-decoration:none;
+  font-size:0.9rem;
+  display:flex;
+  align-items:center;
+  gap:0.4rem;
+  transition:0.25s;
+}
+
+.contact-btn.primary{
+  background:#5b3df5;
+  color:white;
+}
+
+.contact-btn.primary:hover{
+  transform:translateY(-2px);
+}
+
+.contact-btn.outline{
+  border:1px solid #d1d5db;
+  color:#374151;
+}
+
+.contact-btn.outline:hover{
+  background:#f3f4f6;
+}
+
+.contacts-card{
+  background:white;
+  border-radius:1rem;
+  padding:1rem;
+  box-shadow:0 10px 30px rgba(0,0,0,0.08);
+}
+
+.contact-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+
+  padding:0.8rem;
+
+  border-radius:0.8rem;
+  transition:0.2s;
+}
+
+.contact-row:hover{
+  background:#f9fafb;
 }
 
 .send-btn{

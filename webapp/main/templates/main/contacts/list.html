@@ -3,16 +3,36 @@
 {% block title%}{{ request.user.username }} Account {% endblock %}
 
 {% block content%}
-    <h2>Contacts</h2>
-    <a href="{% url 'add_contact' %}">Add Contact</a>
-    <ul>
-        {% for contact in contacts %}
-        <li>
-            {{ contact.friend.username }} -
-            <a href="{% url 'send_money' contact.friend.id %}">Send Money</a>
-        </li>
-        {% empty %}
-        <li>No contacts yet</li>
-        {% endfor %}
-    </ul>
+    <section class="contacts-page">
+
+        <div class="contacts-header">
+            <h1>Contacts</h1>
+
+            <div class="contacts-actions">
+                <a href="/contacts/add" class="contact-btn primary">
+                    <i class="fa-solid fa-user-plus"></i>
+                    Add contact
+                </a>
+            </div>
+        </div>
+
+        <div class="contact-list">
+            {% for contact in contacts %}
+            <div class="contact-item">
+                <div class="contact-left">
+                    <img src="https://github.com/Fev1L.png" class="contact-avatar">
+                    <div class="contact-info">
+                        <div class="contact-name">{{ contact.friend }}</div>
+                        <div class="contact-time">Today</div>
+                    </div>
+                </div>
+                <div class="contact-actions">
+                    <a href="/contacts/send/{{ contact.friend.id }}/" class="send-btn">Send</a>
+                    <a href="#" class="request-btn">Delete</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+    </section>
 {% endblock %}

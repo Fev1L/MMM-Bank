@@ -3,11 +3,27 @@
 {% block title%}{{ request.user.username }} Account {% endblock %}
 
 {% block content%}
-    <h2>Add Contact</h2>
-      <form method="post">
-          {% csrf_token %}
-          {{ form.as_p }}
-        <button type="submit">Add</button>
-      </form>
-    <a href="{% url 'contacts_list' %}">Back to contacts</a>
+<section class="contacts-page">
+    <div class="contacts-card">
+        <h2>Add New Contact</h2>
+          <form method="post">
+              {% csrf_token %}
+              {{ form.as_p }}
+              <button class="login-btn">Add contact</button>
+          </form>
+        <a href="{% url 'contacts_list' %}">Back to contacts</a>
+    </div>
+</section>
 {% endblock %}
+
+            <div class="input-group">
+                <i class="fa-solid fa-user"></i>
+                <input type="text" placeholder="Contact name">
+            </div>
+
+            <div class="input-group">
+                <i class="fa-solid fa-envelope"></i>
+                <input type="email" placeholder="Email">
+            </div>
+
+            <button class="login-btn">Add contact</button>

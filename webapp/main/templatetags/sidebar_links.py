@@ -7,7 +7,7 @@ def get_links():
     return [{
         'name': 'Summary',
         'href': '/',
-        'icon': 'fa-credit-card',
+        'icon': 'fa-regular fa-list-check',
     },{
         'name': 'Credits',
         'href': '/credits/',
