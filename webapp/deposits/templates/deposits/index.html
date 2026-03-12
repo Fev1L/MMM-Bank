@@ -11,12 +11,26 @@ font-family:Arial;
 background:#f5f6f8;
 min-height:100vh;
 padding:40px;
-display:flex;
-flex-direction:column;
-gap:35px;
 }
 
-/* CARD */
+.dashboard{
+display:grid;
+grid-template-columns:420px 1fr;
+gap:40px;
+align-items:start;
+}
+
+.left{
+display:flex;
+flex-direction:column;
+gap:25px;
+}
+
+.right{
+display:flex;
+flex-direction:column;
+gap:25px;
+}
 
 .balance-card{
 background:linear-gradient(135deg,#5b4cff,#8a7dff);
@@ -24,14 +38,7 @@ border-radius:20px;
 padding:40px;
 color:white;
 position:relative;
-width:420px;
-max-width:100%;
 box-shadow:0 20px 40px rgba(0,0,0,0.12);
-transition:0.3s;
-}
-
-.balance-card:hover{
-transform:translateY(-6px);
 }
 
 .bank{
@@ -47,8 +54,6 @@ font-size:36px;
 font-weight:700;
 margin-top:40px;
 }
-
-/* ACTION BUTTONS */
 
 .actions{
 display:flex;
@@ -81,20 +86,21 @@ font-size:22px;
 margin-bottom:6px;
 }
 
-/* SECTIONS */
-
 .section{
 background:white;
 border-radius:20px;
 padding:25px;
 box-shadow:0 10px 20px rgba(0,0,0,0.06);
+transition:0.25s;
+}
+
+.section:hover{
+transform:translateY(-4px);
 }
 
 .section h3{
 margin-bottom:15px;
 }
-
-/* DEPOSIT LIST */
 
 .deposit{
 display:flex;
@@ -104,7 +110,23 @@ border-bottom:1px solid #eee;
 font-size:14px;
 }
 
-/* PLANS */
+.progress{
+height:6px;
+background:#eee;
+border-radius:10px;
+margin-top:6px;
+overflow:hidden;
+}
+
+.progress-bar{
+height:100%;
+background:#5b4cff;
+border-radius:10px;
+}
+
+.extra{
+display:none;
+}
 
 .plans{
 display:flex;
@@ -120,23 +142,42 @@ flex:1;
 min-width:120px;
 text-align:center;
 font-weight:600;
+cursor:pointer;
+transition:0.2s;
 }
 
-/* CALCULATOR */
+.plan:hover{
+background:#ecebff;
+transform:translateY(-4px);
+}
 
 .calculator input{
 padding:10px;
 border-radius:10px;
 border:1px solid #ddd;
 margin-right:10px;
+width:140px;
+}
+
+button{
+background:#5b4cff;
+border:none;
+color:white;
+padding:10px 18px;
+border-radius:10px;
+cursor:pointer;
+font-weight:600;
+margin-top:10px;
+}
+
+button:hover{
+background:#4b3cff;
 }
 
 .result{
 margin-top:10px;
 font-weight:600;
 }
-
-/* HISTORY */
 
 .history-item{
 display:flex;
@@ -145,39 +186,27 @@ font-size:14px;
 padding:8px 0;
 }
 
-/* RESPONSIVE */
-
-@media(max-width:700px){
-
-.page{
-padding:20px;
+@media(max-width:900px){
+.dashboard{
+grid-template-columns:1fr;
 }
-
-.actions{
-gap:15px;
-}
-
-.action-btn{
-width:110px;
-}
-
 }
 
 </style>
 
+
 <div class="page">
 
-<!-- CARD -->
+<div class="dashboard">
+
+<!-- LEFT COLUMN -->
+
+<div class="left">
 
 <div class="balance-card">
-
 <div class="bank">MMM</div>
-
-<div class="balance">$3810.01</div>
-
+<div class="balance" id="balance">$0</div>
 </div>
-
-<!-- ACTIONS -->
 
 <div class="actions">
 
@@ -204,50 +233,80 @@ Buy Bonds
 
 <h3>Active Deposits</h3>
 
+<div id="deposit-list">
+
 <div class="deposit">
-<span>6 months deposit</span>
+<div>
+6 months deposit
+<div class="progress">
+<div class="progress-bar" style="width:60%"></div>
+</div>
+</div>
 <span>$2000 • 5%</span>
 </div>
 
 <div class="deposit">
-<span>12 months deposit</span>
+<div>
+12 months deposit
+<div class="progress">
+<div class="progress-bar" style="width:30%"></div>
+</div>
+</div>
 <span>$5000 • 7%</span>
 </div>
 
+<div class="deposit">
+<div>
+3 months deposit
+<div class="progress">
+<div class="progress-bar" style="width:80%"></div>
+</div>
+</div>
+<span>$800 • 3%</span>
 </div>
 
-<!-- PLANS -->
+<div class="deposit">
+<div>
+24 months deposit
+<div class="progress">
+<div class="progress-bar" style="width:15%"></div>
+</div>
+</div>
+<span>$3000 • 9%</span>
+</div>
 
-<div class="section">
+<div class="deposit">
+<div>
+6 months deposit
+<div class="progress">
+<div class="progress-bar" style="width:40%"></div>
+</div>
+</div>
+<span>$1500 • 5%</span>
+</div>
 
-<h3>Deposit Plans</h3>
+<div class="deposit extra">
+<div>
+12 months deposit
+<div class="progress">
+<div class="progress-bar" style="width:10%"></div>
+</div>
+</div>
+<span>$900 • 7%</span>
+</div>
 
-<div class="plans">
+</div>
 
-<div class="plan">3 months<br>3%</div>
-<div class="plan">6 months<br>5%</div>
-<div class="plan">12 months<br>7%</div>
-<div class="plan">24 months<br>9%</div>
+<button onclick="showMore()">More</button>
 
 </div>
 
 </div>
 
-<!-- CALCULATOR -->
 
-<div class="section calculator">
+<!-- RIGHT COLUMN -->
 
-<h3>Deposit Calculator</h3>
-
-<input type="number" id="amount" placeholder="Amount">
-
-<input type="number" id="rate" placeholder="Interest %">
-
-<button onclick="calc()">Calculate</button>
-
-<div class="result" id="result"></div>
-
-</div>
+<div class="right">
 
 <!-- HISTORY -->
 
@@ -267,21 +326,105 @@ Buy Bonds
 
 </div>
 
+
+<!-- CALCULATOR -->
+
+<div class="section calculator">
+
+<h3>Deposit Calculator</h3>
+
+<input type="number" id="amount" placeholder="Amount">
+<input type="number" id="rate" placeholder="Interest %">
+
+<button onclick="calc()">Calculate</button>
+
+<div class="result" id="result"></div>
+
+<canvas id="chart" height="100"></canvas>
+
 </div>
+
+
+<!-- PLANS -->
+
+<div class="section">
+
+<h3>Deposit Plans</h3>
+
+<div class="plans">
+
+<div class="plan">3 months<br>3%</div>
+<div class="plan">6 months<br>5%</div>
+<div class="plan">12 months<br>7%</div>
+<div class="plan">24 months<br>9%</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
 
-function calc(){
+function showMore(){
+let extra = document.querySelectorAll(".extra")
+extra.forEach(e=>{
+e.style.display="flex"
+})
+}
 
+function calc(){
 let amount = document.getElementById("amount").value
 let rate = document.getElementById("rate").value
-
 let profit = amount * rate / 100
-
-document.getElementById("result").innerText =
-"Profit: $" + profit
-
+document.getElementById("result").innerText = "Profit: $" + profit
 }
+
+const targetBalance = 3810.01
+let current = 0
+
+const counter = setInterval(() => {
+
+current += targetBalance / 60
+
+if(current >= targetBalance){
+current = targetBalance
+clearInterval(counter)
+}
+
+document.getElementById("balance").innerText =
+"$" + current.toFixed(2)
+
+},20)
+
+
+const ctx = document.getElementById('chart')
+
+new Chart(ctx, {
+
+type:'line',
+
+data:{
+labels:['Jan','Feb','Mar','Apr','May','Jun'],
+datasets:[{
+data:[1000,1200,1500,2000,2600,3200],
+borderWidth:2,
+tension:0.4
+}]
+},
+
+options:{
+plugins:{legend:{display:false}}
+}
+
+})
 
 </script>
 
