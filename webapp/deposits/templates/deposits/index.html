@@ -7,82 +7,282 @@
 <style>
 
 .page{
-font-family: Arial;
-background:#f2f2f2;
+font-family:Arial;
+background:#f5f6f8;
 min-height:100vh;
+padding:40px;
+display:flex;
+flex-direction:column;
+gap:35px;
 }
 
-.header{
-background:linear-gradient(180deg,#0f4ea8,#4a8edb);
+/* CARD */
+
+.balance-card{
+background:linear-gradient(135deg,#5b4cff,#8a7dff);
+border-radius:20px;
+padding:40px;
 color:white;
-padding:40px 20px;
-text-align:center;
-border-bottom-left-radius:25px;
-border-bottom-right-radius:25px;
+position:relative;
+width:420px;
+max-width:100%;
+box-shadow:0 20px 40px rgba(0,0,0,0.12);
+transition:0.3s;
 }
 
-.cards{
-padding:20px;
-display:grid;
-grid-template-columns:1fr 1fr;
+.balance-card:hover{
+transform:translateY(-6px);
+}
+
+.bank{
+position:absolute;
+right:25px;
+top:20px;
+font-size:18px;
+font-weight:600;
+}
+
+.balance{
+font-size:36px;
+font-weight:700;
+margin-top:40px;
+}
+
+/* ACTION BUTTONS */
+
+.actions{
+display:flex;
+flex-wrap:wrap;
 gap:20px;
 }
 
-.card{
+.action-btn{
 background:white;
-border-radius:20px;
-padding:25px;
-box-shadow:0 5px 15px rgba(0,0,0,0.08);
-font-weight:600;
-font-size:18px;
+border-radius:16px;
+padding:18px;
+box-shadow:0 10px 20px rgba(0,0,0,0.06);
 text-decoration:none;
-color:black;
-display:block;
-transition:0.2s;
+color:#333;
+font-weight:600;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+width:130px;
+transition:0.25s;
 }
 
-.card:hover{
-transform:scale(1.03);
-}
-
-.big{
-grid-column:span 2;
+.action-btn:hover{
+transform:translateY(-6px) scale(1.05);
 }
 
 .icon{
-font-size:30px;
-margin-bottom:10px;
+font-size:22px;
+margin-bottom:6px;
+}
+
+/* SECTIONS */
+
+.section{
+background:white;
+border-radius:20px;
+padding:25px;
+box-shadow:0 10px 20px rgba(0,0,0,0.06);
+}
+
+.section h3{
+margin-bottom:15px;
+}
+
+/* DEPOSIT LIST */
+
+.deposit{
+display:flex;
+justify-content:space-between;
+padding:10px 0;
+border-bottom:1px solid #eee;
+font-size:14px;
+}
+
+/* PLANS */
+
+.plans{
+display:flex;
+flex-wrap:wrap;
+gap:15px;
+}
+
+.plan{
+background:#f7f7ff;
+border-radius:15px;
+padding:15px;
+flex:1;
+min-width:120px;
+text-align:center;
+font-weight:600;
+}
+
+/* CALCULATOR */
+
+.calculator input{
+padding:10px;
+border-radius:10px;
+border:1px solid #ddd;
+margin-right:10px;
+}
+
+.result{
+margin-top:10px;
+font-weight:600;
+}
+
+/* HISTORY */
+
+.history-item{
+display:flex;
+justify-content:space-between;
+font-size:14px;
+padding:8px 0;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:700px){
+
+.page{
+padding:20px;
+}
+
+.actions{
+gap:15px;
+}
+
+.action-btn{
+width:110px;
+}
+
 }
 
 </style>
 
 <div class="page">
 
-<div class="header">
-<h2>Savings</h2>
-<p>You can open a deposit or create a savings jar</p>
+<!-- CARD -->
+
+<div class="balance-card">
+
+<div class="bank">MMM</div>
+
+<div class="balance">$3810.01</div>
+
 </div>
 
-<div class="cards">
+<!-- ACTIONS -->
 
-<a href="{% url 'open_deposit' %}" class="card big">
+<div class="actions">
+
+<a href="{% url 'open_deposit' %}" class="action-btn">
 <div class="icon">💰</div>
 Open Deposit
 </a>
 
-<a href="{% url 'piggy_bank' %}" class="card">
+<a href="{% url 'piggy_bank' %}" class="action-btn">
 <div class="icon">🐷</div>
-Create Piggy Bank
+Piggy Bank
 </a>
 
-<a href="{% url 'buy_bonds' %}" class="card">
+<a href="{% url 'buy_bonds' %}" class="action-btn">
 <div class="icon">📈</div>
 Buy Bonds
 </a>
 
 </div>
 
+<!-- ACTIVE DEPOSITS -->
+
+<div class="section">
+
+<h3>Active Deposits</h3>
+
+<div class="deposit">
+<span>6 months deposit</span>
+<span>$2000 • 5%</span>
 </div>
 
+<div class="deposit">
+<span>12 months deposit</span>
+<span>$5000 • 7%</span>
+</div>
+
+</div>
+
+<!-- PLANS -->
+
+<div class="section">
+
+<h3>Deposit Plans</h3>
+
+<div class="plans">
+
+<div class="plan">3 months<br>3%</div>
+<div class="plan">6 months<br>5%</div>
+<div class="plan">12 months<br>7%</div>
+<div class="plan">24 months<br>9%</div>
+
+</div>
+
+</div>
+
+<!-- CALCULATOR -->
+
+<div class="section calculator">
+
+<h3>Deposit Calculator</h3>
+
+<input type="number" id="amount" placeholder="Amount">
+
+<input type="number" id="rate" placeholder="Interest %">
+
+<button onclick="calc()">Calculate</button>
+
+<div class="result" id="result"></div>
+
+</div>
+
+<!-- HISTORY -->
+
+<div class="section">
+
+<h3>Deposit History</h3>
+
+<div class="history-item">
+<span>$1000 → $1080</span>
+<span>Closed Jan 2025</span>
+</div>
+
+<div class="history-item">
+<span>$500 → $540</span>
+<span>Closed Aug 2024</span>
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+function calc(){
+
+let amount = document.getElementById("amount").value
+let rate = document.getElementById("rate").value
+
+let profit = amount * rate / 100
+
+document.getElementById("result").innerText =
+"Profit: $" + profit
+
+}
+
+</script>
 
 {% endblock %}
