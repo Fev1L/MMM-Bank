@@ -10,6 +10,7 @@
 
 body {
   background-color: white;
+  overflow: hidden;
 }
 
 .dashboard {
@@ -130,10 +131,9 @@ a:hover {
 }
 
 .sidebar-auth{
-  width: 80%;
+  width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
 }
 
 .dropdown-menu{
@@ -317,7 +317,7 @@ a:hover {
   display:flex;
   align-items:center;
   justify-content:center;
-  box-shadow: 0 0 1rem 1rem rgba(0,0,0,0.05);
+  box-shadow: 0 0 0.5rem 0.5rem rgba(0,0,0,0.05);
 }
 
 .icon.income {
@@ -463,4 +463,148 @@ a:hover {
 .request-btn{
   color:#ef4444;
   text-decoration:none;
+}
+/*  FOR NON LOGIN   */
+.bank-promo{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+
+  padding:4rem;
+  border-radius:1.5rem;
+
+  background:linear-gradient(135deg,#5b3df5,#7b61ff,#a594ff);
+
+  color:white;
+  overflow:hidden;
+}
+
+.promo-left{
+  max-width:500px;
+}
+
+.bank-promo h1{
+  font-size:3rem;
+  margin-bottom:1rem;
+}
+
+.bank-promo p{
+  font-size:1.2rem;
+  opacity:0.9;
+  margin-bottom:2rem;
+}
+
+/* BUTTONS */
+
+.promo-buttons{
+  display:flex;
+  gap:1rem;
+  margin-bottom:2rem;
+}
+
+.promo-login,
+.promo-register{
+  padding:0.8rem 1.4rem;
+  border-radius:1rem;
+  text-decoration:none;
+  font-weight:500;
+  display:flex;
+  align-items:center;
+  gap:0.5rem;
+  transition:0.25s;
+}
+
+.promo-login{
+  background:white;
+  color:#5b3df5;
+}
+
+.promo-login:hover{
+  transform:translateY(-3px);
+}
+
+.promo-register{
+  border:1px solid rgba(255,255,255,0.6);
+  color:white;
+}
+
+.promo-register:hover{
+  background:rgba(255,255,255,1);
+  transform:translateY(-2px);
+}
+
+/* FEATURES */
+
+.promo-features{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:1rem;
+}
+
+.feature{
+  background:rgba(255,255,255,0.15);
+  padding:0.7rem 1rem;
+  border-radius:0.8rem;
+}
+
+/* CARDS */
+
+.promo-cards{
+  position:relative;
+  width:320px;
+  height:200px;
+}
+
+.promo-card{
+  position:absolute;
+  width:260px;
+  height:160px;
+
+  border-radius:1.2rem;
+  padding:1rem;
+
+  background:linear-gradient(135deg,#1f2937,#374151);
+
+  box-shadow:0 15px 40px rgba(0,0,0,0.4);
+
+  transition:0.4s;
+}
+
+/* card styles */
+
+.card1{
+  top:0;
+  left:0;
+  transform:rotate(-10deg);
+}
+
+.card2{
+  top:40px;
+  left:40px;
+  transform:rotate(10deg);
+}
+
+/* hover animation */
+
+.bank-promo:hover .card1{
+  transform:rotate(-5deg) translateY(-10px);
+}
+
+.bank-promo:hover .card2{
+  transform:rotate(5deg) translateY(-15px);
+}
+
+/* chip */
+
+.card-chip{
+  width:40px;
+  height:30px;
+  background:gold;
+  border-radius:5px;
+  margin-bottom:2rem;
+}
+
+.card-number{
+  font-size:1.2rem;
+  letter-spacing:2px;
 }

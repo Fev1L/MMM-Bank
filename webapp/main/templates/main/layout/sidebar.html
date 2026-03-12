@@ -3,12 +3,13 @@
 
 {% get_links as links %}
 
+{% if request.user.is_authenticated %}
 <div class="sidebar">
     <div class="sidebar-logo">
         <span>MMM Bank</span>
     </div>
     <div class="sidebar-user">
-        {% if request.user.is_authenticated %}
+
 
         <div class="dropdown">
             <a href="#" class="user-avatar" data-bs-toggle="dropdown">
@@ -38,22 +39,28 @@
             </ul>
         </div>
 
-        {% else %}
+<!--        <div class="sidebar-auth">-->
+<!--            <a class="auth-btn login-btn" href="/login">-->
+<!--                <i class="fa-solid fa-right-to-bracket"></i>-->
+<!--                <span>Login</span>-->
+<!--            </a>-->
 
-        <div class="sidebar-auth">
-            <a class="btn btn-primary btn-sm w-100 mb-2" href="/login">Login</a>
-            <a class="btn btn-outline-light btn-sm w-100" href="/register">Register</a>
+<!--            <a class="auth-btn register-btn" href="/register">-->
+<!--                <i class="fa-solid fa-user-plus"></i>-->
+<!--                <span>Register</span>-->
+<!--            </a>-->
+<!--        </div>-->
+
+
+    </div>
+        <div class="sidebar-links">
+            {% for link in links %}
+            <a href="{{ link.href }}"
+               class="sidebar-item {% if request.path == link.href %}active{% endif %}">
+                <i class="fa-solid {{ link.icon }}"></i>
+                <span>{{ link.name }}</span>
+            </a>
+            {% endfor %}
         </div>
-
-        {% endif %}
-    </div>
-    <div class="sidebar-links">
-        {% for link in links %}
-        <a href="{{ link.href }}"
-           class="sidebar-item {% if request.path == link.href %}active{% endif %}">
-            <i class="fa-solid {{ link.icon }}"></i>
-            <span>{{ link.name }}</span>
-        </a>
-        {% endfor %}
-    </div>
 </div>
+{% endif %}
