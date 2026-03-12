@@ -40,6 +40,7 @@ class Card(models.Model):
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
+    icon = models.CharField(max_length=100 , default="fa-solid fa-circle-arrow-down")
 
     DEPOSIT = "deposit"
     WITHDRAW = "withdraw"
@@ -51,7 +52,7 @@ class Category(models.Model):
     type = models.CharField(max_length=20, choices=TRANSACTION_TYPES)
 
     def __str__(self):
-        return self.name
+        return f"{self.name}"
 class Transaction(models.Model):
     DEPOSIT = "deposit"
     WITHDRAW = "withdraw"
@@ -59,16 +60,15 @@ class Transaction(models.Model):
     title = models.CharField(max_length=255, default="Transaction")
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
     amount = models.DecimalField(max_digits=12, decimal_places=2)
-    type = models.CharField(max_length=20, choices=Category.TRANSACTION_TYPES)
     created_at = models.DateTimeField(auto_now_add=True)
 
     @transaction.atomic
     def save(self, *args, **kwargs):
         if self.pk:
             raise ValidationError("Transactions cannot be edited")
-        if self.type == self.DEPOSIT:
+        if self.category.type == self.DEPOSIT:
             self.account.balance += self.amount
-        elif self.type == self.WITHDRAW:
+        elif self.category.type == self.WITHDRAW:
             if self.account.balance < self.amount:
                 raise ValidationError("Not enough money")
             self.account.balance -= self.amount
@@ -77,7 +77,7 @@ class Transaction(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"{self.type} - {self.amount}"
+        return f"{self.category.type} - {self.amount}"
 
 @receiver(post_save, sender=User)
 def create_account(sender, instance, created, **kwargs):

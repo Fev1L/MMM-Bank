@@ -316,6 +316,7 @@ a:hover {
   display:flex;
   align-items:center;
   justify-content:center;
+  box-shadow: 0 0 1rem 1rem rgba(0,0,0,0.05);
 }
 
 .icon.income {
@@ -412,7 +413,7 @@ a:hover {
 .contact-list{
   display:flex;
   flex-direction:column;
-  gap:1rem;
+  gap: 1.5rem;
 }
 
 .contact-item{

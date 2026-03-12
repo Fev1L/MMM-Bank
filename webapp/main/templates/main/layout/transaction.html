@@ -9,16 +9,16 @@
         {% for transaction in transactions %}
             <div class="transaction-item">
                 <div class="transaction-left">
-                    <div class="icon"><i class="fa-solid fa-paper-plane"></i></div>
+                    <div class="icon"><i class="{{ transaction.category.icon }}"></i></div>
                     <div>
                         <div class="title">{{ transaction.title }}</div>
                         <div class="category">{{ transaction.category }}</div>
                     </div>
                 </div>
                 <div class="transaction-right
-                    {% if transaction.type == 'deposit' %} positive {%  else %} negative {% endif %}">
+                    {% if transaction.category.type == 'deposit' %} positive {%  else %} negative {% endif %}">
                     <div class="amount">
-                        {% if transaction.type == 'deposit' %} ${{ transaction.amount }}
+                        {% if transaction.category.type == "deposit" %} ${{ transaction.amount }}
                         {%  else %} -${{ transaction.amount }}
                         {% endif %}</div>
                     <div class="date">{{ transaction.created_at }}</div>

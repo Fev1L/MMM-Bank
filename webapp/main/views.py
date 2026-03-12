@@ -11,11 +11,11 @@ def index(request):
         transactions = Transaction.objects.all().order_by('-created_at')
         total_income = 0
         for transaction in transactions:
-            if transaction.type == Transaction.DEPOSIT:
+            if transaction.category.type == Transaction.DEPOSIT:
                 total_income += transaction.amount
         total_expenses = 0
         for transaction in transactions:
-            if transaction.type == Transaction.WITHDRAW:
+            if transaction.category.type == Transaction.WITHDRAW:
                 total_expenses += transaction.amount
         saving_goal = 0
         investments = 0
