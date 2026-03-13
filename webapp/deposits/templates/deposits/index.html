@@ -15,9 +15,8 @@ padding:40px;
 
 .dashboard{
 display:grid;
-grid-template-columns:420px 1fr;
+grid-template-columns:500px 1fr;
 gap:40px;
-align-items:start;
 }
 
 .left{
@@ -55,10 +54,12 @@ font-weight:700;
 margin-top:40px;
 }
 
+
+
 .actions{
-display:flex;
-flex-wrap:wrap;
-gap:20px;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(110px,1fr));
+gap:15px;
 }
 
 .action-btn{
@@ -73,7 +74,6 @@ display:flex;
 flex-direction:column;
 align-items:center;
 justify-content:center;
-width:130px;
 transition:0.25s;
 }
 
@@ -190,12 +190,16 @@ padding:8px 0;
 .dashboard{
 grid-template-columns:1fr;
 }
+
+.actions{
+grid-template-columns:1fr;
+}
 }
 
 </style>
 
 
-<!-- LEFT COLUMN -->
+
 
 <div class="left">
 
@@ -223,7 +227,6 @@ Buy Bonds
 
 </div>
 
-<!-- ACTIVE DEPOSITS -->
 
 <div class="section">
 
@@ -300,11 +303,9 @@ Buy Bonds
 </div>
 
 
-<!-- RIGHT COLUMN -->
+
 
 <div class="right">
-
-<!-- HISTORY -->
 
 <div class="section">
 
@@ -323,8 +324,6 @@ Buy Bonds
 </div>
 
 
-<!-- CALCULATOR -->
-
 <div class="section calculator">
 
 <h3>Deposit Calculator</h3>
@@ -340,8 +339,6 @@ Buy Bonds
 
 </div>
 
-
-<!-- PLANS -->
 
 <div class="section">
 
@@ -395,7 +392,6 @@ document.getElementById("balance").innerText =
 "$" + current.toFixed(2)
 
 },20)
-
 
 const ctx = document.getElementById('chart')
 
