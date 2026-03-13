@@ -113,6 +113,10 @@ a:hover {
   color: white;
 }
 
+.sidebar-logo span {
+  font-size: 1.3rem;
+}
+
 .user-avatar{
   display: block;
   overflow: hidden;
