@@ -9,14 +9,26 @@ def get_links():
         'href': '/',
         'icon': 'fa-regular fa-list-check',
     },{
+        'name': 'Transfer',
+        'href': '/transfer',
+        'icon': 'fa-regular fa-right-left',
+    }, {
         'name': 'Credits',
         'href': '/credits/',
-        'icon': 'fa-chart-pie',
+        'icon': 'fa-solid fa-landmark',
     }, {
         'name': 'Deposits',
         'href': '/deposits/',
-        'icon': 'fa-money-bill-1',
-    }, {
+        'icon': 'fa-solid fa-piggy-bank',
+    },{
+        'name': 'History',
+        'href': '/history',
+        'icon': 'fa-regular fa-chart-pie',
+    },{
+        'name': 'Account',
+        'href': '/profile',
+        'icon': 'fa-solid fa-user',
+    },{
         'name': 'More',
         'href': '/more/',
         'icon': 'fa-ellipsis',

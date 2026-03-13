@@ -37,6 +37,15 @@ def index(request):
     else:
         return render(request, 'main/index.html')
 
+def transfer(request):
+    return render(request, 'main/transfer.html')
+
+def history(request):
+    return render(request, 'main/history.html')
+
+def profile(request):
+    return render(request, 'main/profile.html')
+
 @login_required
 def contacts_list(request):
     contacts = Contact.objects.filter(owner=request.user)
