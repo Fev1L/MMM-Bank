@@ -52,22 +52,19 @@ a:hover {
   position: fixed;
   top: 0;
   left: 0;
-  width: 6%;
+  width: clamp(70px, 5vw, 110px);
   height: 100vh;
-
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-
-  gap: 1.5rem;
-  padding-top: 2rem;
-
+  gap: clamp(18px, 2vw, 26px);
+  padding-top: clamp(24px, 2vw, 40px);
   background: linear-gradient(
-    180deg,
-    #5b3df5 0%,
-    #7b61ff 40%,
-    #a594ff 100%
+          180deg,
+          #5b3df5 0%,
+          #7b61ff 40%,
+          #a594ff 100%
   );
 }
 
@@ -75,30 +72,43 @@ a:hover {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
+  gap: clamp(4px, 0.6vw, 8px);
   text-decoration: none;
   color: #ffffff;
-  padding: 0.8rem;
+  padding: clamp(8px, 0.8vw, 14px);
   border-radius: 1rem;
-  transition: 0.25s;
+  transition: all 0.25s ease;
 }
 
 .sidebar-item i {
-  font-size: 2rem;
+  font-size: clamp(20px, 1.6vw, 30px);
 }
 
 .sidebar-item span {
-  font-size: 1.3rem;
+  font-size: clamp(10px, 0.7vw, 14px);
 }
 
 .sidebar-item:hover {
-  color: white;
-  background: rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.15);
+  transform: translateY(-2px);
 }
 
 .sidebar-item.active {
-  color: rgb(0, 0, 0);
-  background: rgba(255,255,255,1);
+  color: black;
+  background: white;
+  transform: scale(1.05);
+  box-shadow:
+          0 6px 20px rgba(0,0,0,0.2);
+}
+
+.sidebar-item.active::before {
+  content: "";
+  position: absolute;
+  left: -10px;
+  width: 4px;
+  height: 60%;
+  background: white;
+  border-radius: 10px;
 }
 
 .sidebar-logo {

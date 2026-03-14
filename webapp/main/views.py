@@ -39,7 +39,11 @@ def index(request):
 
 
 def history(request):
-    return render(request, 'main/history.html')
+    account = request.user.account
+    balance = account.balance
+    contacts = Contact.objects.filter(owner=request.user)
+    transactions = Transaction.objects.filter(account=account).order_by('-created_at')[:4]
+    return render(request, 'main/history.html',{'contacts': contacts, "balance" : balance, "transactions" : transactions,})
 
 def profile(request):
     return render(request, 'main/profile.html')
