@@ -27,7 +27,10 @@
                 {% endblock %}
             </div>
     </main>
-    {% include 'main/layout/sidebar.html' %}
+    {% if request.user.is_authenticated %}
+        {% include 'main/layout/sidebar.html' %}
+        {% include 'main/layout/cardbar.html' %}
+    {% endif %}
     
 </body>
 </html>

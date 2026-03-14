@@ -42,7 +42,7 @@ def history(request):
     account = request.user.account
     balance = account.balance
     contacts = Contact.objects.filter(owner=request.user)
-    transactions = Transaction.objects.filter(account=account).order_by('-created_at')[:4]
+    transactions = Transaction.objects.filter(account=account).order_by('-created_at')
     return render(request, 'main/history.html',{'contacts': contacts, "balance" : balance, "transactions" : transactions,})
 
 def profile(request):
