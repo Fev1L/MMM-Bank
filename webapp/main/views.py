@@ -12,8 +12,8 @@ def index(request):
     if request.user.is_authenticated:
         account = request.user.account
         balance = account.balance
-        contacts = Contact.objects.filter(owner=request.user)
-        transactions = Transaction.objects.filter(account=account).order_by('-created_at')
+        contacts = Contact.objects.filter(owner=request.user)[:4]
+        transactions = Transaction.objects.filter(account=account).order_by('-created_at')[:4]
         total_income = 0
         for transaction in transactions:
             if transaction.category.type == Transaction.DEPOSIT:
@@ -37,8 +37,6 @@ def index(request):
     else:
         return render(request, 'main/index.html')
 
-def transfer(request):
-    return render(request, 'main/transfer.html')
 
 def history(request):
     return render(request, 'main/history.html')
@@ -48,8 +46,11 @@ def profile(request):
 
 @login_required
 def contacts_list(request):
+    account = request.user.account
+    balance = account.balance
     contacts = Contact.objects.filter(owner=request.user)
-    return render(request, 'main/contacts/list.html', {'contacts': contacts})
+    transactions = Transaction.objects.filter(account=account).order_by('-created_at')[:4]
+    return render(request, 'main/contacts/transfer.html', {'contacts': contacts, "balance" : balance, "transactions" : transactions,})
 
 @login_required
 def add_contact(request):

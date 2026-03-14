@@ -6,48 +6,32 @@
 {% if request.user.is_authenticated %}
 <div class="sidebar">
     <div class="sidebar-logo">
-        <span>MMM Bank</span>
+        <img src="{% static 'main/img/MMM-Logo.png' %}" alt="MMM Bank Logo">
     </div>
+
     <div class="sidebar-user">
+        <a href="#" class="user-avatar">
+            <img src="https://github.com/Fev1L.png" alt="avatar">
+        </a>
 
-
-        <div class="dropdown">
-            <a href="#" class="user-avatar" data-bs-toggle="dropdown">
-                <img src="https://github.com/Fev1L.png" class="rounded-circle">
-            </a>
-
-            <ul class="dropdown-menu dropdown-menu-dark shadow">
-                <li class="px-3 py-2 text-white">
-                    <strong>{{ request.user.username }}</strong>
-                </li>
-
-                <li><hr class="dropdown-divider"></li>
-
-                <li><a class="dropdown-item" href="#">Profile</a></li>
-                <li><a class="dropdown-item" href="#">Settings</a></li>
-
-                <li><hr class="dropdown-divider"></li>
-
-                <li>
-                    <form method="POST" action="/logout">
-                        {% csrf_token %}
-                        <button class="dropdown-item btn btn-link text-start" type="submit">
-                            Logout
-                        </button>
-                    </form>
-                </li>
-            </ul>
+        <div class="user-greeting">
+            Hi, <strong>{{ request.user.username }}</strong>
         </div>
 
+        <form method="POST" action="/logout">
+            {% csrf_token %}
+            <button class="logout-btn" type="submit">Logout</button>
+        </form>
     </div>
-        <div class="sidebar-links">
-            {% for link in links %}
-            <a href="{{ link.href }}"
-               class="sidebar-item {% if request.path == link.href %}active{% endif %}">
-                <i class="fa-solid {{ link.icon }}"></i>
-                <span>{{ link.name }}</span>
-            </a>
-            {% endfor %}
-        </div>
+
+    <div class="sidebar-links">
+        {% for link in links %}
+        <a href="{{ link.href }}"
+           class="sidebar-item {% if request.path == link.href %}active{% endif %}">
+            <i class="fa-solid {{ link.icon }}"></i>
+            <span>{{ link.name }}</span>
+        </a>
+        {% endfor %}
+    </div>
 </div>
 {% endif %}

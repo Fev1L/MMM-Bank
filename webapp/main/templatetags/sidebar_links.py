@@ -10,12 +10,12 @@ def get_links():
         'icon': 'fa-regular fa-list-check',
     },{
         'name': 'Transfer',
-        'href': '/transfer',
+        'href': '/contacts/',
         'icon': 'fa-regular fa-right-left',
     }, {
         'name': 'Credits',
         'href': '/credits/',
-        'icon': 'fa-solid fa-landmark',
+        'icon': 'fa-solid fa-chart-pie',
     }, {
         'name': 'Deposits',
         'href': '/deposits/',
@@ -23,7 +23,7 @@ def get_links():
     },{
         'name': 'History',
         'href': '/history',
-        'icon': 'fa-regular fa-chart-pie',
+        'icon': 'fa-regular fa-landmark',
     },{
         'name': 'Account',
         'href': '/profile',
