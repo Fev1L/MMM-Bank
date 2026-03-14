@@ -778,6 +778,20 @@ a:hover {
 
   cursor:pointer;
   transition:0.25s;
+button:hover{
+background:#4b3cff;
+}
+
+  button{
+background:#5b4cff;
+border:none;
+color:white;
+padding:10px 18px;
+border-radius:10px;
+cursor:pointer;
+font-weight:600;
+margin-top:10px;
+}
 }
 
 .login-btn:hover{
@@ -805,4 +819,166 @@ a:hover {
   padding:0.6rem;
   border-radius:0.6rem;
   margin-bottom:1rem;
+}
+/* FOR DEPOSITS */
+.deposits-container {
+    display: grid;
+    grid-template-columns: 450px 1fr; /* Левая колонка 450px, правая на весь остаток */
+    gap: 30px;
+    padding: 20px;
+    margin-left: 6%; /* Отступ для твоего Sidebar */
+}
+/* Sections */
+.section {
+  background: white;
+  border-radius: 20px;
+  padding: 25px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.06);
+  transition: 0.25s;
+  position: relative; /* Чтобы .bank внутри позиционировался корректно */
+}
+
+
+.section h3 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 1.2rem;
+  color: #333;
+}
+
+/* Calculator  */
+.calc-inputs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+.calculator input{
+padding:10px;
+border-radius:10px;
+border:1px solid #ddd;
+margin-right:10px;
+width:140px;
+}
+/* Plan  */
+.plans{
+display:flex;
+flex-wrap:wrap;
+gap:15px;
+}
+
+.plan{
+background:#f7f7ff;
+border-radius:15px;
+padding:15px;
+flex:1;
+min-width:120px;
+text-align:center;
+font-weight:600;
+cursor:pointer;
+transition:0.2s;
+}
+/* Deposits  */
+.deposit{
+display:flex;
+justify-content:space-between;
+padding:10px 0;
+border-bottom:1px solid #eee;
+font-size:14px;
+}
+
+.progress{
+height:6px;
+background:#eee;
+border-radius:10px;
+margin-top:6px;
+overflow:hidden;
+}
+
+.progress-bar{
+height:100%;
+background:#5b4cff;
+border-radius:10px;
+}
+
+.extra{
+display:none;
+}
+/* styles to deposits  */
+
+.page {
+  font-family: Arial, sans-serif;
+  background: #f5f6f8;
+  min-height: 100vh;
+}
+
+/* struct to deposits */
+.left, .right {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+/* bank */
+.bank {
+  position: absolute;
+  right: 25px;
+  top: 20px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.balance {
+  font-size: 36px;
+  font-weight: 700;
+  margin-top: 40px;
+}
+
+/* hover */
+.section:hover {
+  transform: translateY(-4px);
+}
+
+.plan:hover {
+  background: #ecebff;
+  transform: translateY(-4px);
+}
+
+/* result and history */
+.result {
+  margin-top: 10px;
+  font-weight: 600;
+}
+
+.history-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  padding: 8px 0;
+}
+/* deposit card */
+.deposit-card{
+background: linear-gradient(
+180deg,
+#5b3df5 0%,
+#7b61ff 40%,
+#a594ff 100%
+);
+border-radius:1.5rem;
+padding:25px;
+color:white;
+box-shadow:0 10px 25px rgba(0,0,0,0.08);
+width:100%;
+}
+
+.deposit-card-top{
+display:flex;
+justify-content:space-between;
+font-size:14px;
+opacity:0.9;
+}
+
+.deposit-card-balance{
+font-size:34px;
+font-weight:700;
+margin-top:20px;
 }
