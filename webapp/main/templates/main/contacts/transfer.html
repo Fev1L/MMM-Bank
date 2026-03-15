@@ -18,10 +18,10 @@
             </div>
         </div>
         <div class="quick-actions">
-            <button class="action-btn">
+            <a href="/contacts/send/" class="action-btn">
                 <i class="fa-solid fa-paper-plane"></i>
                 <span>Send</span>
-            </button>
+            </a>
 
             <button class="action-btn">
                 <i class="fa-solid fa-hand-holding-dollar"></i>
@@ -71,7 +71,22 @@
 
 <div class="row g-5">
     <div class="col">
-        {% include 'main/layout/transaction.html' %}
+        <div class="quick-actions">
+            <button class="action-btn">
+                <i class="fa-solid fa-file-lines"></i>
+                <span>Create an Invoice</span>
+            </button>
+
+            <button class="action-btn">
+                <i class="fa-solid fa-building-columns"></i>
+                <span>Transfer to Bank</span>
+            </button>
+
+            <button class="action-btn">
+                <i class="fa-solid fa-left-right"></i>
+                <span>Resolution Centre</span>
+            </button>
+        </div>
     </div>
     <div class="col">
 

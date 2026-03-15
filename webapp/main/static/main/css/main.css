@@ -62,7 +62,7 @@ a:hover {
 
 .cardbar-section {
   gap: 20px;
-  margin-top: 15rem;
+  margin-top: 50%;
 }
 
 .cardbar-header{
@@ -244,7 +244,7 @@ a:hover {
   align-items: center;
   gap: 10px;
   padding-bottom: 25px;
-  margin-bottom: 3rem;
+  margin-bottom: 10%;
 }
 /* AVATAR */
 .user-avatar {
@@ -909,11 +909,10 @@ a:hover {
 .input-group input{
   width:100%;
   padding:0.7rem 0.7rem 0.7rem 2.2rem;
-
   border-radius:0.7rem !important;
   border:none;
-
   outline:none;
+  background:white;
 }
 
 /* BUTTON */

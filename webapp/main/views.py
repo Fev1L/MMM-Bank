@@ -72,6 +72,64 @@ def add_contact(request):
     return render(request, 'main/contacts/add_contact.html', {'form': form})
 
 @login_required
+def send_money_anyone(request):
+    if request.method == 'POST':
+        username_or_email = request.POST.get('user')
+        amount = Decimal(request.POST.get('amount'))
+
+        try:
+            recipient = User.objects.get(username__iexact=username_or_email)
+        except User.DoesNotExist:
+            try:
+                recipient = User.objects.get(email__iexact=username_or_email)
+            except User.DoesNotExist:
+                return render(request, 'main/contacts/send_money_anyone.html', {
+                    'error': "User not found"
+                })
+
+        sender_account = request.user.account
+        recipient_account = recipient.account
+
+        if recipient == request.user:
+            return render(request, 'main/contacts/send_money_anyone.html', {
+                'error': "You cannot send money to yourself"
+            })
+
+        if sender_account.balance < amount:
+            return render(request, 'main/contacts/send_money_anyone.html', {
+                'error': "Not enough balance"
+            })
+
+        transfer_category, _ = Category.objects.get_or_create(
+            name="Transfer",
+            type=Category.WITHDRAW
+        )
+
+        deposit_category, _ = Category.objects.get_or_create(
+            name="Deposit",
+            type=Category.DEPOSIT
+        )
+
+        with db_transaction.atomic():
+            Transaction.objects.create(
+                account=sender_account,
+                amount=amount,
+                category=transfer_category,
+                title=f"Transfer to {recipient.username}"
+            )
+
+            Transaction.objects.create(
+                account=recipient_account,
+                amount=amount,
+                category=deposit_category,
+                title=f"Transfer from {request.user.username}"
+            )
+
+        return redirect('contacts_list')
+
+    return render(request, 'main/contacts/send_money_anyone.html')
+
+@login_required
 def send_money(request, friend_id):
     recipient = User.objects.get(pk=friend_id)
     sender_account = request.user.account

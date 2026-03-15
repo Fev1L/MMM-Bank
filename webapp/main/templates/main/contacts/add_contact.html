@@ -1,29 +1,42 @@
-{% extends 'main/layout/layout.html' %}
+{% extends 'main/layout/users_layout.html' %}
 
-{% block title%}{{ request.user.username }} Account {% endblock %}
+{% block title%}{{ request.user.username }} Add Contact {% endblock %}
 
-{% block content%}
-<section class="contacts-page">
-    <div class="contacts-card">
-        <h2>Add New Contact</h2>
-          <form method="post">
-              {% csrf_token %}
-              {{ form.as_p }}
-              <button class="login-btn">Add contact</button>
-          </form>
-        <a href="{% url 'contacts_list' %}">Back to contacts</a>
-    </div>
-</section>
-{% endblock %}
+{% block content %}
+<div class="login-page">
+    <div class="login-card">
 
+        <h1>Add Contact</h1>
+        <p class="login-subtitle">Save a new contact for quick transfers</p>
+
+        {% if form.errors %}
+        <div class="login-error">
+            <ul>
+                {% for field in form %}
+                {% for error in field.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
             <div class="input-group">
                 <i class="fa-solid fa-user"></i>
-                <input type="text" placeholder="Contact name">
+                {{ form.username_or_email }}
             </div>
 
-            <div class="input-group">
-                <i class="fa-solid fa-envelope"></i>
-                <input type="email" placeholder="Email">
-            </div>
+            <button type="submit" class="login-btn">
+                Add contact
+            </button>
+        </form>
 
-            <button class="login-btn">Add contact</button>
+        <div class="login-footer">
+            <a href="{% url 'contacts_list' %}">← Back to contacts</a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
