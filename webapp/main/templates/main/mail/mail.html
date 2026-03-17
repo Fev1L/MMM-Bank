@@ -24,6 +24,13 @@
     <p>{{ msg.content }}</p>
   </div>
 
+  {% if msg.type == "request" and not msg.is_paid %}
+  <form method="post" action="/pay-request/{{ msg.id }}/">
+    {% csrf_token %}
+    <button class="pay-btn">💸 Pay {{ msg.amount }}</button>
+  </form>
+  {% endif %}
+
   <div class="mail-actions">
     <a href="/inbox/" class="btn-back">← Back</a>
   </div>

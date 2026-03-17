@@ -12,6 +12,10 @@ urlpatterns = [
     path('inbox/', views.inbox, name='inbox'),
     path('inbox/<int:message_id>/', views.message_detail, name='message_detail'),
 
+    path('request/', views.request_money, name='request_money_anyone'),
+    path('request/<int:friend_id>/', views.request_money, name='request_money'),
+    path('pay-request/<int:message_id>/', views.pay_request, name='pay_request'),
+
     path('history', views.history, name='history'),
     path('profile', views.profile, name='profile'),
 

@@ -140,6 +140,19 @@ a:hover {
   text-decoration: none;
   color: #1a73e8;
 }
+
+.pay-btn {
+  background: #1a73e8;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.pay-btn:hover {
+  background: #1557b0;
+}
 /* CARDBAR */
 /* TOP BAR */
 
@@ -1114,3 +1127,39 @@ a:hover {
   margin-bottom:1rem;
 }
 
+.contact-preview{
+  display:flex;
+  align-items:center;
+  gap:0.8rem;
+
+  margin-bottom:1.2rem;
+  padding:0.6rem;
+
+  border-radius:0.8rem;
+  background:rgba(255,255,255,0.15);
+}
+
+.contact-avatar{
+  width:40px;
+  height:40px;
+
+  border-radius:12px;
+
+  background:linear-gradient(
+          135deg,
+          #5b3df5,
+          #7b61ff
+  );
+
+  color:white;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  font-weight:600;
+}
+
+.contact-name{
+  font-weight:600;
+}

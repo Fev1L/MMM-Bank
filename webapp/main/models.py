@@ -65,11 +65,25 @@ class Transaction(models.Model):
         return f"{self.category.type} - {self.amount}"
 
 class InboxMessage(models.Model):
+    SYSTEM = "system"
+    USER = "user"
+    REQUEST = "request"
+
+    MESSAGE_TYPE = [
+        (SYSTEM, "System"),
+        (USER, "User"),
+        (REQUEST, "Request"),
+    ]
+
     receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name="messages")
     sender = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
 
     title = models.CharField(max_length=255)
     content = models.TextField()
+    type = models.CharField(max_length=10, choices=MESSAGE_TYPE, default=SYSTEM)
+
+    amount = models.DecimalField(max_digits=12, decimal_places=2, null=True, blank=True)
+    is_paid = models.BooleanField(default=False)
 
     is_read = models.BooleanField(default=False)
 

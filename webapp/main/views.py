@@ -75,7 +75,7 @@ def contacts_list(request):
     balance = account.balance
     contacts = Contact.objects.filter(owner=request.user)
     transactions = Transaction.objects.filter(account=account).order_by('-created_at')[:4]
-    return render(request, 'main/contacts/transfer.html', {'contacts': contacts, "balance" : balance, "transactions" : transactions,})
+    return render(request, 'main/transfer.html', {'contacts': contacts, "balance" : balance, "transactions" : transactions,})
 
 @login_required
 def add_contact(request):
@@ -115,7 +115,6 @@ def send_money(request, friend_id=None):
                         'error': "User not found"
                     })
 
-        # 👉 логіка переказу (твоя винесена функція)
         try:
             make_transfer(request.user, recipient, amount)
             return redirect('contacts_list')
@@ -128,6 +127,97 @@ def send_money(request, friend_id=None):
     return render(request, 'main/contacts/send_money.html', {
         'friend': recipient
     })
+
+@login_required
+def request_money(request, friend_id=None):
+
+    recipient = None
+
+    if friend_id:
+        recipient = get_object_or_404(User, pk=friend_id)
+
+    if request.method == 'POST':
+        amount = Decimal(request.POST.get('amount'))
+
+        if not recipient:
+            username_or_email = request.POST.get('user')
+
+            try:
+                recipient = User.objects.get(username__iexact=username_or_email)
+            except User.DoesNotExist:
+                try:
+                    recipient = User.objects.get(email__iexact=username_or_email)
+                except User.DoesNotExist:
+                    return render(request, 'main/contacts/request_money.html', {
+                        'error': "User not found"
+                    })
+
+        if recipient == request.user:
+            return render(request, 'main/contacts/request_money.html', {
+                'error': "You cannot request from yourself"
+            })
+
+        InboxMessage.objects.create(
+            receiver=recipient,
+            sender=request.user,
+            title="Payment Request 💸",
+            content=f"{request.user.username} requests {amount}",
+            type=InboxMessage.REQUEST,
+            amount=amount
+        )
+
+        return redirect('contacts_list')
+
+    return render(request, 'main/contacts/request_money.html', {
+        'friend': recipient
+    })
+
+@login_required
+def pay_request(request, message_id):
+    msg = get_object_or_404(InboxMessage, id=message_id, receiver=request.user)
+
+    if msg.is_paid:
+        return redirect('inbox')
+
+    sender_account = request.user.account
+    recipient_account = msg.sender.account
+    amount = msg.amount
+
+    if sender_account.balance < amount:
+        return render(request, 'main/mail/mail.html', {
+            'msg': msg,
+            'error': "Not enough balance"
+        })
+
+    transfer_category, _ = Category.objects.get_or_create(
+        name="Transfer",
+        type=Category.WITHDRAW
+    )
+
+    deposit_category, _ = Category.objects.get_or_create(
+        name="Deposit",
+        type=Category.DEPOSIT
+    )
+
+    with db_transaction.atomic():
+        Transaction.objects.create(
+            account=sender_account,
+            amount=amount,
+            category=transfer_category,
+            title=f"Payment for request from {msg.sender.username}"
+        )
+
+        Transaction.objects.create(
+            account=recipient_account,
+            amount=amount,
+            category=deposit_category,
+            title=f"Payment received from {request.user.username}"
+        )
+
+        msg.is_paid = True
+        msg.save()
+
+    return redirect('inbox')
 
 def login_user(request):
     if request.user.is_authenticated:
