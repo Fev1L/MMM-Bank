@@ -9,14 +9,14 @@ class PiggyBank(models.Model):
     def __str__(self):
         return f"Piggy Bank of {self.user.username}"
 
-# Добавь эту модель вниз
+
 class Transaction(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    amount = models.FloatField()  # Сюда будем записывать сумму (например, 100 или -50)
-    timestamp = models.DateTimeField(auto_now_add=True) # Время создастся автоматически
+    amount = models.FloatField()
+    timestamp = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering = ['-timestamp'] # Автоматическая сортировка: новые сверху
+        ordering = ['-timestamp']
 
     def __str__(self):
         return f"{self.user.username}: {self.amount} at {self.timestamp}"
