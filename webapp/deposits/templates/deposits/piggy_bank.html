@@ -1,10 +1,65 @@
-﻿<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+﻿{% extends 'main/layout/layout.html' %}
 
-</body>
-</html>
+{% block title %}Piggy Bank{% endblock %}
+
+{% block content %}
+ <div class="page">
+    <div class="wrapper">
+        <div class="balance-card">
+            <p style="font-size: 14px; margin: 0; opacity: 0.9;">Piggy Bank Balance</p>
+            <div style="font-size: 40px;">${{ piggy.balance }}</div>
+        </div>
+
+        <div class="section">
+            <h3 style="margin-top: 0;">Savings Goal</h3>
+            <form method="post" style="display: flex; gap: 10px; margin-bottom: 15px;">
+                {% csrf_token %}
+                <input type="number" name="goal" placeholder="Set Goal" value="{{ piggy.goal }}" style="flex: 1;">
+                <button type="submit" class="btn-outline">Set Goal</button>
+            </form>
+
+            <div class="progress">
+                <div class="bar" style="width: {{ percent }}%"></div>
+            </div>
+            <p style="color: #666; font-size: 14px; margin-top: 8px;">Goal: ${{ piggy.goal }}</p>
+        </div>
+
+        <div style="display: flex; gap: 15px;">
+            <div class="section" style="flex: 1; background: #e8f5e9; border: none; text-align: center;">
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="number" name="amount" placeholder="Amount" required style="width: 80%; margin-bottom: 10px;">
+                    <input type="hidden" name="action" value="add">
+                    <button type="submit" style="background: none; color: #2e7d32; border: 1px solid #2e7d32; width: 100%;">Add Money</button>
+                </form>
+            </div>
+            <div class="section" style="flex: 1; background: #ffebee; border: none; text-align: center;">
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="number" name="amount" placeholder="Amount" required style="width: 80%; margin-bottom: 10px;">
+                    <input type="hidden" name="action" value="withdraw">
+                    <button type="submit" style="background: none; color: #c62828; border: 1px solid #c62828; width: 100%;">Withdraw</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3 style="margin-top: 0;">Transactions</h3>
+            {% for tx in transactions %}
+            <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee;">
+                <span style="font-weight: bold; color: {% if tx.amount > 0 %}#2e7d32{% else %}#333{% endif %};">
+                    {% if tx.amount > 0 %}+{% endif %}${{ tx.amount }}
+                </span>
+                <span style="color: #999; font-size: 13px;">{{ tx.timestamp|date:"H:i:s" }}</span>
+            </div>
+            {% empty %}
+            <p style="color: #999;">No transactions yet.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+
+
+
+{% endblock %}
