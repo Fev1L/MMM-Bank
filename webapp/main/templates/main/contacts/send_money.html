@@ -4,46 +4,48 @@
 
 {% block content %}
 <div class="login-page">
-  <div class="login-card">
+    <div class="login-card">
+        <h1>Send Money</h1>
 
-    <h1>Send Money</h1>
-    <p class="login-subtitle">
-      Transfer money to <strong>{{ friend.username }}</strong>
-    </p>
+        {% if error %}
+        <div class="login-error">
+            <p>{{ error }}</p>
+        </div>
+        {% endif %}
 
-    {% if error %}
-    <div class="login-error">
-      <p>{{ error }}</p>
+        <form method="POST">
+            {% csrf_token %}
+            {% if not friend %}
+                <div class="input-group">
+                    <i class="fa-solid fa-user"></i>
+                    <input type="text" name="user" placeholder="Username" required>
+                </div>
+            {% endif %}
+
+            <div class="input-group">
+                <i class="fa-solid fa-dollar-sign"></i>
+                <input
+                        type="number"
+                        name="amount"
+                        placeholder="Amount"
+                        min="1"
+                        step="0.01"
+                        required
+                >
+            </div>
+
+            <button type="submit" class="login-btn">
+                Send money
+            </button>
+
+        </form>
+
+        <div class="login-footer">
+            <a href="{% url 'contacts_list' %}">
+                ← Back to contacts
+            </a>
+        </div>
+
     </div>
-    {% endif %}
-
-    <form method="POST">
-      {% csrf_token %}
-      <div class="input-group">
-        <i class="fa-solid fa-dollar-sign"></i>
-        <input
-                type="number"
-                name="amount"
-                placeholder="Amount"
-                min="1"
-                step="0.01"
-                required
-        >
-      </div>
-
-      <button type="submit" class="login-btn">
-        Send money
-      </button>
-
-    </form>
-
-    <div class="login-footer">
-      <a href="{% url 'contacts_list' %}">
-        ← Back to contacts
-      </a>
-    </div>
-
-  </div>
-
 </div>
 {% endblock %}

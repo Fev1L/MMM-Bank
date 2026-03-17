@@ -1,0 +1,35 @@
+{% extends 'main/mail/mail_layout.html' %}
+
+{% block title%}{{ request.user.username }} Account {% endblock %}
+
+{% block content%}
+  <h2 class="inbox-title">Inbox</h2>
+
+  <div class="inbox-container">
+
+    {% for msg in messages %}
+    <div class="inbox-item {% if not msg.is_read %}unread{% endif %}"
+         onclick="window.location='/inbox/{{ msg.id }}/'">
+
+      <div class="inbox-left">
+        {% if msg.sender %}
+        {{ msg.sender.username }}
+        {% else %}
+        System
+        {% endif %}
+      </div>
+
+      <div class="inbox-center">
+        <span class="inbox-subject">{{ msg.title }}</span>
+        <span class="inbox-preview"> - {{ msg.content|truncatechars:50 }}</span>
+      </div>
+
+      <div class="inbox-right">
+        {{ msg.created_at|date:"H:i" }}
+      </div>
+
+    </div>
+    {% endfor %}
+
+  </div>
+{% endblock %}

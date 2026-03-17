@@ -47,7 +47,161 @@ a {
 a:hover {
   color: #6c6c6c;
 }
+/* MAIL */
+.inbox-title {
+  margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.inbox-container {
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.inbox-item {
+  display: grid;
+  grid-template-columns: 200px 1fr 80px;
+  padding: 12px 16px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.inbox-item:hover {
+  background: #f5f7fa;
+}
+
+.inbox-item.unread {
+  background: #f2f6ff;
+  font-weight: 600;
+}
+
+.inbox-left {
+  color: #202124;
+}
+
+.inbox-center {
+  color: #5f6368;
+}
+
+.inbox-subject {
+  color: #202124;
+  margin-right: 5px;
+}
+
+.inbox-preview {
+  color: #5f6368;
+}
+
+.inbox-right {
+  text-align: right;
+  color: #5f6368;
+  font-size: 12px;
+}
+
+.mail-container {
+  max-width: 800px;
+  margin: 20px auto;
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px 25px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.mail-header h2 {
+  margin-bottom: 10px;
+  font-size: 22px;
+}
+
+.mail-meta {
+  display: flex;
+  justify-content: space-between;
+  color: #5f6368;
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+.mail-body {
+  font-size: 16px;
+  color: #202124;
+  line-height: 1.6;
+  border-top: 1px solid #eee;
+  padding-top: 15px;
+}
+
+.mail-actions {
+  margin-top: 20px;
+}
+
+.btn-back {
+  text-decoration: none;
+  color: #1a73e8;
+}
 /* CARDBAR */
+/* TOP BAR */
+
+.cardbar-top{
+  display:flex;
+  justify-content:flex-end;
+  margin-bottom:1rem;
+}
+
+/* ICON BUTTONS */
+
+.cardbar-actions{
+  display:flex;
+  gap:0.5rem;
+}
+
+.icon-btn{
+  position:relative;
+
+  width:40px;
+  height:40px;
+
+  border:none;
+  border-radius:50%;
+
+  background:white;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  cursor:pointer;
+
+  box-shadow:0 5px 15px rgba(0,0,0,0.1);
+
+  transition:0.25s;
+}
+
+.icon-btn i{
+  font-size:1rem;
+  color:#374151;
+}
+
+.icon-btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 10px 20px rgba(0,0,0,0.15);
+}
+
+/* NOTIFICATION DOT */
+
+.notif-dot{
+  position:absolute;
+  top:8px;
+  right:8px;
+
+  width:8px;
+  height:8px;
+
+  background:#ef4444;
+  border-radius:50%;
+}
+
 .cardbar{
   position: fixed;
   right: 0;

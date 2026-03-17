@@ -1,12 +1,15 @@
-from django.shortcuts import redirect, render
+from django.core.exceptions import ValidationError
+from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from django.db import transaction as db_transaction
-from .models import Transaction, Contact, Category
+from .models import Transaction, Contact, Category, InboxMessage
 from .forms import AddContactForm
 from decimal import Decimal
+from .services import make_transfer
+
 
 def index(request):
     if request.user.is_authenticated:
@@ -14,12 +17,13 @@ def index(request):
         balance = account.balance
         contacts = Contact.objects.filter(owner=request.user)[:4]
         transactions = Transaction.objects.filter(account=account).order_by('-created_at')[:4]
+        transactionsStats = Transaction.objects.filter(account=account).order_by('-created_at')
         total_income = 0
-        for transaction in transactions:
+        for transaction in transactionsStats:
             if transaction.category.type == Transaction.DEPOSIT:
                 total_income += transaction.amount
         total_expenses = 0
-        for transaction in transactions:
+        for transaction in transactionsStats:
             if transaction.category.type == Transaction.WITHDRAW:
                 total_expenses += transaction.amount
         saving_goal = 0
@@ -38,6 +42,7 @@ def index(request):
         return render(request, 'main/index.html')
 
 
+@login_required
 def history(request):
     account = request.user.account
     balance = account.balance
@@ -45,8 +50,24 @@ def history(request):
     transactions = Transaction.objects.filter(account=account).order_by('-created_at')
     return render(request, 'main/history.html',{'contacts': contacts, "balance" : balance, "transactions" : transactions,})
 
+@login_required
 def profile(request):
     return render(request, 'main/profile.html')
+
+@login_required
+def inbox(request):
+    messages = InboxMessage.objects.filter(receiver=request.user).order_by('-created_at')
+    return render(request, 'main/mail/inbox.html', {'messages': messages})
+
+@login_required
+def message_detail(request, message_id):
+    msg = get_object_or_404(InboxMessage, id=message_id, receiver=request.user)
+
+    if not msg.is_read:
+        msg.is_read = True
+        msg.save()
+
+    return render(request, 'main/mail/mail.html', {'msg': msg})
 
 @login_required
 def contacts_list(request):
@@ -72,94 +93,41 @@ def add_contact(request):
     return render(request, 'main/contacts/add_contact.html', {'form': form})
 
 @login_required
-def send_money_anyone(request):
+def send_money(request, friend_id=None):
+    recipient = None
+
+    if friend_id:
+        recipient = get_object_or_404(User, pk=friend_id)
+
     if request.method == 'POST':
-        username_or_email = request.POST.get('user')
         amount = Decimal(request.POST.get('amount'))
 
-        try:
-            recipient = User.objects.get(username__iexact=username_or_email)
-        except User.DoesNotExist:
+        if not recipient:
+            username_or_email = request.POST.get('user')
+
             try:
-                recipient = User.objects.get(email__iexact=username_or_email)
+                recipient = User.objects.get(username__iexact=username_or_email)
             except User.DoesNotExist:
-                return render(request, 'main/contacts/send_money_anyone.html', {
-                    'error': "User not found"
-                })
+                try:
+                    recipient = User.objects.get(email__iexact=username_or_email)
+                except User.DoesNotExist:
+                    return render(request, 'main/contacts/send_money.html', {
+                        'error': "User not found"
+                    })
 
-        sender_account = request.user.account
-        recipient_account = recipient.account
-
-        if recipient == request.user:
-            return render(request, 'main/contacts/send_money_anyone.html', {
-                'error': "You cannot send money to yourself"
+        # 👉 логіка переказу (твоя винесена функція)
+        try:
+            make_transfer(request.user, recipient, amount)
+            return redirect('contacts_list')
+        except ValidationError as e:
+            return render(request, 'main/contacts/send_money.html', {
+                'error': str(e),
+                'friend': recipient
             })
 
-        if sender_account.balance < amount:
-            return render(request, 'main/contacts/send_money_anyone.html', {
-                'error': "Not enough balance"
-            })
-
-        transfer_category, _ = Category.objects.get_or_create(
-            name="Transfer",
-            type=Category.WITHDRAW
-        )
-
-        deposit_category, _ = Category.objects.get_or_create(
-            name="Deposit",
-            type=Category.DEPOSIT
-        )
-
-        with db_transaction.atomic():
-            Transaction.objects.create(
-                account=sender_account,
-                amount=amount,
-                category=transfer_category,
-                title=f"Transfer to {recipient.username}"
-            )
-
-            Transaction.objects.create(
-                account=recipient_account,
-                amount=amount,
-                category=deposit_category,
-                title=f"Transfer from {request.user.username}"
-            )
-
-        return redirect('contacts_list')
-
-    return render(request, 'main/contacts/send_money_anyone.html')
-
-@login_required
-def send_money(request, friend_id):
-    recipient = User.objects.get(pk=friend_id)
-    sender_account = request.user.account
-    recipient_account = recipient.account
-
-    if request.method == 'POST':
-        amount = Decimal(request.POST.get('amount'))
-
-        if sender_account.balance < amount:
-            return render(request, 'main/contacts/send_money.html', {'error': "Not enough balance", 'friend': recipient})
-
-        transfer_category, _ = Category.objects.get_or_create(name="Transfer", type=Category.WITHDRAW)
-
-        with db_transaction.atomic():
-            Transaction.objects.create(
-                account=sender_account,
-                amount=amount,
-                category=transfer_category,
-                title=f"Transfer to {recipient.username}"
-            )
-            deposit_category, _ = Category.objects.get_or_create(name="Deposit", type=Category.DEPOSIT)
-            Transaction.objects.create(
-                account=recipient_account,
-                amount=amount,
-                category=deposit_category,
-                title=f"Transfer from {request.user.username}"
-            )
-        return redirect('contacts_list')
-
-    return render(request, 'main/contacts/send_money.html', {'friend': recipient})
+    return render(request, 'main/contacts/send_money.html', {
+        'friend': recipient
+    })
 
 def login_user(request):
     if request.user.is_authenticated:

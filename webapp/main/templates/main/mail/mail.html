@@ -1,0 +1,33 @@
+{% extends 'main/mail/mail_layout.html' %}
+
+{% block title %}{{ msg.title }}{% endblock %}
+
+{% block content %}
+
+<div class="mail-container">
+
+  <div class="mail-header">
+    <h2>{{ msg.title }}</h2>
+
+    <div class="mail-meta">
+      {% if msg.sender %}
+      <span><b>From:</b> {{ msg.sender.username }}</span>
+      {% else %}
+      <span><b>From:</b> System</span>
+      {% endif %}
+
+      <span class="mail-date">{{ msg.created_at }}</span>
+    </div>
+  </div>
+
+  <div class="mail-body">
+    <p>{{ msg.content }}</p>
+  </div>
+
+  <div class="mail-actions">
+    <a href="/inbox/" class="btn-back">← Back</a>
+  </div>
+
+</div>
+
+{% endblock %}
