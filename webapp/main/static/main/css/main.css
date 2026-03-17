@@ -998,14 +998,6 @@ flex-direction:column;
 gap:25px;
 }
 
-.balance-card{
-background:linear-gradient(135deg,#ff7ab6,#ffb2d6);
-color:white;
-padding:40px;
-border-radius:20px;
-font-size:32px;
-font-weight:700;
-}
 
 .section{
 background:white;

@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import PiggyBank, Transaction
+from .models import PiggyBank, piggy_transactions
 
 
 def piggy_bank(request):
@@ -23,7 +23,7 @@ def piggy_bank(request):
 
                 if action == "add" and amount > 0:
                     piggy.balance += amount
-                    Transaction.objects.create(
+                    piggy_transactions.objects.create(
                         user=request.user,
                         amount=amount
                     )
@@ -32,7 +32,7 @@ def piggy_bank(request):
                     if piggy.balance >= amount:
                         piggy.balance -= amount
 
-                        Transaction.objects.create(
+                        piggy_transactions.objects.create(
                             user=request.user,
                             amount=-amount
                         )
@@ -50,7 +50,7 @@ def piggy_bank(request):
         percent = min(int(percent), 100)
 
 
-    transactions = Transaction.objects.filter(user=request.user).order_by('-timestamp')[:10]
+    transactions = piggy_transactions.objects.filter(user=request.user).order_by('-timestamp')[:10]
 
     return render(request, "deposits/piggy_bank.html", {
         "piggy": piggy,

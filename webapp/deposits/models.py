@@ -10,7 +10,7 @@ class PiggyBank(models.Model):
         return f"Piggy Bank of {self.user.username}"
 
 
-class Transaction(models.Model):
+class  piggy_transactions(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     amount = models.FloatField()
     timestamp = models.DateTimeField(auto_now_add=True)
