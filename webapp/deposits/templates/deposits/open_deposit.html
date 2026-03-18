@@ -1,10 +1,41 @@
-﻿<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+﻿{% extends 'main/layout/layout.html' %}
+{% block title %}open deposit{% endblock %}
 
-</body>
-</html>
+{% block content %}
+<div class="container-fluid px-4">
+
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+
+            <div class="open-deposit-card">
+
+                <h2 class="mb-4">Open Deposit</h2>
+
+                <form method="POST">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label>Amount</label>
+                        <input type="number" name="amount" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label>Duration</label>
+                        <select name="duration" class="form-control">
+                            <option value="3">3 months (3%)</option>
+                            <option value="6">6 months (5%)</option>
+                            <option value="12">12 months (7%)</option>
+                            <option value="24">24 months (9%)</option>
+                        </select>
+                    </div>
+
+                    <button class="btn-open w-100">Open Deposit</button>
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+
+</div>
+{% endblock %}
