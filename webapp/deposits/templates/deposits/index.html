@@ -9,15 +9,13 @@
 <div class="col-md-4">
 
 <div class="deposit-card mb-4">
-
 <div class="deposit-card-top">
 <div>MMM</div>
 </div>
 
-<div class="deposit-card-balance" id="balance">
-$0
+<div class="deposit-card-balance">
+${{ deposits|length|add:0 }}
 </div>
-
 </div>
 
 <div class="quick-actions mb-4">
@@ -47,68 +45,46 @@ $0
 </div>
 </div>
 
-
 <div class="section mb-4">
 <h3>Active Deposits</h3>
 
 <div id="deposit-list">
 
+{% for d in deposits %}
 <div class="deposit">
 <div>
-6 months deposit
+{{ d.duration }} months deposit
 <div class="progress">
-<div class="progress-bar" style="width:60%"></div>
+<div class="progress-bar" style="width:50%"></div>
 </div>
 </div>
-<span>$2000 • 5%</span>
+<span>${{ d.amount }} • {{ d.rate }}%</span>
 </div>
-
-<div class="deposit">
-<div>
-12 months deposit
-<div class="progress">
-<div class="progress-bar" style="width:30%"></div>
-</div>
-</div>
-<span>$5000 • 7%</span>
-</div>
-
-<div class="deposit extra">
-<div>
-24 months deposit
-<div class="progress">
-<div class="progress-bar" style="width:15%"></div>
-</div>
-</div>
-<span>$3000 • 9%</span>
-</div>
-
-</div>
-
-<button class="btn btn-primary mt-3" onclick="showMore()">Show More</button>
+{% empty %}
+<p>No active deposits</p>
+{% endfor %}
 
 </div>
 
 </div>
 
+</div>
 
 <div class="col-md-8">
 
 <div class="section mb-4">
 <h3>Deposit History</h3>
 
+{% for d in history %}
 <div class="history-item">
-<span>$1000 → $1080</span>
-<span class="text-muted">Closed Jan 2025</span>
+<span>${{ d.amount }} → ${{ d.amount|add:d.profit }}</span>
+<span class="text-muted">{{ d.created_at|date:"M Y" }}</span>
 </div>
-
-<div class="history-item">
-<span>$500 → $540</span>
-<span class="text-muted">Closed Aug 2024</span>
-</div>
+{% empty %}
+<p>No history yet</p>
+{% endfor %}
 
 </div>
-
 
 <div class="section calculator mb-4">
 <h3>Deposit Calculator</h3>
@@ -122,30 +98,19 @@ $0
 
 <div class="result mb-3" id="result"></div>
 
-<canvas id="chart" style="width:100%; height:250px;"></canvas>
-
 </div>
-
 
 <div class="section">
 <h3>Deposit Plans</h3>
 
 <div class="row g-2">
 
-<div class="col-6">
-<div class="plan">3 mo / 3%</div>
-</div>
+<div class="col-6"><div class="plan">3 mo / 3%</div></div>
+<div class="col-6"><div class="plan">6 mo / 5%</div></div>
+<div class="col-6"><div class="plan">12 mo / 7%</div></div>
+<div class="col-6"><div class="plan">24 mo / 9%</div></div>
 
-<div class="col-6">
-<div class="plan">6 mo / 5%</div>
 </div>
-
-<div class="col-6">
-<div class="plan">12 mo / 7%</div>
-</div>
-
-<div class="col-6">
-<div class="plan">24 mo / 9%</div>
 </div>
 
 </div>
@@ -154,52 +119,14 @@ $0
 
 </div>
 
-</div>
-
-</div>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    function showMore(){
-        document.querySelectorAll(".extra").forEach(e => e.style.display="flex");
+function calc(){
+    let a = document.getElementById("amount").value;
+    let r = document.getElementById("rate").value;
+    if(a && r) {
+        document.getElementById("result").innerText = "Profit: $" + (a * r / 100).toFixed(2);
     }
-
-    function calc(){
-        let a = document.getElementById("amount").value;
-        let r = document.getElementById("rate").value;
-        if(a && r) {
-            document.getElementById("result").innerText = "Profit: $" + (a * r / 100).toFixed(2);
-        }
-    }
-
-
-    const target = 3810.01; let curr = 0;
-    const count = setInterval(() => {
-        curr += target/60;
-        if(curr >= target){
-            curr = target;
-            clearInterval(count);
-        }
-        document.getElementById("balance").innerText = "$" + curr.toFixed(2);
-    }, 20);
-
-
-    const ctx = document.getElementById('chart');
-    new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: ['Jan','Feb','Mar','Apr','May'],
-            datasets: [{
-                data: [1000, 1500, 2200, 3000, 3810],
-                borderColor: '#5b4cff',
-                backgroundColor: 'rgba(91, 76, 255, 0.1)',
-                fill: true,
-                tension: 0.4
-            }]
-        },
-        options: {
-            plugins: { legend: { display: false } },
-            scales: { y: { display: false }, x: { grid: { display: false } } }
-        }
-    });
+}
 </script>
+
 {% endblock %}

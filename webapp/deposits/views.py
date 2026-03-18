@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import PiggyBank, piggy_transactions
-
+from .models import Deposit
 
 def piggy_bank(request):
 
@@ -60,11 +60,52 @@ def piggy_bank(request):
 
 
 def open_deposit(request):
+    if request.method == "POST":
+        amount = request.POST.get("amount")
+        duration = request.POST.get("duration")
+
+        if amount and duration:
+            amount = float(amount)
+            duration = int(duration)
+
+
+            rates = {
+                3: 3,
+                6: 5,
+                12: 7,
+                24: 9
+            }
+
+            rate = rates.get(duration, 5)
+
+            Deposit.objects.create(
+                user=request.user,
+                amount=amount,
+                duration=duration,
+                rate=rate
+            )
+
+        return redirect('index')
+
     return render(request, "deposits/open_deposit.html")
 
 
 def index(request):
-    return render(request, 'deposits/index.html')
+    deposits = Deposit.objects.filter(user=request.user, is_active=True)
+    history = Deposit.objects.filter(user=request.user, is_active=False)
+
+    chart_data = []
+    total = 0
+
+    for d in deposits:
+        total += d.amount + (d.amount * d.rate / 100)
+        chart_data.append(total)
+
+    return render(request, 'deposits/index.html', {
+        "deposits": deposits,
+        "history": history,
+        "chart_data": chart_data
+    })
 
 
 def buy_bonds(request):
