@@ -18,6 +18,8 @@ urlpatterns = [
     path('gift/send/', views.send_gift, name='send_gift'),
     path('claim-gift/<int:message_id>/', views.claim_gift, name='claim_gift'),
 
+    path('goals', views.goals, name='goals'),
+
     path('history', views.history, name='history'),
     path('profile', views.profile, name='profile'),
 

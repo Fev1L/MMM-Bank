@@ -1187,3 +1187,27 @@ a:hover {
   transform:translateY(-2px) scale(1.02);
   box-shadow:0 10px 25px rgba(0,0,0,0.3);
 }
+
+/* GOAL STYLE */
+
+.goal-card{
+  background: linear-gradient(
+          135deg,
+          rgba(255,255,255,0.12),
+          rgba(255,255,255,0.05)
+  );
+}
+
+.goal-btn{
+  background: linear-gradient(
+          135deg,
+          #22c55e,
+          #4ade80
+  );
+  color:white;
+}
+
+.goal-btn:hover{
+  transform:translateY(-2px) scale(1.02);
+  box-shadow:0 10px 25px rgba(0,0,0,0.3);
+}

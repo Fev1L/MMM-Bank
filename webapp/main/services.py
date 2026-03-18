@@ -3,7 +3,6 @@ from django.db import transaction as db_transaction
 
 from .models import Category, Transaction
 
-
 def make_transfer(sender, recipient, amount):
     sender_account = sender.account
     recipient_account = recipient.account

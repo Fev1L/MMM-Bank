@@ -1,7 +1,4 @@
-from contextlib import nullcontext
-
 from django.core.exceptions import ValidationError
-from django.db.models import TextField
 from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -10,7 +7,7 @@ from django.contrib import messages
 from django.db import transaction as db_transaction
 from .models import Transaction, Contact, Category, InboxMessage
 from .forms import AddContactForm
-from decimal import Decimal
+from decimal import Decimal, InvalidOperation
 from .services import make_transfer
 
 
@@ -29,7 +26,7 @@ def index(request):
         for transaction in transactionsStats:
             if transaction.category.type == Transaction.WITHDRAW:
                 total_expenses += transaction.amount
-        saving_goal = 0
+        saving_goal = account.saving_goal
         investments = 0
         imrt = {
             "balance" : balance,
@@ -56,6 +53,32 @@ def history(request):
 @login_required
 def profile(request):
     return render(request, 'main/profile.html')
+
+@login_required
+def goals(request):
+    account = request.user.account
+
+    if request.method == 'POST':
+        saving_goal = request.POST.get('saving_goal')
+
+        try:
+            account.saving_goal = Decimal(saving_goal)
+            account.save()
+        except InvalidOperation:
+            return render(request, 'main/layout/goals.html', {
+                'error': 'Invalid number',
+                'saving_goal': account.saving_goal
+            })
+
+        if saving_goal:
+            account.saving_goal = Decimal(saving_goal)
+            account.save()
+
+            return redirect('home')
+
+    return render(request, 'main/layout/goals.html', {
+        'saving_goal': account.saving_goal
+    })
 
 @login_required
 def inbox(request):
@@ -90,7 +113,7 @@ def add_contact(request):
                 form.add_error('username_or_email', "You can't add yourself.")
             else:
                 Contact.objects.get_or_create(owner=request.user, friend=friend)
-                return redirect('contacts_list')
+                return redirect('home')
     else:
         form = AddContactForm()
     return render(request, 'main/contacts/add_contact.html', {'form': form})
@@ -120,7 +143,7 @@ def send_money(request, friend_id=None):
 
         try:
             make_transfer(request.user, recipient, amount)
-            return redirect('contacts_list')
+            return redirect('home')
         except ValidationError as e:
             return render(request, 'main/contacts/send_money.html', {
                 'error': str(e),
@@ -168,7 +191,7 @@ def request_money(request, friend_id=None):
             amount=amount
         )
 
-        return redirect('contacts_list')
+        return redirect('redirect')
 
     return render(request, 'main/contacts/request_money.html', {
         'friend': recipient
@@ -229,7 +252,7 @@ def send_gift(request):
                 amount=amount
             )
 
-        return redirect('contacts_list')
+        return redirect('redirect')
 
     return render(request, 'main/contacts/send_gift.html')
 
