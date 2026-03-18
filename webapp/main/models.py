@@ -68,11 +68,13 @@ class InboxMessage(models.Model):
     SYSTEM = "system"
     USER = "user"
     REQUEST = "request"
+    GIFT = "gift"
 
     MESSAGE_TYPE = [
         (SYSTEM, "System"),
         (USER, "User"),
         (REQUEST, "Request"),
+        (GIFT, "Gift"),
     ]
 
     receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name="messages")

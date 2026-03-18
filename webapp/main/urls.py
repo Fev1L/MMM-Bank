@@ -15,6 +15,8 @@ urlpatterns = [
     path('request/', views.request_money, name='request_money_anyone'),
     path('request/<int:friend_id>/', views.request_money, name='request_money'),
     path('pay-request/<int:message_id>/', views.pay_request, name='pay_request'),
+    path('gift/send/', views.send_gift, name='send_gift'),
+    path('claim-gift/<int:message_id>/', views.claim_gift, name='claim_gift'),
 
     path('history', views.history, name='history'),
     path('profile', views.profile, name='profile'),

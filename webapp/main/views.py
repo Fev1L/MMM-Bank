@@ -1,4 +1,7 @@
+from contextlib import nullcontext
+
 from django.core.exceptions import ValidationError
+from django.db.models import TextField
 from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -130,7 +133,6 @@ def send_money(request, friend_id=None):
 
 @login_required
 def request_money(request, friend_id=None):
-
     recipient = None
 
     if friend_id:
@@ -173,6 +175,65 @@ def request_money(request, friend_id=None):
     })
 
 @login_required
+def send_gift(request):
+
+    if request.method == 'POST':
+        username_or_email = request.POST.get('user')
+        amount = Decimal(request.POST.get('amount'))
+        message = request.POST.get('message')
+
+        if not message:
+            message = f"{request.user.username} sent you a gift of ${amount}"
+
+        try:
+            recipient = User.objects.get(username__iexact=username_or_email)
+        except User.DoesNotExist:
+            try:
+                recipient = User.objects.get(email__iexact=username_or_email)
+            except User.DoesNotExist:
+                return render(request, 'main/contacts/send_gift.html', {
+                    'error': "User not found"
+                })
+
+        if recipient == request.user:
+            return render(request, 'main/contacts/send_gift.html', {
+                'error': "You cannot send gift to yourself"
+            })
+
+        sender_account = request.user.account
+
+        if sender_account.balance < amount:
+            return render(request, 'main/contacts/send_gift.html', {
+                'error': "Not enough balance"
+            })
+
+        transfer_category, _ = Category.objects.get_or_create(
+            name="Gift",
+            type=Category.WITHDRAW
+        )
+
+        with db_transaction.atomic():
+            Transaction.objects.create(
+                account=sender_account,
+                amount=amount,
+                category=transfer_category,
+                title=f"Gift to {recipient.username}"
+            )
+
+            InboxMessage.objects.create(
+                receiver=recipient,
+                sender=request.user,
+                title="You received a gift 🎁",
+                content=message,
+                type=InboxMessage.GIFT,
+                amount=amount
+            )
+
+        return redirect('contacts_list')
+
+    return render(request, 'main/contacts/send_gift.html')
+
+@login_required
 def pay_request(request, message_id):
     msg = get_object_or_404(InboxMessage, id=message_id, receiver=request.user)
 
@@ -212,6 +273,38 @@ def pay_request(request, message_id):
             amount=amount,
             category=deposit_category,
             title=f"Payment received from {request.user.username}"
+        )
+
+        msg.is_paid = True
+        msg.save()
+
+    return redirect('inbox')
+
+
+@login_required
+def claim_gift(request, message_id):
+    if request.method != 'POST':
+        return redirect('inbox')
+
+    msg = get_object_or_404(InboxMessage, id=message_id, receiver=request.user)
+
+    if msg.is_paid:
+        return redirect('inbox')
+
+    recipient_account = request.user.account
+    amount = msg.amount
+
+    deposit_category, _ = Category.objects.get_or_create(
+        name="Gift",
+        type=Category.DEPOSIT
+    )
+
+    with db_transaction.atomic():
+        Transaction.objects.create(
+            account=recipient_account,
+            amount=amount,
+            category=deposit_category,
+            title=f"Gift from {msg.sender.username}"
         )
 
         msg.is_paid = True

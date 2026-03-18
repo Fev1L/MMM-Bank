@@ -27,7 +27,14 @@
   {% if msg.type == "request" and not msg.is_paid %}
   <form method="post" action="/pay-request/{{ msg.id }}/">
     {% csrf_token %}
-    <button class="pay-btn">💸 Pay {{ msg.amount }}</button>
+    <button class="pay-btn">💸 Pay ${{ msg.amount }}</button>
+  </form>
+  {% endif %}
+
+  {% if msg.type == "gift" and not msg.is_paid %}
+  <form method="post" action="/claim-gift/{{ msg.id }}/">
+    {% csrf_token %}
+    <button class="pay-btn">🎁 Claim ${{ msg.amount }}</button>
   </form>
   {% endif %}
 
