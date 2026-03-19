@@ -3,7 +3,9 @@
         <div class="cardbar-actions">
             <a href="{% url 'inbox' %}" class="icon-btn">
                 <i class="fa-solid fa-bell"></i>
-                <span class="notif-dot"></span>
+                {% if unread_count > 0 %}
+                <span class="notif-count">{{ unread_count }}</span>
+                {% endif %}
             </a>
 
             <button class="icon-btn">

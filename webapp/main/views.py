@@ -191,7 +191,7 @@ def request_money(request, friend_id=None):
             amount=amount
         )
 
-        return redirect('redirect')
+        return redirect('home')
 
     return render(request, 'main/contacts/request_money.html', {
         'friend': recipient
@@ -252,7 +252,7 @@ def send_gift(request):
                 amount=amount
             )
 
-        return redirect('redirect')
+        return redirect('home')
 
     return render(request, 'main/contacts/send_gift.html')
 
