@@ -3,43 +3,87 @@
 
 {% block content %}
 
-<div class="dashboard">
-  <div class="row" style="grid-template-columns: 1fr 1.6fr; gap: 2.5%;">
 
-    <div class="col" style="display: flex; flex-direction: column; gap: 1.5rem;">
 
-      <div class="card balance-card" style="position: relative; overflow: hidden; background: linear-gradient(180deg, #5b3df5 0%, #7b61ff 40%, #a594ff 100%); border-radius: 1.5rem; min-height: 220px;">
-        <div style="position: absolute; top: 1.2rem; right: 1.5rem; color: white; font-weight: 700; font-size: 1.2rem; background: rgba(255,255,255,0.15); padding: 0.4rem 0.9rem; border-radius: 2rem;">
-          MMM
-        </div>
-        <div style="padding: 4rem 1.5rem 2rem 1.5rem; text-align: center; color: white;">
-          <div style="font-size: 3rem; font-weight: 700; line-height: 1;">
-            ${{ balance|default:"0"|floatformat:"0" }}
-          </div>
-        </div>
+
+<div class="row">
+  <div class="col">
+    <div class="card balance-card">
+      <div class="card-top">
+        <span class="card-title"> </span>
+        <h1 style="font-size: 30px;">MMM</h1>
       </div>
 
-      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
-        <a href="{% url 'open_deposit' %}" class="text-center" style="text-decoration: none; color: inherit;">
-          <div style="background: white; border-radius: 1rem; padding: 1.2rem 0.8rem; box-shadow: 0 6px 20px rgba(0,0,0,0.08); transition: all 0.25s ease; cursor: pointer;">
-            <i class="fa-solid fa-plus fa-2xl mb-3" style="color: #6b7280;"></i>
-            <div style="font-size: 0.9rem; color: #4b5563; font-weight: 500;">Open</div>
-          </div>
-        </a>
-        <a href="{% url 'piggy_bank' %}" class="text-center" style="text-decoration: none; color: inherit;">
-          <div style="background: white; border-radius: 1rem; padding: 1.2rem 0.8rem; box-shadow: 0 6px 20px rgba(0,0,0,0.08); transition: all 0.25s ease; cursor: pointer;">
-            <i class="fa-solid fa-piggy-bank fa-2xl mb-3" style="color: #6b7280;"></i>
-            <div style="font-size: 0.9rem; color: #4b5563; font-weight: 500;">Piggy</div>
-          </div>
-        </a>
-        <a href="{% url 'buy_bonds' %}" class="text-center" style="text-decoration: none; color: inherit;">
-          <div style="background: white; border-radius: 1rem; padding: 1.2rem 0.8rem; box-shadow: 0 6px 20px rgba(0,0,0,0.08); transition: all 0.25s ease; cursor: pointer;">
-            <i class="fa-solid fa-chart-line fa-2xl mb-3" style="color: #6b7280;"></i>
-            <div style="font-size: 0.9rem; color: #4b5563; font-weight: 500;">Bonds</div>
-          </div>
-        </a>
+      <div class="card-bottom">
+        <div class="card-balance">${{ balance }}</div>
       </div>
+    </div>
 
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+      <a href="{% url 'open_deposit' %}" class="text-center" style="text-decoration: none; color: inherit;">
+        <div style="background: white; border-radius: 1rem; padding: 1.2rem 0.8rem; box-shadow: 0 6px 20px rgba(0,0,0,0.08); transition: all 0.25s ease; cursor: pointer;">
+          <i class="fa-solid fa-plus fa-2xl mb-3" style="color: #6b7280;"></i>
+          <div style="font-size: 0.9rem; color: #4b5563; font-weight: 500;">Open</div>
+        </div>
+      </a>
+      <a href="{% url 'piggy_bank' %}" class="text-center" style="text-decoration: none; color: inherit;">
+        <div style="background: white; border-radius: 1rem; padding: 1.2rem 0.8rem; box-shadow: 0 6px 20px rgba(0,0,0,0.08); transition: all 0.25s ease; cursor: pointer;">
+          <i class="fa-solid fa-piggy-bank fa-2xl mb-3" style="color: #6b7280;"></i>
+          <div style="font-size: 0.9rem; color: #4b5563; font-weight: 500;">Piggy</div>
+        </div>
+      </a>
+      <a href="{% url 'buy_bonds' %}" class="text-center" style="text-decoration: none; color: inherit;">
+        <div style="background: white; border-radius: 1rem; padding: 1.2rem 0.8rem; box-shadow: 0 6px 20px rgba(0,0,0,0.08); transition: all 0.25s ease; cursor: pointer;">
+          <i class="fa-solid fa-chart-line fa-2xl mb-3" style="color: #6b7280;"></i>
+          <div style="font-size: 0.9rem; color: #4b5563; font-weight: 500;">Bonds</div>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card" style="padding: 1.8rem; background: white; border-radius: 1.5rem; box-shadow: 0 4px 20px rgba(0,0,0,0.06);">
+      <h5 class="mb-4" style="font-weight: 600;">Deposit Calculator</h5>
+      <div style="display: flex; gap: 1.2rem; margin-bottom: 1.5rem;">
+        <input type="number" id="amount" class="form-control" placeholder="Amount ($)"
+               style="background: rgba(243,244,246,0.6); border: none; border-radius: 1rem; padding: 1rem; font-size: 1.1rem;">
+        <input type="number" id="rate" class="form-control" placeholder="Interest %" step="0.1"
+               style="background: rgba(243,244,246,0.6); border: none; border-radius: 1rem; padding: 1rem; font-size: 1.1rem;">
+      </div>
+      <button class="btn btn-primary w-100 mb-3" onclick="calc()"
+              style="border-radius: 1rem; padding: 1rem; font-size: 1.1rem; font-weight: 600;">
+        Calculate
+      </button>
+      <div id="result" style="min-height: 3rem; font-weight: 500; color: #1f2937; font-size: 1.1rem; text-align: center;"></div>
+    </div>
+
+    <div class="card" style="padding: 1.8rem; background: white; border-radius: 1.5rem; box-shadow: 0 4px 20px rgba(0,0,0,0.06);">
+      <h5 class="mb-4" style="font-weight: 600;">Deposit Plans</h5>
+      <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.2rem;">
+        <div class="text-center" style="background: linear-gradient(180deg, #5b3df5 0%, #7b61ff 100%); color: white; border-radius: 1.2rem; padding: 1.4rem;">
+          <div style="font-size: 1.2rem; opacity: 0.9;">3 mo</div>
+          <div style="font-size: 1.6rem; font-weight: 700;">3%</div>
+        </div>
+        <div class="text-center" style="background: linear-gradient(180deg, #5b3df5 0%, #7b61ff 100%); color: white; border-radius: 1.2rem; padding: 1.4rem;">
+          <div style="font-size: 1.2rem; opacity: 0.9;">6 mo</div>
+          <div style="font-size: 1.6rem; font-weight: 700;">5%</div>
+        </div>
+        <div class="text-center" style="background: linear-gradient(180deg, #5b3df5 0%, #7b61ff 100%); color: white; border-radius: 1.2rem; padding: 1.4rem;">
+          <div style="font-size: 1.2rem; opacity: 0.9;">12 mo</div>
+          <div style="font-size: 1.6rem; font-weight: 700;">7%</div>
+        </div>
+        <div class="text-center" style="background: linear-gradient(180deg, #5b3df5 0%, #7b61ff 100%); color: white; border-radius: 1.2rem; padding: 1.4rem;">
+          <div style="font-size: 1.2rem; opacity: 0.9;">24 mo</div>
+          <div style="font-size: 1.6rem; font-weight: 700;">9%</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
       <div class="transactions" style="flex: 1;">
         <div class="transactions-header">
           <h5>Active Deposits</h5>
@@ -70,46 +114,7 @@
 
     </div>
 
-    <div class="col" style="display: flex; flex-direction: column; gap: 1.8rem;">
-
-      <div class="card" style="padding: 1.8rem; background: white; border-radius: 1.5rem; box-shadow: 0 4px 20px rgba(0,0,0,0.06);">
-        <h5 class="mb-4" style="font-weight: 600;">Deposit Calculator</h5>
-        <div style="display: flex; gap: 1.2rem; margin-bottom: 1.5rem;">
-          <input type="number" id="amount" class="form-control" placeholder="Amount ($)"
-                 style="background: rgba(243,244,246,0.6); border: none; border-radius: 1rem; padding: 1rem; font-size: 1.1rem;">
-          <input type="number" id="rate" class="form-control" placeholder="Interest %" step="0.1"
-                 style="background: rgba(243,244,246,0.6); border: none; border-radius: 1rem; padding: 1rem; font-size: 1.1rem;">
-        </div>
-        <button class="btn btn-primary w-100 mb-3" onclick="calc()"
-                style="border-radius: 1rem; padding: 1rem; font-size: 1.1rem; font-weight: 600;">
-          Calculate
-        </button>
-        <div id="result" style="min-height: 3rem; font-weight: 500; color: #1f2937; font-size: 1.1rem; text-align: center;"></div>
-      </div>
-
-      <div class="card" style="padding: 1.8rem; background: white; border-radius: 1.5rem; box-shadow: 0 4px 20px rgba(0,0,0,0.06);">
-        <h5 class="mb-4" style="font-weight: 600;">Deposit Plans</h5>
-        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.2rem;">
-          <div class="text-center" style="background: linear-gradient(180deg, #5b3df5 0%, #7b61ff 100%); color: white; border-radius: 1.2rem; padding: 1.4rem;">
-            <div style="font-size: 1.2rem; opacity: 0.9;">3 mo</div>
-            <div style="font-size: 1.6rem; font-weight: 700;">3%</div>
-          </div>
-          <div class="text-center" style="background: linear-gradient(180deg, #5b3df5 0%, #7b61ff 100%); color: white; border-radius: 1.2rem; padding: 1.4rem;">
-            <div style="font-size: 1.2rem; opacity: 0.9;">6 mo</div>
-            <div style="font-size: 1.6rem; font-weight: 700;">5%</div>
-          </div>
-          <div class="text-center" style="background: linear-gradient(180deg, #5b3df5 0%, #7b61ff 100%); color: white; border-radius: 1.2rem; padding: 1.4rem;">
-            <div style="font-size: 1.2rem; opacity: 0.9;">12 mo</div>
-            <div style="font-size: 1.6rem; font-weight: 700;">7%</div>
-          </div>
-          <div class="text-center" style="background: linear-gradient(180deg, #5b3df5 0%, #7b61ff 100%); color: white; border-radius: 1.2rem; padding: 1.4rem;">
-            <div style="font-size: 1.2rem; opacity: 0.9;">24 mo</div>
-            <div style="font-size: 1.6rem; font-weight: 700;">9%</div>
-          </div>
-        </div>
-      </div>
-
-
+    <div class="col">
       <div class="transactions" style="flex: 1;">
         <div class="transactions-header">
           <h5>Deposit History</h5>
@@ -138,7 +143,7 @@
     </div>
 
   </div>
-</div>
+
 
 <script>
 function calc() {

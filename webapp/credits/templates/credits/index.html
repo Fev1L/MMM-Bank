@@ -4,86 +4,44 @@
 
 {% block content %}
 
-<div style="
-    display: flex;
-    gap: 24px;
-    padding: 0 24px 0 -10px;
-    margin-top: -30px;
-    width: 100%;
-    box-sizing: border-box;
-    min-height: calc(100vh - 100px);
-">
+<div class="row">
 
     <!-- КОЛОНКА 1: Credit status → кнопки → Loan activity (коротка) -->
-    <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 12px;">
+    <div class="col">
 
         <h2 style="margin: 0;">Credit status</h2>
 
-        <div class="card balance-card" style="padding:14px 16px; min-height:130px; flex: 0 0 auto; height: auto !important;">
+        <div class="card balance-card">
             <div class="card-top">
-                <h2>MMM</h2>
+                <span class="card-title"> </span>
+                <h1 style="font-size: 30px;">MMM</h1>
             </div>
-            <div class="card-balance" style="font-size:45px;">$0</div>
-        </div>
 
-        <div style="display:flex; gap:10px; flex:0 0 auto;">
-            <a href="{% url 'pay_extra' %}" style="
-                flex:1; background:#eee; border-radius:25px;
-                padding:9px 15px; display:flex;
-                justify-content:center; align-items:center;
-            ">💸 Pay extra</a>
-
-            <a href="{% url 'avaible_loans' %}" style="
-                flex:1; background:#eee; border-radius:25px;
-                padding:9px 15px; display:flex;
-                justify-content:center; align-items:center;
-            ">💰 Avaible loans</a>
-        </div>
-
-        <!-- Loan activity детальна з View all -->
-        <div style="
-            background: white; padding: 16px; border-radius: 20px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.06);
-            flex: 1; display: flex; flex-direction: column;
-        ">
-            <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
-                <h3>Loan activity</h3>
-                <span style="color:#3b6cff; cursor:pointer;">View all</span>
-            </div>
-            <div style="flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
-                <div style="display:flex; justify-content:space-between; padding: 10px 0; border-bottom: 1px solid #f0f0f0;">
-                    <div>Payment<div style="font-size:12px;color:gray;">Monthly</div></div>
-                    <div style="text-align:right;"><div style="color:red;">-$100</div><div style="font-size:12px;color:gray;">7 Mar 2026</div></div>
-                </div>
-                <div style="display:flex; justify-content:space-between; padding: 10px 0; border-bottom: 1px solid #f0f0f0;">
-                    <div>Interest<div style="font-size:12px;color:gray;">Loan fee</div></div>
-                    <div style="text-align:right;"><div style="color:red;">-$20</div><div style="font-size:12px;color:gray;">6 Mar 2026</div></div>
-                </div>
-                <div style="display:flex; justify-content:space-between; padding: 10px 0; border-bottom: 1px solid #f0f0f0;">
-                    <div>Loan received<div style="font-size:12px;color:gray;">Car loan</div></div>
-                    <div style="text-align:right;"><div style="color:green;">+$2000</div><div style="font-size:12px;color:gray;">5 Mar 2026</div></div>
-                </div>
-                <div style="display:flex; justify-content:space-between; padding: 10px 0; border-bottom: 1px solid #f0f0f0;">
-                    <div>Extra payment<div style="font-size:12px;color:gray;">Manual</div></div>
-                    <div style="text-align:right;"><div style="color:red;">-$200</div><div style="font-size:12px;color:gray;">3 Mar 2026</div></div>
-                </div>
-                <div style="display:flex; justify-content:space-between; padding: 10px 0; border-bottom: 1px solid #f0f0f0;">
-                    <div>Payment<div style="font-size:12px;color:gray;">Monthly</div></div>
-                    <div style="text-align:right;"><div style="color:red;">-$100</div><div style="font-size:12px;color:gray;">2 Mar 2026</div></div>
-                </div>
-                <div style="display:flex; justify-content:space-between; padding: 10px 0;">
-                    <div>Extra payment<div style="font-size:12px;color:gray;">Manual</div></div>
-                    <div style="text-align:right;"><div style="color:red;">-$200</div><div style="font-size:12px;color:gray;">4 Mar 2026</div></div>
-                </div>
+            <div class="card-bottom">
+                <div class="card-balance">${{ balance }}</div>
             </div>
         </div>
 
+        <div class="quick-actions">
+            <a href="{% url 'pay_extra' %}" class="action-btn">
+                <i class="fa-solid fa-money-bill"></i>
+                <span>Pay extra</span>
+            </a>
+
+            <a href="{% url 'avaible_loans' %}" class="action-btn">
+                <i class="fa-solid fa-coins"></i>
+                <span>Avaible loans</span>
+            </a>
+
+            <a href="#" class="action-btn">
+                <i class="fa-solid fa-percent"></i>
+                <span>Mortgage</span>
+            </a>
+        </div>
     </div>
 
-
     <!-- КОЛОНКА 2: Credit terms → Active loan → Loan activity (детальна) -->
-    <div style="flex:1.4; min-width:0; display:flex; flex-direction:column; gap:12px;">
-
+    <div class="col">
         <!-- Credit terms -->
         <div style="
             background:white;
@@ -138,6 +96,54 @@
             </div>
         </div>
 
+
+
+    </div>
+
+</div>
+
+<div class="row">
+    <!-- Loan activity детальна з View all -->
+    <div class="col">
+        <section class="transactions">
+            <div class="transactions-header">
+                <h3>Loan activity</h3>
+                <a href="#" class="view-all">More</a>
+            </div>
+            <div class="transaction-list">
+                <div class="transaction-item">
+                    <div class="transaction-left">
+                        <div class="icon"><i class="fa-solid fa-circle-arrow-up"></i></div>
+                        <div>
+                            <div class="title">Payment</div>
+                            <div class="category">Monthly</div>
+                        </div>
+                    </div>
+                    <div class="transaction-right negative">
+                        <div class="amount"> -$100</div>
+                        <div class="date">7 Mar 2026</div>
+                    </div>
+                </div>
+
+                <div class="transaction-item">
+                    <div class="transaction-left">
+                        <div class="icon"><i class="fa-solid fa-circle-arrow-down"></i></div>
+                        <div>
+                            <div class="title">Loan received</div>
+                            <div class="category">Car loan</div>
+                        </div>
+                    </div>
+                    <div class="transaction-right positive">
+                        <div class="amount"> $2000</div>
+                        <div class="date">5 Mar 2026</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+
+    <div class="col">
         <!-- Active loan -->
         <div style="
             background: linear-gradient(90deg,#3c25b8,#7c6ce0);
@@ -147,27 +153,26 @@
             flex: 0 0 auto;
         ">
             <div>Car loan</div>
-            <div style="font-size:28px;">$2000</div>
+            <div style="font-size:28px;">$20000</div>
             <div>Left: $1500</div>
             <div>Monthly: $100</div>
             <div>Status: Active</div>
         </div>
 
-        <!-- Loan activity коротка -->
         <div style="
-            background: white; padding: 16px; border-radius: 20px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.06);
-            flex: 1;
+            background: linear-gradient(90deg,#3c25b8,#7c6ce0);
+            color:white;
+            border-radius:20px;
+            padding:18px;
+            flex: 0 0 auto;
         ">
-            <h3>Loan activity</h3>
-            <div>Payment -100</div>
-            <div>Interest -20</div>
-            <div>Loan +2000</div>
-            <div>Extra -200</div>
+            <div>IPhone loan</div>
+            <div style="font-size:28px;">$1300</div>
+            <div>Left: $400</div>
+            <div>Monthly: $100</div>
+            <div>Status: Active</div>
         </div>
-
     </div>
-
 </div>
 
 {% endblock %}
