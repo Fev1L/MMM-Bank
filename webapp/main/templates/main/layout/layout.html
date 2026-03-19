@@ -20,9 +20,7 @@
 <body>
     <main class="py-5">
 
-            <div class="
-            {% if request.user.is_authenticated %} dashboard
-            {% else %} container {% endif %}">
+          <div class="dashboard">
                 {% block content %}
                 {% endblock %}
             </div>

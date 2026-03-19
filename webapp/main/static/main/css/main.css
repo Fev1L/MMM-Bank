@@ -806,3 +806,10 @@ a:hover {
   border-radius:0.6rem;
   margin-bottom:1rem;
 }
+.dashboard {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding-left: 110px;
+    box-sizing: border-box;
+}
