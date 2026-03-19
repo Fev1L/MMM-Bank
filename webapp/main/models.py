@@ -102,7 +102,6 @@ def create_account(sender, instance, created, **kwargs):
 
         InboxMessage.objects.create(
             receiver=instance,
-            sender="MMM-Bank Team",
             title="Welcome 🎉",
             content="Welcome to our bank! Your account has been created."
         )
