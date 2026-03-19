@@ -1,0 +1,96 @@
+{% extends 'main/layout/layout.html' %}
+
+{% block title%}{{ request.user.username }} Account {% endblock %}
+
+{% block content%}
+<div class="row g-5">
+    <div class="col">
+        <h1 style="font-size: 30px;">MMM Balance </h1>
+
+        <div class="card balance-card">
+            <div class="card-top">
+                <span class="card-title"> </span>
+                <h1 style="font-size: 30px;">MMM</h1>
+            </div>
+
+            <div class="card-bottom">
+                <div class="card-balance">${{ balance }}</div>
+            </div>
+        </div>
+        <div class="quick-actions">
+            <a href="/contacts/send/" class="action-btn">
+                <i class="fa-solid fa-paper-plane"></i>
+                <span>Send</span>
+            </a>
+
+            <button class="action-btn">
+                <i class="fa-solid fa-hand-holding-dollar"></i>
+                <span>Request</span>
+            </button>
+
+            <button class="action-btn">
+                <i class="fa-solid fa-gift"></i>
+                <span>Send a Gift</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="col">
+        <section class="contacts-page">
+            <div class="contacts-header">
+                <h1>Contacts</h1>
+
+                <div class="contacts-actions">
+                    <a href="/contacts/add" class="contact-btn primary">
+                        <i class="fa-solid fa-user-plus"></i>
+                        Add contact
+                    </a>
+                </div>
+            </div>
+
+            <div class="contact-list">
+                {% for contact in contacts %}
+                <div class="contact-item">
+                    <div class="contact-left">
+                        <img src="https://github.com/Fev1L.png" class="contact-avatar">
+                        <div class="contact-info">
+                            <div class="contact-name">{{ contact.friend }}</div>
+                            <div class="contact-time">Today</div>
+                        </div>
+                    </div>
+                    <div class="contact-actions">
+                        <a href="/contacts/send/{{ contact.friend.id }}/" class="send-btn">Send</a>
+                        <a href="#" class="request-btn">Request</a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+    </div>
+</div>
+
+<div class="row g-5">
+    <div class="col">
+        <div class="quick-actions">
+            <button class="action-btn">
+                <i class="fa-solid fa-file-lines"></i>
+                <span>Create an Invoice</span>
+            </button>
+
+            <button class="action-btn">
+                <i class="fa-solid fa-building-columns"></i>
+                <span>Transfer to Bank</span>
+            </button>
+
+            <button class="action-btn">
+                <i class="fa-solid fa-left-right"></i>
+                <span>Resolution Centre</span>
+            </button>
+        </div>
+    </div>
+    <div class="col">
+
+    </div>
+</div>
+
+{% endblock %}

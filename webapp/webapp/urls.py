@@ -10,4 +10,4 @@ urlpatterns = [
     path('credits/', include('credits.urls')), 
     path('deposits/', include('deposits.urls')),
     path('more/', include('more.urls'))
-] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+]

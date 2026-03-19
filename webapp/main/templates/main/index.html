@@ -20,30 +20,26 @@
                 </div>
                 <div class="quick-actions">
 
-                    <button class="action-btn">
+                    <a href="/contacts/send/" class="action-btn">
                         <i class="fa-solid fa-paper-plane"></i>
                         <span>Send</span>
-                    </button>
+                    </a>
 
-                    <button class="action-btn">
+                    <a href="/request/" class="action-btn">
                         <i class="fa-solid fa-hand-holding-dollar"></i>
                         <span>Request</span>
-                    </button>
+                    </a>
 
-                    <button class="action-btn">
+                    <a href="gift/send/" class="action-btn">
                         <i class="fa-solid fa-gift"></i>
                         <span>Send a Gift</span>
-                    </button>
+                    </a>
 
                 </div>
             </div>
             <div class="col">
                 <h1 style="font-size: 30px;">My Activity</h1>
                 {% include 'main/layout/stats.html' %}
-            </div>
-            <div class="col">
-                <h1 style="font-size: 30px;">My Cards</h1>
-                {% include 'main/layout/cards.html' %}
             </div>
         </div>
 
@@ -53,10 +49,6 @@
             </div>
             <div class="col">
                 {% include 'main/contacts/contacts.html' %}
-            </div>
-            <div class="col">
-                <h1 style="font-size: 30px;">My Banks</h1>
-                {% include 'main/layout/cards.html' %}
             </div>
         </div>
 
