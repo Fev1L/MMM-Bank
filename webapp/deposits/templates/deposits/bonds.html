@@ -1,10 +1,84 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+﻿{% extends 'main/layout/layout.html' %}
+{% block content %}
+{% load static %}
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Stocks</title>
+    <link rel="stylesheet" href="{% static 'main/css/main.css' %}">
 </head>
-<body>
+
+
+
+<div class="dashboard">
+
+    <div class="row">
+
+
+        <div class="col">
+
+            <div class="section">
+                <h3>Available Stocks</h3>
+
+                {% for stock in stocks %}
+                <div class="stock-card">
+                    <div class="stock-info">
+                        <i class="fa-solid fa-dollar-sign"></i>
+                        <span class="stock-name">{{ stock.name }}</span>
+                        <span class="stock-symbol">{{ stock.symbol }}</span>
+                    </div>
+
+                    <div style="text-align:right;">
+                        <div class="stock-price">${{ stock.price }}</div>
+                        <div class="stock-change up">+1.2%</div>
+                    </div>
+                </div>
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+
+        <div class="col">
+
+            <div class="section">
+                <h3>Buy Stock</h3>
+
+                <form method="POST" class="buy-form">
+                    {% csrf_token %}
+
+                    <select name="stock">
+                        {% for stock in stocks %}
+                        <option value="{{ stock.id }}">
+                            {{ stock.name }} ({{ stock.symbol }})
+                        </option>
+                        {% endfor %}
+                    </select>
+
+                    <input type="number" name="quantity" placeholder="Quantity" required>
+
+                    <button type="submit">Buy</button>
+                </form>
+            </div>
+
+            <div class="section">
+                <h3>Purchase History</h3>
+
+                {% for p in purchases %}
+                <div class="history-item">
+                    <span>{{ p.stock.symbol }} x{{ p.quantity }}</span>
+                    <span>${{ p.total_price }}</span>
+                </div>
+                {% empty %}
+                <p>No purchases yet</p>
+                {% endfor %}
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
 
 </body>
-</html>
+{% endblock %}

@@ -1,6 +1,8 @@
+from decimal import Decimal
+
 from django.shortcuts import render, redirect
-from .models import PiggyBank, piggy_transactions
-from .models import Deposit
+from .models import PiggyBank, piggy_transactions, Deposit , Stock, Purchase
+from main.models import Transaction, Category
 
 def piggy_bank(request):
 
@@ -77,6 +79,14 @@ def open_deposit(request):
             }
 
             rate = rates.get(duration, 5)
+            transfer_category, _ = Category.objects.get_or_create(name="Open Deposit", type=Category.WITHDRAW)
+
+            Transaction.objects.create(
+                account=request.user.account,
+                amount=Decimal(amount),
+                category=transfer_category,
+                title=f"Deposit open successfully"
+            )
 
             Deposit.objects.create(
                 user=request.user,
@@ -91,6 +101,8 @@ def open_deposit(request):
 
 
 def index(request):
+    account = request.user.account
+    balance = account.balance
     deposits = Deposit.objects.filter(user=request.user, is_active=True)
     history = Deposit.objects.filter(user=request.user, is_active=False)
 
@@ -104,9 +116,39 @@ def index(request):
     return render(request, 'deposits/index.html', {
         "deposits": deposits,
         "history": history,
-        "chart_data": chart_data
+        "chart_data": chart_data,
+        "balance": balance,
     })
 
 
 def buy_bonds(request):
-    return render(request, "deposits/bonds.html")
+    stocks = Stock.objects.all()
+    purchases = Purchase.objects.filter(user=request.user).order_by("-created_at")[:10]
+
+    if request.method == "POST":
+        stock_id = request.POST.get("stock")
+        quantity = request.POST.get("quantity")
+
+        if stock_id and quantity:
+            try:
+                stock = Stock.objects.get(id=stock_id)
+                quantity = int(quantity)
+
+                total_price = stock.price * quantity
+
+                Purchase.objects.create(
+                    user=request.user,
+                    stock=stock,
+                    quantity=quantity,
+                    total_price=total_price
+                )
+
+            except:
+                pass
+
+        return redirect("buy_bonds")
+
+    return render(request, "deposits/bonds.html", {
+        "stocks": stocks,
+        "purchases": purchases
+    })

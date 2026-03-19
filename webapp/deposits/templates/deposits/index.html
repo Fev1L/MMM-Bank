@@ -2,130 +2,157 @@
 {% block title %}Deposits{% endblock %}
 
 {% block content %}
-<div class="container-fluid">
 
-<div class="row mt-4">
+<div class="dashboard">
+  <div class="row" style="grid-template-columns: 1fr 1.6fr; gap: 2.5%;">
 
-<div class="col-md-4">
+    <div class="col" style="display: flex; flex-direction: column; gap: 1.5rem;">
 
-<div class="deposit-card mb-4">
-<div class="deposit-card-top">
-<div>MMM</div>
-</div>
+      <div class="card balance-card" style="position: relative; overflow: hidden; background: linear-gradient(180deg, #5b3df5 0%, #7b61ff 40%, #a594ff 100%); border-radius: 1.5rem; min-height: 220px;">
+        <div style="position: absolute; top: 1.2rem; right: 1.5rem; color: white; font-weight: 700; font-size: 1.2rem; background: rgba(255,255,255,0.15); padding: 0.4rem 0.9rem; border-radius: 2rem;">
+          MMM
+        </div>
+        <div style="padding: 4rem 1.5rem 2rem 1.5rem; text-align: center; color: white;">
+          <div style="font-size: 3rem; font-weight: 700; line-height: 1;">
+            ${{ balance|default:"0"|floatformat:"0" }}
+          </div>
+        </div>
+      </div>
 
-<div class="deposit-card-balance">
-${{ deposits|length|add:0 }}
-</div>
-</div>
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+        <a href="{% url 'open_deposit' %}" class="text-center" style="text-decoration: none; color: inherit;">
+          <div style="background: white; border-radius: 1rem; padding: 1.2rem 0.8rem; box-shadow: 0 6px 20px rgba(0,0,0,0.08); transition: all 0.25s ease; cursor: pointer;">
+            <i class="fa-solid fa-plus fa-2xl mb-3" style="color: #6b7280;"></i>
+            <div style="font-size: 0.9rem; color: #4b5563; font-weight: 500;">Open</div>
+          </div>
+        </a>
+        <a href="{% url 'piggy_bank' %}" class="text-center" style="text-decoration: none; color: inherit;">
+          <div style="background: white; border-radius: 1rem; padding: 1.2rem 0.8rem; box-shadow: 0 6px 20px rgba(0,0,0,0.08); transition: all 0.25s ease; cursor: pointer;">
+            <i class="fa-solid fa-piggy-bank fa-2xl mb-3" style="color: #6b7280;"></i>
+            <div style="font-size: 0.9rem; color: #4b5563; font-weight: 500;">Piggy</div>
+          </div>
+        </a>
+        <a href="{% url 'buy_bonds' %}" class="text-center" style="text-decoration: none; color: inherit;">
+          <div style="background: white; border-radius: 1rem; padding: 1.2rem 0.8rem; box-shadow: 0 6px 20px rgba(0,0,0,0.08); transition: all 0.25s ease; cursor: pointer;">
+            <i class="fa-solid fa-chart-line fa-2xl mb-3" style="color: #6b7280;"></i>
+            <div style="font-size: 0.9rem; color: #4b5563; font-weight: 500;">Bonds</div>
+          </div>
+        </a>
+      </div>
 
-<div class="quick-actions mb-4">
-<div class="row text-center">
+      <div class="transactions" style="flex: 1;">
+        <div class="transactions-header">
+          <h5>Active Deposits</h5>
+        </div>
+        <div class="transaction-list">
+          {% for d in deposits %}
+          <div class="transaction-item">
+            <div class="transaction-left">
+              <div class="icon" style="background: #1e40af;">
+                <i class="fa-solid fa-clock"></i>
+              </div>
+              <div>
+                <div class="title">{{ d.duration }} months deposit</div>
+                <div class="category">{{ d.rate }}%</div>
+              </div>
+            </div>
+            <div class="transaction-right">
+              <div style="font-weight: 600;">${{ d.amount|floatformat:"0" }}</div>
+            </div>
+          </div>
+          {% empty %}
+          <div class="transaction-item text-center py-4" style="color: #6b7280;">
+            No active deposits yet
+          </div>
+          {% endfor %}
+        </div>
+      </div>
 
-<div class="col-4">
-<a href="{% url 'open_deposit' %}" class="action-btn">
-<i class="fa-solid fa-plus"></i>
-<div class="action-title">Open</div>
-</a>
-</div>
+    </div>
 
-<div class="col-4">
-<a href="{% url 'piggy_bank' %}" class="action-btn">
-<i class="fa-solid fa-piggy-bank"></i>
-<div class="action-title">Piggy</div>
-</a>
-</div>
+    <div class="col" style="display: flex; flex-direction: column; gap: 1.8rem;">
 
-<div class="col-4">
-<a href="{% url 'buy_bonds' %}" class="action-btn">
-<i class="fa-solid fa-chart-line"></i>
-<div class="action-title">Bonds</div>
-</a>
-</div>
+      <div class="card" style="padding: 1.8rem; background: white; border-radius: 1.5rem; box-shadow: 0 4px 20px rgba(0,0,0,0.06);">
+        <h5 class="mb-4" style="font-weight: 600;">Deposit Calculator</h5>
+        <div style="display: flex; gap: 1.2rem; margin-bottom: 1.5rem;">
+          <input type="number" id="amount" class="form-control" placeholder="Amount ($)"
+                 style="background: rgba(243,244,246,0.6); border: none; border-radius: 1rem; padding: 1rem; font-size: 1.1rem;">
+          <input type="number" id="rate" class="form-control" placeholder="Interest %" step="0.1"
+                 style="background: rgba(243,244,246,0.6); border: none; border-radius: 1rem; padding: 1rem; font-size: 1.1rem;">
+        </div>
+        <button class="btn btn-primary w-100 mb-3" onclick="calc()"
+                style="border-radius: 1rem; padding: 1rem; font-size: 1.1rem; font-weight: 600;">
+          Calculate
+        </button>
+        <div id="result" style="min-height: 3rem; font-weight: 500; color: #1f2937; font-size: 1.1rem; text-align: center;"></div>
+      </div>
 
-</div>
-</div>
+      <div class="card" style="padding: 1.8rem; background: white; border-radius: 1.5rem; box-shadow: 0 4px 20px rgba(0,0,0,0.06);">
+        <h5 class="mb-4" style="font-weight: 600;">Deposit Plans</h5>
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.2rem;">
+          <div class="text-center" style="background: linear-gradient(180deg, #5b3df5 0%, #7b61ff 100%); color: white; border-radius: 1.2rem; padding: 1.4rem;">
+            <div style="font-size: 1.2rem; opacity: 0.9;">3 mo</div>
+            <div style="font-size: 1.6rem; font-weight: 700;">3%</div>
+          </div>
+          <div class="text-center" style="background: linear-gradient(180deg, #5b3df5 0%, #7b61ff 100%); color: white; border-radius: 1.2rem; padding: 1.4rem;">
+            <div style="font-size: 1.2rem; opacity: 0.9;">6 mo</div>
+            <div style="font-size: 1.6rem; font-weight: 700;">5%</div>
+          </div>
+          <div class="text-center" style="background: linear-gradient(180deg, #5b3df5 0%, #7b61ff 100%); color: white; border-radius: 1.2rem; padding: 1.4rem;">
+            <div style="font-size: 1.2rem; opacity: 0.9;">12 mo</div>
+            <div style="font-size: 1.6rem; font-weight: 700;">7%</div>
+          </div>
+          <div class="text-center" style="background: linear-gradient(180deg, #5b3df5 0%, #7b61ff 100%); color: white; border-radius: 1.2rem; padding: 1.4rem;">
+            <div style="font-size: 1.2rem; opacity: 0.9;">24 mo</div>
+            <div style="font-size: 1.6rem; font-weight: 700;">9%</div>
+          </div>
+        </div>
+      </div>
 
-<div class="section mb-4">
-<h3>Active Deposits</h3>
 
-<div id="deposit-list">
+      <div class="transactions" style="flex: 1;">
+        <div class="transactions-header">
+          <h5>Deposit History</h5>
+        </div>
+        <div class="transaction-list">
+          {% for d in history %}
+          <div class="transaction-item">
+            <div class="transaction-left">
+              <div class="icon" style="background: #065f46;">
+                <i class="fa-solid fa-check"></i>
+              </div>
+              <div>
+                <div class="title">${{ d.amount|floatformat:"0" }} → ${{ d.amount|add:d.profit|floatformat:"0" }}</div>
+                <div class="category">{{ d.created_at|date:"d M Y" }}</div>
+              </div>
+            </div>
+          </div>
+          {% empty %}
+          <div class="transaction-item text-center py-4" style="color: #6b7280;">
+            No history yet
+          </div>
+          {% endfor %}
+        </div>
+      </div>
 
-{% for d in deposits %}
-<div class="deposit">
-<div>
-{{ d.duration }} months deposit
-<div class="progress">
-<div class="progress-bar" style="width:50%"></div>
-</div>
-</div>
-<span>${{ d.amount }} • {{ d.rate }}%</span>
-</div>
-{% empty %}
-<p>No active deposits</p>
-{% endfor %}
+    </div>
 
-</div>
-
-</div>
-
-</div>
-
-<div class="col-md-8">
-
-<div class="section mb-4">
-<h3>Deposit History</h3>
-
-{% for d in history %}
-<div class="history-item">
-<span>${{ d.amount }} → ${{ d.amount|add:d.profit }}</span>
-<span class="text-muted">{{ d.created_at|date:"M Y" }}</span>
-</div>
-{% empty %}
-<p>No history yet</p>
-{% endfor %}
-
-</div>
-
-<div class="section calculator mb-4">
-<h3>Deposit Calculator</h3>
-
-<div class="d-flex gap-2 mb-3">
-<input type="number" id="amount" class="form-control" placeholder="Amount">
-<input type="number" id="rate" class="form-control" placeholder="Interest %">
-</div>
-
-<button class="btn btn-primary w-100 mb-3" onclick="calc()">Calculate</button>
-
-<div class="result mb-3" id="result"></div>
-
-</div>
-
-<div class="section">
-<h3>Deposit Plans</h3>
-
-<div class="row g-2">
-
-<div class="col-6"><div class="plan">3 mo / 3%</div></div>
-<div class="col-6"><div class="plan">6 mo / 5%</div></div>
-<div class="col-6"><div class="plan">12 mo / 7%</div></div>
-<div class="col-6"><div class="plan">24 mo / 9%</div></div>
-
-</div>
-</div>
-
-</div>
-
-</div>
-
+  </div>
 </div>
 
 <script>
-function calc(){
-    let a = document.getElementById("amount").value;
-    let r = document.getElementById("rate").value;
-    if(a && r) {
-        document.getElementById("result").innerText = "Profit: $" + (a * r / 100).toFixed(2);
-    }
+function calc() {
+  let amount = parseFloat(document.getElementById("amount").value) || 0;
+  let rate   = parseFloat(document.getElementById("rate").value) || 0;
+
+  if (amount > 0 && rate > 0) {
+    let profit = (amount * (rate / 100)).toFixed(2);
+    document.getElementById("result").innerHTML =
+      `<span style="color: #059669;">Estimated profit: $${profit}</span>`;
+  } else {
+    document.getElementById("result").innerHTML =
+      `<span style="color: #dc2626;">Please enter valid amount and interest rate</span>`;
+  }
 }
 </script>
 
