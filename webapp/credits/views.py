@@ -13,3 +13,25 @@ def index(request):
     return render(request, 'credits/index.html', {
         'has_active_loan': has_active_loan,
     })
+
+@login_required
+def pay_extra(request):
+    has_active_loan = Credit.objects.filter(
+        user=request.user,
+        is_active=True
+    ).exists()
+
+    return render(request, 'credits/pay_extra.html', {
+        'has_active_loan': has_active_loan,
+    })
+
+@login_required
+def avaible_loans(request):
+    has_active_loan = Credit.objects.filter(
+        user=request.user,
+        is_active=True
+    ).exists()
+
+    return render(request, 'credits/avaible_loans.html', {
+        'has_active_loan': has_active_loan,
+    })
