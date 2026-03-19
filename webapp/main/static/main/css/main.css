@@ -596,6 +596,7 @@ a:hover {
   background: rgb(255,255,255);
   backdrop-filter: blur(10px);
   height: 100%;
+  max-height: 40vh;
 }
 
 .transactions-header{
@@ -609,6 +610,8 @@ a:hover {
   display: flex;
   flex-direction: column;
   gap: 2%;
+  max-height: 40vh;
+  overflow-y: auto;
 }
 
 .transaction-item {
@@ -729,7 +732,7 @@ a:hover {
   background: rgb(255,255,255);
   backdrop-filter: blur(10px);
   height: 100%;
-
+  max-height: 40vh;
 }
 
 .contacts-header{
@@ -743,6 +746,8 @@ a:hover {
   display:flex;
   flex-direction:column;
   gap: 1.5rem;
+  max-height: 40vh;
+  overflow-y: auto;
 }
 
 .contact-item{
