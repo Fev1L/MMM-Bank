@@ -1,0 +1,76 @@
+{% extends 'main/layout/layout.html' %}
+
+{% block title%}{{ request.user.username }} Account {% endblock %}
+
+{% block content%}
+<div class="row g-5">
+    <div class="col">
+        <h1 style="font-size: 30px;">MMM Balance </h1>
+
+        <div class="card balance-card">
+            <div class="card-top">
+                <span class="card-title"> </span>
+                <h1 style="font-size: 30px;">MMM</h1>
+            </div>
+
+            <div class="card-bottom">
+                <div class="card-balance">${{ balance }}</div>
+            </div>
+        </div>
+        <div class="quick-actions">
+            <button class="action-btn">
+                <i class="fa-solid fa-paper-plane"></i>
+                <span>Send</span>
+            </button>
+
+            <button class="action-btn">
+                <i class="fa-solid fa-hand-holding-dollar"></i>
+                <span>Request</span>
+            </button>
+
+            <button class="action-btn">
+                <i class="fa-solid fa-gift"></i>
+                <span>Send a Gift</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="col">
+        <section class="transactions">
+            <div class="transactions-header">
+                <h2>Recent Activity</h2>
+            </div>
+
+            <div class="transaction-list">
+                {% for transaction in transactions %}
+                <div class="transaction-item">
+                    <div class="transaction-left">
+                        <div class="icon"><i class="{{ transaction.category.icon }}"></i></div>
+                        <div>
+                            <div class="title">{{ transaction.title }}</div>
+                            <div class="category">{{ transaction.category }}</div>
+                        </div>
+                    </div>
+                    <div class="transaction-right
+                    {% if transaction.category.type == 'deposit' %} positive {%  else %} negative {% endif %}">
+                        <div class="amount">
+                            {% if transaction.category.type == "deposit" %} ${{ transaction.amount }}
+                            {%  else %} -${{ transaction.amount }}
+                            {% endif %}</div>
+                        <div class="date">{{ transaction.created_at }}</div>
+                    </div>
+                </div>
+
+                {% endfor %}
+            </div>
+        </section>
+    </div>
+</div>
+
+<div class="row g-5">
+    <div class="col">
+        {% include 'main/contacts/contacts.html' %}
+    </div>
+</div>
+
+{% endblock %}
