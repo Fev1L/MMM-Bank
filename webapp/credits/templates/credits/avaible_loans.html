@@ -1,0 +1,104 @@
+{% extends 'main/layout/users_layout.html' %}
+
+{% block title %}Available loans{% endblock %}
+
+{% block content %}
+
+<div class="login-page">
+
+    <div class="login-card" style="width: 500px;">
+
+        <a href="{% url 'credits' %}" class="login-btn"
+           style="margin-bottom: 10px; text-align:center; display:block;">
+            ← Back
+        </a>
+
+        <h1>Available loans</h1>
+        <p class="login-subtitle">
+            Choose your fintech loan
+        </p>
+
+
+        <!-- КОЛОНКА -->
+
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+
+            <div style="
+                background: linear-gradient(90deg,#5b3df5,#8a7be0);
+                color: white;
+                border-radius: 20px;
+                padding: 18px;
+                text-align: center;
+                cursor: pointer;
+                transition: 0.2s;
+            "
+            onmouseover="this.style.transform='scale(1.03)'"
+            onmouseout="this.style.transform='scale(1)'">
+
+                <div style="font-size:15px;">Small loan</div>
+                <div style="font-size:42px; font-weight:600;">$500</div>
+
+            </div>
+
+
+            <div style="
+                background: linear-gradient(90deg,#4b2fd6,#7c6ce0);
+                color: white;
+                border-radius: 20px;
+                padding: 18px;
+                text-align: center;
+                cursor: pointer;
+                transition: 0.2s;
+            "
+            onmouseover="this.style.transform='scale(1.03)'"
+            onmouseout="this.style.transform='scale(1)'">
+
+                <div style="font-size:15px;">Medium loan</div>
+                <div style="font-size:42px; font-weight:600;">$2000</div>
+
+            </div>
+
+
+            <div style="
+                background: linear-gradient(90deg,#3c25b8,#6e5de0);
+                color: white;
+                border-radius: 20px;
+                padding: 18px;
+                text-align: center;
+                cursor: pointer;
+                transition: 0.2s;
+            "
+            onmouseover="this.style.transform='scale(1.03)'"
+            onmouseout="this.style.transform='scale(1)'">
+
+                <div style="font-size:15px;">Big loan</div>
+                <div style="font-size:42px; font-weight:600;">$5000</div>
+
+            </div>
+
+
+            <div style="
+                background: linear-gradient(90deg,#2d1ea8,#5f4fe0);
+                color: white;
+                border-radius: 20px;
+                padding: 18px;
+                text-align: center;
+                cursor: pointer;
+                transition: 0.2s;
+            "
+            onmouseover="this.style.transform='scale(1.03)'"
+            onmouseout="this.style.transform='scale(1)'">
+
+                <div style="font-size:15px;">Max limit</div>
+                <div style="font-size:42px; font-weight:600;">$10000</div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+{% endblock %}

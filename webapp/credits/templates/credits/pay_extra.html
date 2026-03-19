@@ -1,0 +1,61 @@
+{% extends 'main/layout/users_layout.html' %}
+
+{% block title %}Pay extra{% endblock %}
+
+{% block content %}
+
+<div class="login-page">
+    <div class="login-card">
+
+        <a href="{% url 'credits' %}" class="login-btn"
+           style="margin-bottom: 10px; text-align:center; display:block;">
+            ← Back
+        </a>
+
+        <h1>Pay extra</h1>
+        <p class="login-subtitle">
+            Secure fintech payment
+        </p>
+
+        {% if messages %}
+        <div class="login-error">
+            <ul>
+                {% for message in messages %}
+                <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="input-group">
+                <i class="fa-solid fa-credit-card"></i>
+                <input type="text" name="card"
+                       placeholder="Card number" required>
+            </div>
+
+            <div class="input-group">
+                <i class="fa-solid fa-calendar"></i>
+                <input type="text" name="date"
+                       placeholder="MM / YY" required>
+            </div>
+
+            <div class="input-group">
+                <i class="fa-solid fa-lock"></i>
+                <input type="text" name="cvv"
+                       placeholder="CVV" required>
+            </div>
+
+            <button type="submit" class="login-btn">
+                Pay now
+            </button>
+
+        </form>
+
+
+    </div>
+</div>
+
+{% endblock %}
