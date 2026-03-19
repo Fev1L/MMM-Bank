@@ -1,3 +1,52 @@
 from django.db import models
+from django.contrib.auth.models import User
 
-# Create your models here.
+class PiggyBank(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    balance = models.FloatField(default=0)
+    goal = models.FloatField(default=0)
+
+    def __str__(self):
+        return f"Piggy Bank of {self.user.username}"
+
+
+class piggy_transactions(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    amount = models.FloatField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-timestamp']
+
+    def __str__(self):
+        return f"{self.user.username}: {self.amount} at {self.timestamp}"
+
+
+class Deposit(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    amount = models.FloatField()
+    rate = models.FloatField()
+    duration = models.IntegerField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_active = models.BooleanField(default=True)
+
+    def profit(self):
+        return self.amount * self.rate / 100
+
+
+class Stock(models.Model):
+    name = models.CharField(max_length=100)
+    symbol = models.CharField(max_length=10)
+    price = models.FloatField()
+
+    def __str__(self):
+        return f"{self.name} ({self.symbol})"
+
+
+class Purchase(models.Model):
+
+    stock = models.ForeignKey(Stock, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    quantity = models.IntegerField()
+    total_price = models.FloatField()
+    created_at = models.DateTimeField(auto_now_add=True)
