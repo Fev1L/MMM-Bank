@@ -20,6 +20,15 @@
                     <i class="fa-solid fa-user"></i>
                     <input type="text" name="user" placeholder="Username" required>
                 </div>
+            {% else %}
+            <div class="contact-preview">
+                <div class="contact-avatar">
+                    {{ friend.username|first|upper }}
+                </div>
+                <div class="contact-name">
+                    {{ friend.username }}
+                </div>
+            </div>
             {% endif %}
 
             <div class="input-group">

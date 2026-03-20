@@ -17,22 +17,7 @@
                 <div class="card-balance">${{ balance }}</div>
             </div>
         </div>
-        <div class="quick-actions">
-            <button class="action-btn">
-                <i class="fa-solid fa-paper-plane"></i>
-                <span>Send</span>
-            </button>
-
-            <button class="action-btn">
-                <i class="fa-solid fa-hand-holding-dollar"></i>
-                <span>Request</span>
-            </button>
-
-            <button class="action-btn">
-                <i class="fa-solid fa-gift"></i>
-                <span>Send a Gift</span>
-            </button>
-        </div>
+        {% include 'main/buttons/active_button.html' %}
     </div>
 
     <div class="col">

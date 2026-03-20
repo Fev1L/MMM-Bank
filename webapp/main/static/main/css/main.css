@@ -230,7 +230,7 @@ a:hover {
 
 .cardbar-section {
   gap: 20px;
-  margin-top: 50%;
+  margin-top: 10vh;
 }
 
 .cardbar-header{
@@ -712,11 +712,11 @@ a:hover {
 }
 
 .action-btn i {
-  font-size: 1.6rem;
+  font-size: clamp(20px, 1.6vw, 30px);
 }
 
 .action-btn span {
-  font-size: 0.9rem;
+  font-size: clamp(10px, 0.7vw, 14px);
 }
 
 .action-btn:hover {
