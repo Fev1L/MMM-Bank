@@ -38,3 +38,14 @@ def avaible_loans(request):
     return render(request, 'credits/avaible_loans.html', {
         'has_active_loan': has_active_loan,
     })
+
+@login_required
+def mortgage(request):
+    has_mortgage = Credit.objects.filter(
+        user=request.user,
+        is_active=True
+    ).exists()
+
+    return render(request, 'credits/mortgage.html', {
+        'has_mortgage': has_mortgage,
+    })
