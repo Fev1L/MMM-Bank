@@ -15,8 +15,8 @@ def index(request):
     if request.user.is_authenticated:
         account = request.user.account
         balance = account.balance
-        contacts = Contact.objects.filter(owner=request.user)[:4]
-        transactions = Transaction.objects.filter(account=account).order_by('-created_at')[:4]
+        contacts = Contact.objects.filter(owner=request.user)[:3]
+        transactions = Transaction.objects.filter(account=account).order_by('-created_at')[:3]
         transactionsStats = Transaction.objects.filter(account=account).order_by('-created_at')
         total_income = 0
         for transaction in transactionsStats:
