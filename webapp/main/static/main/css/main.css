@@ -567,7 +567,6 @@ a:hover {
   justify-content: space-between;
   align-items: center;
   gap: 12px;
-  background: #f9fafc;
   padding: 12px 14px;
   transition: 0.2s ease;
 }
@@ -864,4 +863,270 @@ a:hover {
 
 .pay-btn:hover {
   background: #1557b0;
+}
+/* LOGIN PAGE */
+
+.login-page{
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+
+  background:linear-gradient(
+          135deg,
+          #5b3df5,
+          #7b61ff,
+          #a594ff
+  );
+}
+
+/* CARD */
+
+.login-card{
+  width:100%;
+  max-width:420px;
+
+  padding:3rem;
+
+  border-radius:1.5rem;
+
+  background:rgba(255,255,255,0.2);
+  backdrop-filter:blur(20px);
+
+  color:white;
+  box-shadow:0 20px 60px rgba(0,0,0,0.25);
+}
+
+.login-card h1{
+  font-size:2rem;
+  margin-bottom:0.3rem;
+}
+
+.login-subtitle{
+  opacity:0.8;
+  margin-bottom:2rem;
+}
+
+/* INPUT */
+
+.input-group{
+  position:relative;
+  margin-bottom:1.2rem;
+}
+
+.input-group i{
+  position:absolute;
+  left:12px;
+  top:50%;
+  transform:translateY(-50%);
+  opacity:0.7;
+  color:black;
+  z-index:2;
+}
+
+.input-group input{
+  width:100%;
+  padding:0.7rem 0.7rem 0.7rem 2.2rem;
+  border-radius:0.7rem !important;
+  border:none;
+  outline:none;
+  background:white;
+}
+
+.input-group select{
+  width:100%;
+  padding:0.7rem 0.7rem 0.7rem 2.2rem;
+  border-radius:0.7rem !important;
+  border:none;
+  outline:none;
+  background:white;
+  color:black;
+  appearance:none;
+  -webkit-appearance:none;
+  -moz-appearance:none;
+  cursor:pointer;
+  position:relative;
+  z-index:1;
+}
+
+/* BUTTON */
+
+.login-btn{
+  width:100%;
+  padding:0.7rem;
+
+  border:none;
+  border-radius:0.8rem;
+
+  background:white;
+  color:#5b3df5;
+
+  font-weight:600;
+
+  cursor:pointer;
+  transition:0.25s;
+}
+
+.login-btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 10px 20px rgba(0,0,0,0.25);
+}
+
+/* FOOTER */
+
+.login-footer{
+  margin-top:1.5rem;
+  font-size:0.9rem;
+}
+
+.login-footer a{
+  color:white;
+  font-weight:600;
+  text-decoration:none;
+}
+
+/* ERROR */
+
+.login-error{
+  background:rgba(255,80,80,0.2);
+  padding:0.6rem;
+  border-radius:0.6rem;
+  margin-bottom:1rem;
+}
+
+.contact-preview{
+  display:flex;
+  align-items:center;
+  gap:0.8rem;
+
+  margin-bottom:1.2rem;
+  padding:0.6rem;
+
+  border-radius:0.8rem;
+  background:rgba(255,255,255,0.15);
+}
+
+.contact-avatar{
+  width:40px;
+  height:40px;
+
+  border-radius:12px;
+
+  background:linear-gradient(
+          135deg,
+          #5b3df5,
+          #7b61ff
+  );
+
+  color:white;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  font-weight:600;
+}
+
+.contact-name{
+  font-weight:600;
+
+}
+/* SPECIAL GIFT STYLE */
+
+.gift-card{
+  background: linear-gradient(
+          135deg,
+          rgba(255,255,255,0.15),
+          rgba(255,255,255,0.05)
+  );
+}
+
+.gift-btn{
+  background: linear-gradient(
+          135deg,
+          #f59e0b,
+          #f97316
+  );
+  color:white;
+}
+
+.gift-btn:hover{
+  transform:translateY(-2px) scale(1.02);
+  box-shadow:0 10px 25px rgba(0,0,0,0.3);
+}
+
+/* GOAL STYLE */
+
+.goal-card{
+  background: linear-gradient(
+          135deg,
+          rgba(255,255,255,0.12),
+          rgba(255,255,255,0.05)
+  );
+}
+
+.goal-btn{
+  background: linear-gradient(
+          135deg,
+          #22c55e,
+          #4ade80
+  );
+  color:white;
+}
+
+.goal-btn:hover{
+  transform:translateY(-2px) scale(1.02);
+  box-shadow:0 10px 25px rgba(0,0,0,0.3);
+}
+
+.invoice-btn{
+  background: linear-gradient(
+          135deg,
+          #3b82f6,
+          #60a5fa
+  );
+  color: white;
+}
+
+.invoice-btn:hover{
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+}
+
+.bank-btn{
+  background: linear-gradient(
+          135deg,
+          #6366f1,
+          #8b5cf6
+  );
+  color: white;
+}
+
+.bank-btn:hover{
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+}
+
+.resolution-item{
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.resolution-item:hover{
+  background: rgba(255,255,255,0.15);
+}
+
+.danger-btn{
+  background: linear-gradient(
+          135deg,
+          #ef4444,
+          #f87171
+  );
+  color: white;
+}
+
+.danger-btn:hover{
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
 }

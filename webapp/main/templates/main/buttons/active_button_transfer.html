@@ -1,16 +1,16 @@
 <div class="quick-actions">
-    <button class="action-btn">
+    <a href="{% url 'create_an_invoice' %}" class="action-btn">
         <i class="fa-solid fa-file-lines"></i>
         <span>Create an Invoice</span>
-    </button>
+    </a>
 
-    <button class="action-btn">
+    <a href="{% url 'transfer_to_bank' %}" class="action-btn">
         <i class="fa-solid fa-building-columns"></i>
         <span>Transfer to Bank</span>
-    </button>
+    </a>
 
-    <button class="action-btn">
-        <i class="fa-solid fa-left-right"></i>
+    <a href="{% url 'resolution_centre' %}" class="action-btn">
+        <i class="fa-solid fa-handshake-angle"></i>
         <span>Resolution Centre</span>
-    </button>
+    </a>
 </div>
