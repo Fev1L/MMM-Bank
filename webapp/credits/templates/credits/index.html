@@ -43,58 +43,47 @@
     <!-- КОЛОНКА 2: Credit terms → Active loan → Loan activity (детальна) -->
     <div class="col">
         <!-- Credit terms -->
-        <div style="
-            background:white;
-            padding:20px;
-            border-radius:20px;
-            box-shadow:0 8px 20px rgba(0,0,0,0.06);
-            flex: 0 0 auto;
-        ">
-            <h3 style="margin-bottom:10px;">Credit terms</h3>
-            <div style="color:#555; font-size:14px; margin-bottom:15px;">
-                Loan service is provided by MMM Bank.
-                Interest depends on client rating and credit history.
-                Early repayment is allowed without penalty.
+       <div class="credit-terms-card">
+
+    <h3>Credit terms</h3>
+
+    <div class="terms-grid">
+
+        <div class="term">
+            <span>Small</span>
+            <div class="bar">
+                <div style="width:20%"></div>
             </div>
-            <table style="width:100%; border-collapse:collapse; font-size:14px;">
-                <tr style="background:#f5f5f5;">
-                    <th style="padding:8px; text-align:left;">Loan type</th>
-                    <th style="padding:8px;">Limit</th>
-                    <th style="padding:8px;">Interest</th>
-                    <th style="padding:8px;">Period</th>
-                </tr>
-                <tr>
-                    <td style="padding:8px;">Small loan</td>
-                    <td style="padding:8px;">$500</td>
-                    <td style="padding:8px;">5%</td>
-                    <td style="padding:8px;">1 month</td>
-                </tr>
-                <tr>
-                    <td style="padding:8px;">Medium loan</td>
-                    <td style="padding:8px;">$2000</td>
-                    <td style="padding:8px;">4%</td>
-                    <td style="padding:8px;">3 months</td>
-                </tr>
-                <tr>
-                    <td style="padding:8px;">Big loan</td>
-                    <td style="padding:8px;">$5000</td>
-                    <td style="padding:8px;">3%</td>
-                    <td style="padding:8px;">6 months</td>
-                </tr>
-                <tr>
-                    <td style="padding:8px;">Max limit</td>
-                    <td style="padding:8px;">$10000</td>
-                    <td style="padding:8px;">2%</td>
-                    <td style="padding:8px;">12 months</td>
-                </tr>
-            </table>
-            <div style="margin-top:15px; font-size:13px; color:#777;">
-                • Early repayment allowed
-                • No hidden fees
-                • Monthly payment required
-                • Client rating affects interest
-            </div>
+            <small>$500 • 5%</small>
         </div>
+
+        <div class="term">
+            <span>Medium</span>
+            <div class="bar">
+                <div style="width:40%"></div>
+            </div>
+            <small>$2000 • 4%</small>
+        </div>
+
+        <div class="term">
+            <span>Big</span>
+            <div class="bar">
+                <div style="width:70%"></div>
+            </div>
+            <small>$5000 • 3%</small>
+        </div>
+
+        <div class="term">
+            <span>Max</span>
+            <div class="bar">
+                <div style="width:100%"></div>
+            </div>
+            <small>$10000 • 2%</small>
+        </div>
+
+    </div>
+
+</div>
 
 
 
