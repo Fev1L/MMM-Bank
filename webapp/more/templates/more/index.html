@@ -1,7 +1,27 @@
-{% extends 'main/layout/layout.html' %}
+{% extends 'more/layout.html' %}
 
-{% block title%}Homepage{% endblock %}
+{% block title %}More{% endblock %}
 
-{% block content%}
-<h1>MORE</h1>
+{% block content %}
+
+<a href="{% url 'casino_home' %}" class="more-card casino">
+    <i class="fa-solid fa-dice"></i>
+    <span>MMM-Casino</span>
+</a>
+
+<a href="#" class="more-card tools">
+    <i class="fa-solid fa-hammer"></i>
+    <span>WIP</span>
+</a>
+
+<a href="#" class="more-card stats">
+    <i class="fa-solid fa-hammer"></i>
+    <span>WIP</span>
+</a>
+
+<a href="#" class="more-card vip">
+    <i class="fa-solid fa-hammer"></i>
+    <span>WIP</span>
+</a>
+
 {% endblock %}

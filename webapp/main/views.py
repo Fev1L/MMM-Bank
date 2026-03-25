@@ -65,7 +65,7 @@ def transfer_to_bank(request):
 @login_required
 def resolution_centre(request):
     account = request.user.account
-    transactions = Transaction.objects.filter(account=account).order_by('-created_at')
+    transactions = Transaction.objects.filter(account=account, category__type=Category.WITHDRAW ).order_by('-created_at')
     return render(request, 'main/buttons/resolution_centre.html', {'transactions': transactions})
 
 @login_required
@@ -396,7 +396,13 @@ def register(request):
          return redirect('home')
     
     if request.method == 'POST':
-        user = User.objects.create_user(request.POST['username'], request.POST['email'], request.POST['password'])
+        user = User.objects.create_user(
+            username=request.POST['username'],
+            email=request.POST['email'],
+            password=request.POST['password'],
+            first_name=request.POST['name'],
+            last_name=request.POST['surname'],
+        )
         login(request, user)
         return redirect('home')
     

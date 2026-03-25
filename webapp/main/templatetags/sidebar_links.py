@@ -33,4 +33,35 @@ def get_links():
         'href': '/more/',
         'icon': 'fa-ellipsis',
     }]
-    
+
+@register.simple_tag
+def get_casino_links():
+    return [{
+        'name': 'Home',
+        'href': '/more/casino/',
+        'icon': 'fa-solid fa-home',
+    },{
+        'name': 'Slots',
+        'href': '/more/casino/slots',
+        'icon': 'fa-solid fa-dice',
+    }, {
+        'name': 'Poker',
+        'href': '#',
+        'icon': 'fa-solid fa-clover',
+    }, {
+        'name': 'Dice',
+        'href': '#',
+        'icon': 'fa-solid fa-dice-d20',
+    },{
+        'name': 'Guess',
+        'href': '#',
+        'icon': 'fa-solid fa-bullseye',
+    },{
+        'name': 'Roulette',
+        'href': '#',
+        'icon': 'fa-solid fa-circle',
+    },{
+        'name': 'Back',
+        'href': '/more/',
+        'icon': 'fa-solid fa-landmark',
+    }]

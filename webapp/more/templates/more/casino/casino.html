@@ -1,0 +1,60 @@
+{% extends 'more/casino/casino_layout.html' %}
+
+{% block title %}MMM-Casino{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col">
+        <h1 style="font-size: 30px;">MMM Balance </h1>
+
+        <div class="card balance-card">
+            <div class="card-top">
+                <span class="card-title"> </span>
+                <h1 style="font-size: 30px;">MMM</h1>
+            </div>
+
+            <div class="card-bottom">
+                <div class="card-balance">${{ balance }}</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col">
+
+        <div class="casino-header-card">
+            <h2>MMM-Casino</h2>
+            <p>Try your luck</p>
+        </div>
+
+        <div class="casino-games">
+
+            <a href="#" class="casino-card">
+                <i class="fa-solid fa-dice"></i>
+                <span>Slots</span>
+            </a>
+
+            <a href="#" class="casino-card">
+                <i class="fa-solid fa-clover"></i>
+                <span>Poker</span>
+            </a>
+
+            <a href="#" class="casino-card">
+                <i class="fa-solid fa-dice-d20"></i>
+                <span>Dice</span>
+            </a>
+
+            <a href="#" class="casino-card">
+                <i class="fa-solid fa-bullseye"></i>
+                <span>Guess</span>
+            </a>
+
+            <a href="#" class="casino-card">
+                <i class="fa-solid fa-circle"></i>
+                <span>Roulette</span>
+            </a>
+
+        </div>
+
+    </div>
+</div>
+{% endblock %}
