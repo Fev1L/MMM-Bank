@@ -5,59 +5,95 @@
 {% block content %}
 
 <div class="login-page">
+
     <div class="login-card">
 
         <h1>Pay extra</h1>
+
         <p class="login-subtitle">
-            Secure fintech payment
+            Choose loan and amount
         </p>
+
 
         {% if messages %}
         <div class="login-error">
             <ul>
                 {% for message in messages %}
-                <li>{{ message }}</li>
+                    <li>{{ message }}</li>
                 {% endfor %}
             </ul>
         </div>
         {% endif %}
 
+
         <form method="POST">
+
             {% csrf_token %}
 
-            <div class="input-group">
-                <i class="fa-solid fa-credit-card"></i>
-                <input type="text" name="card"
-                       placeholder="Card number" required>
-            </div>
+
+           <div class="input-group">
+
+    <i class="fa-solid fa-money-bill"></i>
+
+    <select name="loan"
+            required
+            class="custom-input"
+            style="padding-left:35px;">
+
+        <option value="">
+            Select loan
+        </option>
+
+        {% for loan in loans %}
+            <option value="{{ loan.id }}">
+                {{ loan.name }} — ${{ loan.amount }}
+            </option>
+        {% endfor %}
+
+    </select>
+
+</div>
+
+
+
+            <!-- AMOUNT -->
 
             <div class="input-group">
-                <i class="fa-solid fa-calendar"></i>
-                <input type="text" name="date"
-                       placeholder="MM / YY" required>
+
+                <i class="fa-solid fa-money-bill"></i>
+
+                <input
+                    type="number"
+                    name="amount"
+                    placeholder="Amount"
+                    required
+                    class="custom-input"
+                >
+
             </div>
 
-            <div class="input-group">
-                <i class="fa-solid fa-lock"></i>
-                <input type="text" name="cvv"
-                       placeholder="CVV" required>
-            </div>
+
 
             <button type="submit" class="login-btn">
-                Pay now
+                Pay
             </button>
+
 
         </form>
 
 
-        <!-- BACK BUTTON DOWN -->
-        <a href="{% url 'credits' %}" class="login-btn"
+
+        <a href="{% url 'credits' %}"
+           class="login-btn"
            style="margin-top:10px; display:block; text-align:center;">
+
             ← Back
+
         </a>
 
 
     </div>
+
 </div>
 
 {% endblock %}
