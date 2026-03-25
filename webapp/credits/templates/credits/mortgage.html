@@ -7,24 +7,10 @@
 <div class="login-page">
     <div class="login-card">
 
-        <a href="{% url 'credits' %}" class="login-btn"
-           style="margin-bottom: 10px; text-align:center; display:block;">
-            ← Back
-        </a>
-
         <h1>Mortgage</h1>
         <p class="login-subtitle">
-            Apply for mortgage in MMM Bank
+            Rate 3.5% • Max $100000 • 30 years
         </p>
-
-
-        <div class="login-info">
-
-            <p>Rate: 3.5%</p>
-            <p>Max amount: $100000</p>
-            <p>Max period: 30 years</p>
-
-        </div>
 
 
         <form method="POST">
@@ -47,10 +33,15 @@
             </div>
 
             <button type="submit" class="login-btn">
-                Apply mortgage
+                Apply
             </button>
 
         </form>
+
+
+        <a href="{% url 'credits' %}" class="login-btn" style="margin-top:10px; display:block; text-align:center;">
+    ← Back
+</a>
 
     </div>
 </div>
