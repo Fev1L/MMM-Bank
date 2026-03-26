@@ -1,37 +1,124 @@
-.credit-terms-card {
-    background: linear-gradient(135deg,#5b4bff,#8a7bff);
+.ct-terms-card {
+    background: #ffffff;
     border-radius: 20px;
     padding: 20px;
-    color: white;
-
-    flex: 1; /* ← ОЦЕ ГОЛОВНЕ */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+    flex: 0 0 auto;
 }
 
-.terms-grid {
+.ct-terms-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.ct-terms-header h3 {
+    margin: 0 0 8px;
+    color: #111111;
+    font-size: 32px;
+    font-weight: 700;
+}
+
+.ct-terms-header p {
+    margin: 0;
+    color: #555555;
+    font-size: 14px;
+    line-height: 1.5;
+    max-width: 420px;
+}
+
+.ct-terms-badge {
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: #f3f0ff;
+    color: #5b3df5;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.ct-terms-list {
     display: flex;
     flex-direction: column;
     gap: 12px;
 }
 
-.bar {
+.ct-term-item {
+    padding: 12px 14px;
+    border-radius: 16px;
+    background: #faf9ff;
+}
+
+.ct-term-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 8px;
+}
+
+.ct-term-top h4 {
+    margin: 0;
+    color: #111111;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.ct-term-top p {
+    margin: 4px 0 0;
+    color: #666666;
+    font-size: 14px;
+}
+
+.ct-term-pill {
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: #ffffff;
+    border: 1px solid #e3dbff;
+    color: #5b3df5;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.ct-term-metrics {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+    color: #333333;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.ct-term-bar {
     height: 8px;
-    background: rgba(255,255,255,0.3);
-    border-radius: 10px;
+    border-radius: 999px;
+    background: #e8e1ff;
+    overflow: hidden;
 }
 
-.bar div {
+.ct-term-bar-fill {
     height: 100%;
-    background: white;
-    border-radius: 10px;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #5b3df5 0%, #7b61ff 100%);
 }
 
-.row {
-    display: flex;
-    gap: 20px;
+.ct-terms-note {
+    margin-top: 16px;
+    color: #777777;
+    font-size: 13px;
+    line-height: 1.5;
 }
 
-.col {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
+@media (max-width: 900px) {
+    .ct-terms-header,
+    .ct-term-top,
+    .ct-term-metrics {
+        flex-direction: column;
+        align-items: flex-start;
+    }
 }
