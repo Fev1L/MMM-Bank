@@ -359,27 +359,28 @@
         </div>
 
         <div class="active-loans-list">
-            {% if active_credit_cards %}
-                {% for card in active_credit_cards %}
-                    <div style="
-                        background: linear-gradient(90deg,#3c25b8,#7c6ce0);
-                        color:white;
-                        border-radius:20px;
+        {% if has_active_credit_cards %}
+            {% for card in active_credit_cards %}
+                <div style="
+                    background: linear-gradient(90deg,#3c25b8,#7c6ce0);
+                    color:white;
+                    border-radius:20px;
                         padding:18px;
                         flex: 0 0 auto;
-                    ">
-                        <div>{{ card.title }}</div>
-                        <div style="font-size:28px;">${{ card.amount }}</div>
-                        <div>Left: ${{ card.left }}</div>
-                        <div>Monthly: ${{ card.monthly }}</div>
-                        {% if not card.is_placeholder %}
-                            <div>Rate: {{ card.rate }}%</div>
-                        {% endif %}
-                        <div>Status: {{ card.status }}</div>
-                    </div>
-                {% endfor %}
-            {% endif %}
-        </div>
+                ">
+                    <div>{{ card.title }}</div>
+                    <div style="font-size:28px;">${{ card.amount }}</div>
+                    <div>Left: ${{ card.left }}</div>
+                    <div>Monthly: ${{ card.monthly }}</div>
+                    <div>Rate: {{ card.rate }}%</div>
+                    <div>Status: {{ card.status }}</div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="transaction-item text-center py-4" style="color: #6b7280;">
+                No active loans yet
+            </div>
+        {% endif %}
     </div>
 </div>
 

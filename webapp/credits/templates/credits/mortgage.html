@@ -7,18 +7,17 @@
 <div class="login-page">
     <div class="login-card">
 
+        <a href="{% url 'inbox' %}" class="page-bell-btn" aria-label="Open inbox">
+            <i class="fa-regular fa-bell"></i>
+            {% if unread_count %}
+                <span class="page-bell-badge">{{ unread_count }}</span>
+            {% endif %}
+        </a>
+
         <h1>Mortgage</h1>
         <p class="login-subtitle">
             Rate 3.5% • Max $100000 • 30 years
         </p>
-
-        {% if messages %}
-            {% for message in messages %}
-                <div class="{% if message.tags == 'success' %}login-success{% else %}login-error{% endif %}">
-                    {{ message }}
-                </div>
-            {% endfor %}
-        {% endif %}
 
         {% if has_mortgage %}
             <div class="login-subtitle">

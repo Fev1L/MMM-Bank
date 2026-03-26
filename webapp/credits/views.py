@@ -1,6 +1,5 @@
 from decimal import Decimal, InvalidOperation
 
-from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
 from django.db import transaction as db_transaction
@@ -8,46 +7,25 @@ from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
 
 from .models import Credit
-from main.models import Category, Transaction
+from main.models import Category, InboxMessage, Transaction
 
 
-AVAILABLE_LOANS = [
-    {
-        'key': 'bicycle',
-        'client_name': 'Bicycle loan',
-        'amount': Decimal('500.00'),
-        'interest_rate': 5.0,
-        'gradient': 'linear-gradient(90deg,#5b3df5,#8a7be0)',
-    },
-    {
-        'key': 'motorcycle',
-        'client_name': 'Motorcycle loan',
-        'amount': Decimal('3000.00'),
-        'interest_rate': 4.5,
-        'gradient': 'linear-gradient(90deg,#4b2fd6,#7c6ce0)',
-    },
-    {
-        'key': 'car',
-        'client_name': 'Car loan',
-        'amount': Decimal('20000.00'),
-        'interest_rate': 3.5,
-        'gradient': 'linear-gradient(90deg,#3c25b8,#6e5de0)',
-    },
-    {
-        'key': 'apartment',
-        'client_name': 'Apartment loan',
-        'amount': Decimal('50000.00'),
-        'interest_rate': 2.8,
-        'gradient': 'linear-gradient(90deg,#2d1ea8,#5f4fe0)',
-    },
-    {
-        'key': 'house',
-        'client_name': 'House loan',
-        'amount': Decimal('100000.00'),
-        'interest_rate': 2.3,
-        'gradient': 'linear-gradient(90deg,#25198f,#5647d9)',
-    },
-]
+MAX_LOAN_LIMIT = Decimal('200000.00')
+DEFAULT_LOAN_INTEREST = 4.0
+
+
+def get_active_credit_total(user):
+    active_credits = Credit.objects.filter(user=user, is_active=True)
+    return sum((credit.amount for credit in active_credits), Decimal('0.00'))
+
+
+def create_credit_notification(user, title, content):
+    InboxMessage.objects.create(
+        receiver=user,
+        title=title,
+        content=content,
+        type=InboxMessage.SYSTEM,
+    )
 
 
 @login_required
@@ -81,34 +59,13 @@ def index(request):
             'status': 'Active' if credit.is_active else 'Closed',
             'is_placeholder': False,
         })
-    if not active_credit_cards:
-        active_credit_cards = [
-            {
-                'title': 'No active loans yet',
-                'amount': Decimal('0.00'),
-                'left': Decimal('0.00'),
-                'monthly': Decimal('0.00'),
-                'rate': Decimal('0.00'),
-                'status': 'Waiting for application',
-                'is_placeholder': True,
-            },
-            {
-                'title': 'No active loans yet',
-                'amount': Decimal('0.00'),
-                'left': Decimal('0.00'),
-                'monthly': Decimal('0.00'),
-                'rate': Decimal('0.00'),
-                'status': 'Waiting for application',
-                'is_placeholder': True,
-            },
-        ]
-
     return render(request, 'credits/index.html', {
         'has_active_loan': active_credits.exists(),
         'balance': balance,
         'loan_activity': loan_activity,
         'show_all_activity': show_all_activity,
         'active_credit_cards': active_credit_cards,
+        'has_active_credit_cards': bool(active_credit_cards),
         'show_all_cards': show_all_cards,
         'has_more_credit_cards': active_credits.count() > 2,
     })
@@ -129,11 +86,19 @@ def pay_extra(request):
             amount = Decimal('0')
 
         if amount <= 0:
-            messages.error(request, 'Enter a valid amount greater than 0.')
+            create_credit_notification(
+                request.user,
+                'Credit payment declined',
+                'Enter a valid extra payment amount greater than 0.',
+            )
             return redirect('pay_extra')
 
         if amount > loan.amount:
-            messages.error(request, 'Extra payment cannot be bigger than the remaining loan balance.')
+            create_credit_notification(
+                request.user,
+                'Credit payment declined',
+                'Extra payment cannot be bigger than the remaining loan balance.',
+            )
             return redirect('pay_extra')
 
         payment_category, _ = Category.objects.get_or_create(
@@ -155,13 +120,25 @@ def pay_extra(request):
                     loan.is_active = False
                 loan.save(update_fields=['amount', 'is_active'])
         except ValidationError as exc:
-            messages.error(request, str(exc))
+            create_credit_notification(
+                request.user,
+                'Credit payment declined',
+                str(exc),
+            )
             return redirect('pay_extra')
 
         if loan.is_active:
-            messages.success(request, f'Extra payment of ${amount} was applied to {loan.client_name}.')
+            create_credit_notification(
+                request.user,
+                'Credit payment received',
+                f'Extra payment of ${amount} was applied to {loan.client_name}.',
+            )
         else:
-            messages.success(request, f'{loan.client_name} has been fully repaid.')
+            create_credit_notification(
+                request.user,
+                'Credit closed',
+                f'{loan.client_name} has been fully repaid.',
+            )
         return redirect('pay_extra')
 
     return render(request, 'credits/pay_extra.html', {
@@ -177,11 +154,44 @@ def avaible_loans(request):
     )
 
     if request.method == 'POST':
-        loan_key = request.POST.get('loan_type')
-        loan_data = next((loan for loan in AVAILABLE_LOANS if loan['key'] == loan_key), None)
+        loan_target = request.POST.get('loan_target', '').strip()
 
-        if loan_data is None:
-            messages.error(request, 'Please choose a valid loan option.')
+        try:
+            amount = Decimal(request.POST.get('amount', '0'))
+        except InvalidOperation:
+            amount = Decimal('0')
+
+        if not loan_target:
+            create_credit_notification(
+                request.user,
+                'Credit request declined',
+                'Please enter what you want to take the credit for.',
+            )
+            return redirect('avaible_loans')
+
+        if amount <= 0:
+            create_credit_notification(
+                request.user,
+                'Credit request declined',
+                'Please enter a valid loan amount.',
+            )
+            return redirect('avaible_loans')
+
+        if amount > MAX_LOAN_LIMIT:
+            create_credit_notification(
+                request.user,
+                'Credit request declined',
+                'You cannot take a loan for this amount. Maximum loan limit is $200000.',
+            )
+            return redirect('avaible_loans')
+
+        current_total = get_active_credit_total(request.user)
+        if current_total >= MAX_LOAN_LIMIT or current_total + amount > MAX_LOAN_LIMIT:
+            create_credit_notification(
+                request.user,
+                'Credit limit reached',
+                'You have reached the credit limit. Return the debt first.',
+            )
             return redirect('avaible_loans')
 
         payout_category, _ = Category.objects.get_or_create(
@@ -192,25 +202,29 @@ def avaible_loans(request):
         with db_transaction.atomic():
             credit = Credit.objects.create(
                 user=request.user,
-                client_name=loan_data['client_name'],
-                amount=loan_data['amount'],
-                interest_rate=loan_data['interest_rate'],
+                client_name=f'{loan_target.title()} loan',
+                amount=amount,
+                interest_rate=DEFAULT_LOAN_INTEREST,
                 is_active=True,
             )
 
             Transaction.objects.create(
                 account=request.user.account,
-                amount=loan_data['amount'],
+                amount=amount,
                 category=payout_category,
                 title=f"Loan approved: {credit.client_name}"
             )
 
-        messages.success(request, f"{loan_data['client_name']} was added to your account.")
+        create_credit_notification(
+            request.user,
+            'Credit approved',
+            f'{credit.client_name} was added to your account for ${amount}.',
+        )
         return redirect('avaible_loans')
 
     return render(request, 'credits/avaible_loans.html', {
         'has_active_loan': active_loans.exists(),
-        'loan_options': AVAILABLE_LOANS,
+        'max_loan_limit': MAX_LOAN_LIMIT,
     })
 
 @login_required
@@ -234,15 +248,36 @@ def mortgage(request):
             years = 0
 
         if has_mortgage:
-            messages.error(request, 'You already have an active mortgage.')
+            create_credit_notification(
+                request.user,
+                'Mortgage request declined',
+                'You already have an active mortgage.',
+            )
             return redirect('mortgage')
 
         if amount <= 0 or amount > Decimal('100000'):
-            messages.error(request, 'Mortgage amount must be between $1 and $100000.')
+            create_credit_notification(
+                request.user,
+                'Mortgage request declined',
+                'Mortgage amount must be between $1 and $100000.',
+            )
+            return redirect('mortgage')
+
+        current_total = get_active_credit_total(request.user)
+        if current_total >= MAX_LOAN_LIMIT or current_total + amount > MAX_LOAN_LIMIT:
+            create_credit_notification(
+                request.user,
+                'Credit limit reached',
+                'You have reached the credit limit. Return the debt first.',
+            )
             return redirect('mortgage')
 
         if years < 1 or years > 30:
-            messages.error(request, 'Mortgage term must be between 1 and 30 years.')
+            create_credit_notification(
+                request.user,
+                'Mortgage request declined',
+                'Mortgage term must be between 1 and 30 years.',
+            )
             return redirect('mortgage')
 
         mortgage_category, _ = Category.objects.get_or_create(
@@ -266,7 +301,11 @@ def mortgage(request):
                 title=f'Mortgage approved: {credit.client_name}'
             )
 
-        messages.success(request, 'Mortgage application approved and credited to your account.')
+        create_credit_notification(
+            request.user,
+            'Mortgage approved',
+            f'Mortgage application approved and credited to your account for ${amount}.',
+        )
         return redirect('mortgage')
 
     return render(request, 'credits/mortgage.html', {

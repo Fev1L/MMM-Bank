@@ -8,45 +8,63 @@
 
     <div class="login-card" style="width: 500px;">
 
+        <a href="{% url 'inbox' %}" class="page-bell-btn" aria-label="Open inbox">
+            <i class="fa-regular fa-bell"></i>
+            {% if unread_count %}
+                <span class="page-bell-badge">{{ unread_count }}</span>
+            {% endif %}
+        </a>
+
         <h1>Available loans</h1>
         <p class="login-subtitle">
-            Choose your fintech loan
+            Choose what you need the credit for and enter your amount
         </p>
 
-        {% if messages %}
-            {% for message in messages %}
-                <div class="{% if message.tags == 'success' %}login-success{% else %}login-error{% endif %}">
-                    {{ message }}
-                </div>
-            {% endfor %}
-        {% endif %}
+        <form method="POST">
+            {% csrf_token %}
 
-        <div style="display: flex; flex-direction: column; gap: 12px;">
-            {% for loan in loan_options %}
-                <form method="POST" style="margin: 0;">
-                    {% csrf_token %}
-                    <input type="hidden" name="loan_type" value="{{ loan.key }}">
-                    <button type="submit" style="
-                        width: 100%;
-                        border: none;
-                        background: {{ loan.gradient }};
-                        color: white;
-                        border-radius: 20px;
-                        padding: 18px;
-                        text-align: center;
-                        cursor: pointer;
-                        transition: 0.2s;
-                    "
-                    onmouseover="this.style.transform='scale(1.03)'"
-                    onmouseout="this.style.transform='scale(1)'">
-                        <div style="font-size:15px;">{{ loan.client_name }}</div>
-                        <div style="font-size:42px; font-weight:600;">${{ loan.amount }}</div>
-                    </button>
-                </form>
-            {% endfor %}
-        </div>
+            <div class="input-group">
+                <i class="fa-solid fa-pen"></i>
+                <input
+                    type="text"
+                    name="loan_target"
+                    list="loan-targets"
+                    placeholder="What do you need the credit for?"
+                    required
+                    class="custom-input"
+                >
+                <datalist id="loan-targets">
+                    <option value="Bicycle">
+                    <option value="Motorcycle">
+                    <option value="Car">
+                    <option value="Apartment">
+                    <option value="House">
+                </datalist>
+            </div>
 
-        <a href="{% url 'credits' %}" class="login-back-btn available-loans-back">
+            <div class="input-group">
+                <i class="fa-solid fa-money-bill"></i>
+                <input
+                    type="number"
+                    name="amount"
+                    placeholder="Amount"
+                    min="1"
+                    max="{{ max_loan_limit|floatformat:'0' }}"
+                    required
+                    class="custom-input"
+                >
+            </div>
+
+            <div class="login-subtitle" style="margin-top: -8px; margin-bottom: 1rem;">
+                Maximum loan limit: ${{ max_loan_limit|floatformat:"0" }}
+            </div>
+
+            <button type="submit" class="login-btn">
+                Take credit
+            </button>
+        </form>
+
+        <a href="{% url 'credits' %}" class="mortgage-action-btn secondary" style="margin-top: 16px;">
             <i class="fa-solid fa-arrow-left"></i>
             <span>Back to Credits</span>
         </a>

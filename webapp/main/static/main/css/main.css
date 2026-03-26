@@ -1043,6 +1043,7 @@ a:hover {
   max-width:420px;
 
   padding:3rem;
+  position:relative;
 
   border-radius:1.5rem;
 
@@ -1051,6 +1052,52 @@ a:hover {
 
   color:white;
   box-shadow:0 20px 60px rgba(0,0,0,0.25);
+}
+
+.page-bell-btn{
+  position:absolute;
+  top:1rem;
+  right:1rem;
+  width:44px;
+  height:44px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  border-radius:999px;
+  background:rgba(255,255,255,0.22);
+  color:white;
+  text-decoration:none;
+
+  box-shadow:0 10px 26px rgba(0,0,0,0.18);
+  backdrop-filter:blur(12px);
+  transition:0.25s;
+}
+
+.page-bell-btn:hover{
+  transform:translateY(-2px);
+  background:rgba(255,255,255,0.3);
+  color:white;
+}
+
+.page-bell-badge{
+  position:absolute;
+  top:-4px;
+  right:-4px;
+  min-width:20px;
+  height:20px;
+  padding:0 6px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  border-radius:999px;
+  background:#ef4444;
+  color:white;
+  font-size:0.7rem;
+  font-weight:700;
 }
 
 .login-card h1{
@@ -1079,13 +1126,17 @@ a:hover {
   color:black;
 }
 
-.input-group input{
+.input-group input,
+.input-group select{
   width:100%;
   padding:0.7rem 0.7rem 0.7rem 2.2rem;
   border-radius:0.7rem !important;
   border:none;
   outline:none;
   background:white;
+  appearance:none;
+  -webkit-appearance:none;
+  color:#111827;
 }
 
 /* BUTTON */
@@ -1158,6 +1209,10 @@ a:hover {
   box-shadow:0 14px 32px rgba(49,95,205,0.14);
 }
 
+a.login-back-btn.pay-extra-back:hover{
+  color:#2347a8;
+}
+
 .login-back-btn.available-loans-back{
   background:rgba(244,240,255,0.9);
   border-color:rgba(91,61,245,0.16);
@@ -1167,6 +1222,10 @@ a:hover {
 .login-back-btn.available-loans-back:hover{
   color:#4c31e0;
   box-shadow:0 14px 32px rgba(91,61,245,0.16);
+}
+
+a.login-back-btn.available-loans-back:hover{
+  color:#4c31e0;
 }
 
 .login-back-btn.mortgage-back{
@@ -1216,7 +1275,12 @@ a:hover {
 }
 
 .mortgage-action-btn.secondary:hover{
+  color:#ffffff;
   box-shadow:0 18px 36px rgba(91,61,245,0.24);
+}
+
+a.mortgage-action-btn.secondary:hover{
+  color:#ffffff;
 }
 
 /* FOOTER */

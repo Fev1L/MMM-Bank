@@ -9,7 +9,7 @@ from django.urls import reverse
 
 from credits.models import Credit
 from credits.views import index
-from main.models import Transaction
+from main.models import InboxMessage, Transaction
 
 
 class CreditsFlowTests(TestCase):
@@ -49,11 +49,17 @@ class CreditsFlowTests(TestCase):
                 amount=Decimal("250.00"),
             ).exists()
         )
+        self.assertTrue(
+            InboxMessage.objects.filter(
+                receiver=self.user,
+                title="Credit payment received",
+            ).exists()
+        )
 
     def test_available_loan_creates_credit_and_deposits_money(self):
         response = self.client.post(
             reverse("avaible_loans"),
-            {"loan_type": "motorcycle"},
+            {"loan_target": "motorcycle", "amount": "3000.00"},
         )
 
         self.user.account.refresh_from_db()
@@ -62,7 +68,7 @@ class CreditsFlowTests(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, reverse("avaible_loans"))
         self.assertEqual(loan.amount, Decimal("3000.00"))
-        self.assertEqual(loan.interest_rate, 4.5)
+        self.assertEqual(loan.interest_rate, 4.0)
         self.assertTrue(loan.is_active)
         self.assertEqual(self.user.account.balance, Decimal("8000.00"))
         self.assertTrue(
@@ -72,9 +78,58 @@ class CreditsFlowTests(TestCase):
                 amount=Decimal("3000.00"),
             ).exists()
         )
+        self.assertTrue(
+            InboxMessage.objects.filter(
+                receiver=self.user,
+                title="Credit approved",
+            ).exists()
+        )
+
+    def test_available_loan_rejects_amount_above_limit(self):
+        response = self.client.post(
+            reverse("avaible_loans"),
+            {"loan_target": "house", "amount": "250000.00"},
+        )
+
+        self.user.account.refresh_from_db()
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse("avaible_loans"))
+        self.assertEqual(Credit.objects.count(), 0)
+        self.assertEqual(self.user.account.balance, Decimal("5000.00"))
+        self.assertTrue(
+            InboxMessage.objects.filter(
+                receiver=self.user,
+                title="Credit request declined",
+            ).exists()
+        )
+
+    def test_available_loan_rejects_when_total_credit_limit_is_reached(self):
+        Credit.objects.create(
+            user=self.user,
+            client_name="Existing loan",
+            amount=Decimal("200000.00"),
+            interest_rate=4,
+            is_active=True,
+        )
+
+        response = self.client.post(
+            reverse("avaible_loans"),
+            {"loan_target": "bike", "amount": "500.00"},
+        )
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse("avaible_loans"))
+        self.assertEqual(Credit.objects.filter(user=self.user).count(), 1)
+        self.assertTrue(
+            InboxMessage.objects.filter(
+                receiver=self.user,
+                title="Credit limit reached",
+            ).exists()
+        )
 
     def test_credits_page_shows_real_loan_activity(self):
-        self.client.post(reverse("avaible_loans"), {"loan_type": "motorcycle"})
+        self.client.post(reverse("avaible_loans"), {"loan_target": "motorcycle", "amount": "3000.00"})
         loan = Credit.objects.get(user=self.user, client_name="Motorcycle loan")
         self.client.post(reverse("pay_extra"), {"loan": loan.id, "amount": "250.00"})
 
@@ -95,8 +150,8 @@ class CreditsFlowTests(TestCase):
         self.assertIn("Loan payment", activity_categories)
 
     def test_credits_page_limits_activity_until_more_is_enabled(self):
-        for loan_type in ["bicycle", "motorcycle", "car", "apartment"]:
-            self.client.post(reverse("avaible_loans"), {"loan_type": loan_type})
+        for loan_target, amount in [("bicycle", "500.00"), ("motorcycle", "3000.00"), ("car", "20000.00"), ("apartment", "50000.00")]:
+            self.client.post(reverse("avaible_loans"), {"loan_target": loan_target, "amount": amount})
         self.client.post(reverse("mortgage"), {"amount": "20000.00", "years": "15"})
 
         loan = Credit.objects.get(user=self.user, client_name="Motorcycle loan")
@@ -125,8 +180,8 @@ class CreditsFlowTests(TestCase):
         self.assertEqual(len(full_context["loan_activity"]), 6)
 
     def test_credits_page_shows_active_credit_cards_from_database(self):
-        self.client.post(reverse("avaible_loans"), {"loan_type": "car"})
-        self.client.post(reverse("avaible_loans"), {"loan_type": "bicycle"})
+        self.client.post(reverse("avaible_loans"), {"loan_target": "car", "amount": "20000.00"})
+        self.client.post(reverse("avaible_loans"), {"loan_target": "bicycle", "amount": "500.00"})
 
         request = self.factory.get(reverse("credits"))
         request.user = self.user
@@ -142,7 +197,7 @@ class CreditsFlowTests(TestCase):
         self.assertIn("Car loan", card_titles)
         self.assertIn("Bicycle loan", card_titles)
 
-    def test_credits_page_shows_two_placeholders_without_active_loans(self):
+    def test_credits_page_shows_empty_state_without_active_loans(self):
         request = self.factory.get(reverse("credits"))
         request.user = self.user
 
@@ -152,13 +207,13 @@ class CreditsFlowTests(TestCase):
 
         context = mocked_render.call_args[0][2]
 
-        self.assertEqual(len(context["active_credit_cards"]), 2)
-        self.assertTrue(all(item["is_placeholder"] for item in context["active_credit_cards"]))
+        self.assertEqual(len(context["active_credit_cards"]), 0)
+        self.assertFalse(context["has_active_credit_cards"])
         self.assertFalse(context["has_more_credit_cards"])
 
     def test_credit_cards_show_more_reveals_all_active_loans(self):
-        for loan_type in ["bicycle", "motorcycle", "car"]:
-            self.client.post(reverse("avaible_loans"), {"loan_type": loan_type})
+        for loan_target, amount in [("bicycle", "500.00"), ("motorcycle", "3000.00"), ("car", "20000.00")]:
+            self.client.post(reverse("avaible_loans"), {"loan_target": loan_target, "amount": amount})
 
         request = self.factory.get(reverse("credits"))
         request.user = self.user
@@ -203,5 +258,35 @@ class CreditsFlowTests(TestCase):
                 account=self.user.account,
                 title="Mortgage approved: Mortgage",
                 amount=Decimal("20000.00"),
+            ).exists()
+        )
+        self.assertTrue(
+            InboxMessage.objects.filter(
+                receiver=self.user,
+                title="Mortgage approved",
+            ).exists()
+        )
+
+    def test_mortgage_rejects_when_total_credit_limit_is_reached(self):
+        Credit.objects.create(
+            user=self.user,
+            client_name="Existing loan",
+            amount=Decimal("200000.00"),
+            interest_rate=4,
+            is_active=True,
+        )
+
+        response = self.client.post(
+            reverse("mortgage"),
+            {"amount": "1000.00", "years": "15"},
+        )
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse("mortgage"))
+        self.assertEqual(Credit.objects.filter(user=self.user).count(), 1)
+        self.assertTrue(
+            InboxMessage.objects.filter(
+                receiver=self.user,
+                title="Credit limit reached",
             ).exists()
         )
