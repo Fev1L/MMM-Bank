@@ -12,7 +12,19 @@
             Rate 3.5% • Max $100000 • 30 years
         </p>
 
+        {% if messages %}
+            {% for message in messages %}
+                <div class="{% if message.tags == 'success' %}login-success{% else %}login-error{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
 
+        {% if has_mortgage %}
+            <div class="login-subtitle">
+                You already have an active mortgage. Extra applications are disabled until it is closed.
+            </div>
+        {% else %}
         <form method="POST">
             {% csrf_token %}
 
@@ -37,6 +49,7 @@
             </button>
 
         </form>
+        {% endif %}
 
 
         <a href="{% url 'credits' %}" class="login-btn" style="margin-top:10px; display:block; text-align:center;">

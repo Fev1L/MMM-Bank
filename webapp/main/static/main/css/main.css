@@ -1133,6 +1133,14 @@ a:hover {
   margin-bottom:1rem;
 }
 
+.login-success{
+  background:rgba(34,197,94,0.18);
+  padding:0.6rem;
+  border-radius:0.6rem;
+  margin-bottom:1rem;
+  color:#14532d;
+}
+
 .contact-preview{
   display:flex;
   align-items:center;

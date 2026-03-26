@@ -16,16 +16,15 @@
 
 
         {% if messages %}
-        <div class="login-error">
-            <ul>
-                {% for message in messages %}
-                    <li>{{ message }}</li>
-                {% endfor %}
-            </ul>
-        </div>
+            {% for message in messages %}
+                <div class="{% if message.tags == 'success' %}login-success{% else %}login-error{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
         {% endif %}
 
 
+        {% if loans %}
         <form method="POST">
 
             {% csrf_token %}
@@ -46,7 +45,7 @@
 
         {% for loan in loans %}
             <option value="{{ loan.id }}">
-                {{ loan.name }} — ${{ loan.amount }}
+                {{ loan.client_name }} — ${{ loan.amount }}
             </option>
         {% endfor %}
 
@@ -80,6 +79,11 @@
 
 
         </form>
+        {% else %}
+            <div class="login-subtitle">
+                You have no active credits available for extra payment.
+            </div>
+        {% endif %}
 
 
 
