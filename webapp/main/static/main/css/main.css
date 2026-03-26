@@ -1111,6 +1111,114 @@ a:hover {
   box-shadow:0 10px 20px rgba(0,0,0,0.25);
 }
 
+.login-back-btn{
+  width:100%;
+  margin-top:0.9rem;
+  padding:0.85rem 1rem;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:0.6rem;
+
+  border-radius:1rem;
+  border:1px solid rgba(91,61,245,0.14);
+
+  background:rgba(255,255,255,0.82);
+  color:#5b3df5;
+
+  font-weight:700;
+  letter-spacing:0.01em;
+  text-decoration:none;
+
+  box-shadow:0 12px 30px rgba(31,41,55,0.08);
+  backdrop-filter:blur(10px);
+  transition:0.25s;
+}
+
+.login-back-btn:hover{
+  transform:translateY(-2px);
+  background:white;
+  color:#4c31e0;
+  box-shadow:0 14px 32px rgba(91,61,245,0.16);
+}
+
+.login-back-btn i{
+  font-size:0.9rem;
+}
+
+.login-back-btn.pay-extra-back{
+  background:rgba(238,244,255,0.9);
+  border-color:rgba(59,130,246,0.18);
+  color:#315fcd;
+}
+
+.login-back-btn.pay-extra-back:hover{
+  color:#2347a8;
+  box-shadow:0 14px 32px rgba(49,95,205,0.14);
+}
+
+.login-back-btn.available-loans-back{
+  background:rgba(244,240,255,0.9);
+  border-color:rgba(91,61,245,0.16);
+  color:#5b3df5;
+}
+
+.login-back-btn.available-loans-back:hover{
+  color:#4c31e0;
+  box-shadow:0 14px 32px rgba(91,61,245,0.16);
+}
+
+.login-back-btn.mortgage-back{
+  background:linear-gradient(90deg, rgba(91,61,245,0.82), rgba(123,97,255,0.68));
+  border-color:rgba(255,255,255,0.18);
+  color:#ffffff;
+}
+
+.login-back-btn.mortgage-back:hover{
+  color:#ffffff;
+  box-shadow:0 14px 32px rgba(91,61,245,0.22);
+}
+
+.mortgage-action-btn{
+  width:100%;
+  padding:0.95rem 1rem;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:0.6rem;
+
+  border:none;
+  border-radius:1rem;
+
+  background:linear-gradient(90deg,#5b3df5 0%, #7b61ff 100%);
+  color:#ffffff;
+
+  font-weight:700;
+  letter-spacing:0.01em;
+
+  box-shadow:0 16px 34px rgba(91,61,245,0.24);
+  cursor:pointer;
+  transition:0.25s;
+}
+
+.mortgage-action-btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 18px 38px rgba(91,61,245,0.28);
+}
+
+.mortgage-action-btn.secondary{
+  background:linear-gradient(90deg, rgba(91,61,245,0.82), rgba(123,97,255,0.68));
+  border:1px solid rgba(255,255,255,0.18);
+  box-shadow:0 14px 30px rgba(91,61,245,0.18);
+  text-decoration:none;
+}
+
+.mortgage-action-btn.secondary:hover{
+  box-shadow:0 18px 36px rgba(91,61,245,0.24);
+}
+
 /* FOOTER */
 
 .login-footer{
