@@ -1,10 +1,10 @@
 from django.contrib import admin
 
-from .models import PiggyBank, piggy_transactions, Stock, Deposit, Purchase
+from .models import PiggyBank, PiggyTransaction, Stock, Deposit, Purchase
 
 admin.site.register(PiggyBank)
 
-admin.site.register(piggy_transactions)
+admin.site.register(PiggyTransaction)
 
 admin.site.register(Stock)
 

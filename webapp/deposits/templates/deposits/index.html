@@ -3,47 +3,67 @@
 
 {% block content %}
 
-
-
-
 <div class="row">
   <div class="col">
     <div class="card balance-card">
       <div class="card-top">
-        <span class="card-title"> </span>
+        <span class="card-title"></span>
         <h1 style="font-size: 30px;">MMM</h1>
       </div>
-
       <div class="card-bottom">
         <div class="card-balance">${{ balance }}</div>
       </div>
     </div>
 
-    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 1.5rem;">
       <a href="{% url 'open_deposit' %}" class="text-center" style="text-decoration: none; color: inherit;">
-        <div style="background: white; border-radius: 1rem; padding: 1.2rem 0.8rem; box-shadow: 0 6px 20px rgba(0,0,0,0.08); transition: all 0.25s ease; cursor: pointer;">
+        <div class="action-card">
           <i class="fa-solid fa-plus fa-2xl mb-3" style="color: #6b7280;"></i>
-          <div style="font-size: 0.9rem; color: #4b5563; font-weight: 500;">Open</div>
+          <div class="action-text">Open</div>
         </div>
       </a>
       <a href="{% url 'piggy_bank' %}" class="text-center" style="text-decoration: none; color: inherit;">
-        <div style="background: white; border-radius: 1rem; padding: 1.2rem 0.8rem; box-shadow: 0 6px 20px rgba(0,0,0,0.08); transition: all 0.25s ease; cursor: pointer;">
+        <div class="action-card">
           <i class="fa-solid fa-piggy-bank fa-2xl mb-3" style="color: #6b7280;"></i>
-          <div style="font-size: 0.9rem; color: #4b5563; font-weight: 500;">Piggy</div>
+          <div class="action-text">Piggy</div>
         </div>
       </a>
       <a href="{% url 'buy_bonds' %}" class="text-center" style="text-decoration: none; color: inherit;">
-        <div style="background: white; border-radius: 1rem; padding: 1.2rem 0.8rem; box-shadow: 0 6px 20px rgba(0,0,0,0.08); transition: all 0.25s ease; cursor: pointer;">
+        <div class="action-card">
           <i class="fa-solid fa-chart-line fa-2xl mb-3" style="color: #6b7280;"></i>
-          <div style="font-size: 0.9rem; color: #4b5563; font-weight: 500;">Bonds</div>
+          <div class="action-text">Bonds</div>
         </div>
       </a>
     </div>
   </div>
 
   <div class="col">
-    <div class="card" style="padding: 1.8rem; background: white; border-radius: 1.5rem; box-shadow: 0 4px 20px rgba(0,0,0,0.06);">
-      <h5 class="mb-4" style="font-weight: 600;">Deposit Calculator</h5>
+
+    <div class="section-card">
+      <h5 class="section-title">Deposit Plans</h5>
+      <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.2rem;">
+        <div class="plan">
+          <div class="plan-duration">3 mo</div>
+          <div class="plan-rate">3%</div>
+        </div>
+        <div class="plan">
+          <div class="plan-duration">6 mo</div>
+          <div class="plan-rate">5%</div>
+        </div>
+        <div class="plan">
+          <div class="plan-duration">12 mo</div>
+          <div class="plan-rate">7%</div>
+        </div>
+        <div class="plan">
+          <div class="plan-duration">24 mo</div>
+          <div class="plan-rate">9%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- === DEPOSIT CALCULATOR (теперь ниже ставок) === -->
+    <div class="section-card" style="margin-top: 2rem;">
+      <h5 class="section-title">Deposit Calculator</h5>
       <div style="display: flex; gap: 1.2rem; margin-bottom: 1.5rem;">
         <input type="number" id="amount" class="form-control" placeholder="Amount ($)"
                style="background: rgba(243,244,246,0.6); border: none; border-radius: 1rem; padding: 1rem; font-size: 1.1rem;">
@@ -57,93 +77,67 @@
       <div id="result" style="min-height: 3rem; font-weight: 500; color: #1f2937; font-size: 1.1rem; text-align: center;"></div>
     </div>
 
-    <div class="card" style="padding: 1.8rem; background: white; border-radius: 1.5rem; box-shadow: 0 4px 20px rgba(0,0,0,0.06);">
-      <h5 class="mb-4" style="font-weight: 600;">Deposit Plans</h5>
-      <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.2rem;">
-        <div class="text-center" style="background: linear-gradient(180deg, #5b3df5 0%, #7b61ff 100%); color: white; border-radius: 1.2rem; padding: 1.4rem;">
-          <div style="font-size: 1.2rem; opacity: 0.9;">3 mo</div>
-          <div style="font-size: 1.6rem; font-weight: 700;">3%</div>
-        </div>
-        <div class="text-center" style="background: linear-gradient(180deg, #5b3df5 0%, #7b61ff 100%); color: white; border-radius: 1.2rem; padding: 1.4rem;">
-          <div style="font-size: 1.2rem; opacity: 0.9;">6 mo</div>
-          <div style="font-size: 1.6rem; font-weight: 700;">5%</div>
-        </div>
-        <div class="text-center" style="background: linear-gradient(180deg, #5b3df5 0%, #7b61ff 100%); color: white; border-radius: 1.2rem; padding: 1.4rem;">
-          <div style="font-size: 1.2rem; opacity: 0.9;">12 mo</div>
-          <div style="font-size: 1.6rem; font-weight: 700;">7%</div>
-        </div>
-        <div class="text-center" style="background: linear-gradient(180deg, #5b3df5 0%, #7b61ff 100%); color: white; border-radius: 1.2rem; padding: 1.4rem;">
-          <div style="font-size: 1.2rem; opacity: 0.9;">24 mo</div>
-          <div style="font-size: 1.6rem; font-weight: 700;">9%</div>
-        </div>
-      </div>
-    </div>
-
   </div>
 </div>
 
-<div class="row">
+<div class="row mt-4">
   <div class="col">
-      <div class="transactions" style="flex: 1;">
-        <div class="transactions-header">
-          <h5>Active Deposits</h5>
-        </div>
-        <div class="transaction-list">
-          {% for d in deposits %}
-          <div class="transaction-item">
-            <div class="transaction-left">
-              <div class="icon" style="background: #1e40af;">
-                <i class="fa-solid fa-clock"></i>
-              </div>
-              <div>
-                <div class="title">{{ d.duration }} months deposit</div>
-                <div class="category">{{ d.rate }}%</div>
-              </div>
-            </div>
-            <div class="transaction-right">
-              <div style="font-weight: 600;">${{ d.amount|floatformat:"0" }}</div>
-            </div>
-          </div>
-          {% empty %}
-          <div class="transaction-item text-center py-4" style="color: #6b7280;">
-            No active deposits yet
-          </div>
-          {% endfor %}
-        </div>
+    <div class="transactions">
+      <div class="transactions-header">
+        <h5>Active Deposits</h5>
       </div>
-
-    </div>
-
-    <div class="col">
-      <div class="transactions" style="flex: 1;">
-        <div class="transactions-header">
-          <h5>Deposit History</h5>
-        </div>
-        <div class="transaction-list">
-          {% for d in history %}
-          <div class="transaction-item">
-            <div class="transaction-left">
-              <div class="icon" style="background: #065f46;">
-                <i class="fa-solid fa-check"></i>
-              </div>
-              <div>
-                <div class="title">${{ d.amount|floatformat:"0" }} → ${{ d.amount|add:d.profit|floatformat:"0" }}</div>
-                <div class="category">{{ d.created_at|date:"d M Y" }}</div>
-              </div>
+      <div class="transaction-list">
+        {% for d in deposits %}
+        <div class="transaction-item">
+          <div class="transaction-left">
+            <div class="icon" style="background: #1e40af;">
+              <i class="fa-solid fa-clock"></i>
+            </div>
+            <div>
+              <div class="title">{{ d.duration }} months deposit</div>
+              <div class="category">{{ d.rate }}%</div>
             </div>
           </div>
-          {% empty %}
-          <div class="transaction-item text-center py-4" style="color: #6b7280;">
-            No history yet
+          <div class="transaction-right">
+            <div style="font-weight: 600;">${{ d.amount|floatformat:"0" }}</div>
           </div>
-          {% endfor %}
         </div>
+        {% empty %}
+        <div class="transaction-item text-center py-4" style="color: #6b7280;">
+          No active deposits yet
+        </div>
+        {% endfor %}
       </div>
-
     </div>
-
   </div>
 
+  <div class="col">
+    <div class="transactions">
+      <div class="transactions-header">
+        <h5>Deposit History</h5>
+      </div>
+      <div class="transaction-list">
+        {% for d in history %}
+        <div class="transaction-item">
+          <div class="transaction-left">
+            <div class="icon" style="background: #065f46;">
+              <i class="fa-solid fa-check"></i>
+            </div>
+            <div>
+              <div class="title">${{ d.amount|floatformat:"0" }} → ${{ d.amount|add:d.profit|floatformat:"0" }}</div>
+              <div class="category">{{ d.created_at|date:"d M Y" }}</div>
+            </div>
+          </div>
+        </div>
+        {% empty %}
+        <div class="transaction-item text-center py-4" style="color: #6b7280;">
+          No history yet
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
 
 <script>
 function calc() {

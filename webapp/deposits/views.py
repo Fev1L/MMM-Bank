@@ -1,65 +1,89 @@
 from decimal import Decimal
 
 from django.shortcuts import render, redirect
-from .models import PiggyBank, piggy_transactions, Deposit , Stock, Purchase
+from .models import PiggyBank, PiggyTransaction, Deposit , Stock, Purchase
 from main.models import Transaction, Category
 
-def piggy_bank(request):
+from decimal import Decimal
+from django.shortcuts import render, redirect
+# ... інші імпорти
 
-    piggy, created = PiggyBank.objects.get_or_create(user=request.user)
+def piggy_bank(request):
+    if not request.user.is_authenticated:
+        return redirect('login')  # або куди потрібно
+
+    piggies = PiggyBank.objects.filter(user=request.user).order_by('-created_at')
+
+    selected_piggy = None
+    percent = 0
+    transactions = []
 
     if request.method == "POST":
         action = request.POST.get("action")
-        amount_raw = request.POST.get("amount")
-        goal_raw = request.POST.get("goal")
 
-        if goal_raw:
-            try:
-                piggy.goal = float(goal_raw)
-            except ValueError:
-                pass
+        if action == "create":
+            name = request.POST.get("name", "").strip()
+            if name:
+                PiggyBank.objects.create(
+                    user=request.user,
+                    name=name,
+                    balance=Decimal('0.00'),
+                    goal=Decimal('0.00')
+                )
+            return redirect('piggy_bank')
 
-        if amount_raw:
+        elif action in ["add", "withdraw"]:
             try:
-                amount = float(amount_raw)
+                piggy_id = int(request.POST.get("piggy_id"))
+                amount = Decimal(request.POST.get("amount", 0))
+
+                piggy = PiggyBank.objects.get(id=piggy_id, user=request.user)
 
                 if action == "add" and amount > 0:
                     piggy.balance += amount
-                    piggy_transactions.objects.create(
+                    PiggyTransaction.objects.create(   # ← змінено
                         user=request.user,
-                        amount=amount
+                        piggy=piggy,
+                        amount=amount,
+                        transaction_type='add'
                     )
 
                 elif action == "withdraw" and amount > 0:
                     if piggy.balance >= amount:
                         piggy.balance -= amount
-
-                        piggy_transactions.objects.create(
+                        PiggyTransaction.objects.create(   # ← змінено
                             user=request.user,
-                            amount=-amount
+                            piggy=piggy,
+                            amount=amount,                 # залиш позитивне, тип покаже withdraw
+                            transaction_type='withdraw'
                         )
-            except ValueError:
+
+                piggy.save()
+
+            except Exception as e:
+                # Краще логувати помилку в production, але для розробки можна pass
                 pass
 
-        piggy.save()
+            return redirect('piggy_bank')
 
-        return redirect('piggy_bank')
+    # GET частина
+    if piggies.exists():
+        selected_piggy = piggies.first()
 
+        if selected_piggy.goal > 0:
+            percent = min(int((selected_piggy.balance / selected_piggy.goal) * 100), 100)
 
-    percent = 0
-    if piggy.goal > 0:
-        percent = (piggy.balance / piggy.goal) * 100
-        percent = min(int(percent), 100)
-
-
-    transactions = piggy_transactions.objects.filter(user=request.user).order_by('-timestamp')[:10]
+        # Головне виправлення тут:
+        transactions = PiggyTransaction.objects.filter(   # ← змінено назву моделі
+            piggy=selected_piggy
+        ).order_by('-timestamp')[:10]
 
     return render(request, "deposits/piggy_bank.html", {
-        "piggy": piggy,
+        "piggies": piggies,
+        "selected_piggy": selected_piggy,
         "percent": percent,
         "transactions": transactions,
     })
-
 
 def open_deposit(request):
     if request.method == "POST":
