@@ -3,36 +3,33 @@
 
 {% block content %}
 
-<div class="row">
+<div class="row g-5">
   <div class="col">
+    <h1 style="font-size: 30px;">MMM Balance </h1>
+
     <div class="card balance-card">
       <div class="card-top">
-        <span class="card-title"></span>
+        <span class="card-title"> </span>
         <h1 style="font-size: 30px;">MMM</h1>
       </div>
+
       <div class="card-bottom">
         <div class="card-balance">${{ balance }}</div>
       </div>
     </div>
 
-    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 1.5rem;">
-      <a href="{% url 'open_deposit' %}" class="text-center" style="text-decoration: none; color: inherit;">
-        <div class="action-card">
-          <i class="fa-solid fa-plus fa-2xl mb-3" style="color: #6b7280;"></i>
-          <div class="action-text">Open</div>
-        </div>
+    <div class="quick-actions">
+      <a href="{% url 'open_deposit' %}" class="action-btn">
+        <i class="fa-solid fa-plus"></i>
+        <span>Open Deposits</span>
       </a>
-      <a href="{% url 'piggy_bank' %}" class="text-center" style="text-decoration: none; color: inherit;">
-        <div class="action-card">
-          <i class="fa-solid fa-piggy-bank fa-2xl mb-3" style="color: #6b7280;"></i>
-          <div class="action-text">Piggy</div>
-        </div>
+      <a href="{% url 'piggy_bank' %}" class="action-btn">
+        <i class="fa-solid fa-piggy-bank" ></i>
+        <span>Piggy bank</span>
       </a>
-      <a href="{% url 'buy_bonds' %}" class="text-center" style="text-decoration: none; color: inherit;">
-        <div class="action-card">
-          <i class="fa-solid fa-chart-line fa-2xl mb-3" style="color: #6b7280;"></i>
-          <div class="action-text">Bonds</div>
-        </div>
+      <a href="{% url 'buy_bonds' %}" class="action-btn">
+        <i class="fa-solid fa-chart-line" ></i>
+        <span>Buy Bounds</span>
       </a>
     </div>
   </div>
@@ -40,7 +37,7 @@
   <div class="col">
 
     <div class="section-card">
-      <h5 class="section-title">Deposit Plans</h5>
+      <h1 class="section-title" style="font-size: 30px;">Deposit Plans</h1>
       <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.2rem;">
         <div class="plan">
           <div class="plan-duration">3 mo</div>
@@ -61,36 +58,21 @@
       </div>
     </div>
 
-    <!-- === DEPOSIT CALCULATOR (теперь ниже ставок) === -->
-    <div class="section-card" style="margin-top: 2rem;">
-      <h5 class="section-title">Deposit Calculator</h5>
-      <div style="display: flex; gap: 1.2rem; margin-bottom: 1.5rem;">
-        <input type="number" id="amount" class="form-control" placeholder="Amount ($)"
-               style="background: rgba(243,244,246,0.6); border: none; border-radius: 1rem; padding: 1rem; font-size: 1.1rem;">
-        <input type="number" id="rate" class="form-control" placeholder="Interest %" step="0.1"
-               style="background: rgba(243,244,246,0.6); border: none; border-radius: 1rem; padding: 1rem; font-size: 1.1rem;">
-      </div>
-      <button class="btn btn-primary w-100 mb-3" onclick="calc()"
-              style="border-radius: 1rem; padding: 1rem; font-size: 1.1rem; font-weight: 600;">
-        Calculate
-      </button>
-      <div id="result" style="min-height: 3rem; font-weight: 500; color: #1f2937; font-size: 1.1rem; text-align: center;"></div>
-    </div>
 
   </div>
 </div>
 
-<div class="row mt-4">
+<div class="row g-5">
   <div class="col">
     <div class="transactions">
       <div class="transactions-header">
-        <h5>Active Deposits</h5>
+        <h1 style="font-size: 30px;">Active Deposits</h1>
       </div>
       <div class="transaction-list">
         {% for d in deposits %}
         <div class="transaction-item">
           <div class="transaction-left">
-            <div class="icon" style="background: #1e40af;">
+            <div class="icon"">
               <i class="fa-solid fa-clock"></i>
             </div>
             <div>
@@ -114,13 +96,13 @@
   <div class="col">
     <div class="transactions">
       <div class="transactions-header">
-        <h5>Deposit History</h5>
+        <h1 style="font-size: 30px;">Deposit History</h1>
       </div>
       <div class="transaction-list">
         {% for d in history %}
         <div class="transaction-item">
           <div class="transaction-left">
-            <div class="icon" style="background: #065f46;">
+            <div class="icon">
               <i class="fa-solid fa-check"></i>
             </div>
             <div>

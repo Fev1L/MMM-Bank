@@ -1,65 +1,88 @@
-﻿{% extends 'main/layout/layout.html' %}
+﻿{% extends 'main/users/users_layout.html' %}
 {% block content %}
 {% load static %}
 
-<div class="dashboard">
-    <div class="row">
-        <div class="col">
-            <div class="section">
-                <h3>Available Stocks</h3>
-                {% for stock in stocks %}
-                <div class="stock-card">
-                    <div class="stock-info">
-                        <i class="fa-solid fa-dollar-sign"></i>
-                        <span class="stock-name">{{ stock.name }}</span>
-                        <span class="stock-symbol">{{ stock.symbol }}</span>
+<div class="login-page">
+    <div class="login-card wide">
+
+        <h1>Investments 📈</h1>
+
+        <h2>Available Stocks</h2>
+
+        <div class="stocks-list">
+            {% for stock in stocks %}
+            <div style="color: #6b7280 !important;" class="stock-card">
+
+                <div class="stock-left">
+                    <div class="stock-icon">
+                        <i class="fa-solid fa-chart-line"></i>
                     </div>
-                    <div style="text-align:right;">
-                        <div class="stock-price">${{ stock.price }}</div>
-                        <div class="stock-change up">+1.2%</div>
+
+                    <div>
+                        <div class="stock-name">{{ stock.name }}</div>
+                        <div class="stock-symbol">{{ stock.symbol }}</div>
                     </div>
                 </div>
-                {% endfor %}
-            </div>
-        </div>
 
-        <div class="col">
-            <div class="section">
-                <h3>Investment Bounds</h3>
-                <p><strong>Lower bound:</strong> ${{ lower_bound }}</p>
-                <p><strong>Upper bound:</strong> ${{ upper_bound }}</p>
-                <p>Current balance: <strong>${{ balance }}</strong></p>
-            </div>
-
-            <div class="section">
-                <h3>Buy Stock</h3>
-                <form method="POST" class="buy-form">
-                    {% csrf_token %}
-                    <select name="stock" required>
-                        <option value="">Select stock...</option>
-                        {% for stock in stocks %}
-                        <option value="{{ stock.id }}">
-                            {{ stock.name }} ({{ stock.symbol }}) - ${{ stock.price }}
-                        </option>
-                        {% endfor %}
-                    </select>
-                    <input type="number" name="quantity" placeholder="Quantity" min="1" required>
-                    <button type="submit">Buy</button>
-                </form>
-            </div>
-
-            <div class="section">
-                <h3>Purchase History</h3>
-                {% for p in purchases %}
-                <div class="history-item">
-                    <span>{{ p.stock.symbol }} x{{ p.quantity }}</span>
-                    <span>${{ p.total_price }}</span>
+                <div class="stock-right">
+                    <div class="stock-price">${{ stock.price }}</div>
+                    <div class="stock-change up">+1.2%</div>
                 </div>
-                {% empty %}
-                <p>No purchases yet</p>
-                {% endfor %}
+
             </div>
+            {% endfor %}
         </div>
+
+        <h2>Buy Stock</h2>
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="input-group">
+                <i class="fa-solid fa-coins"></i>
+                <select name="stock" required>
+                    <option value="">Select stock...</option>
+                    {% for stock in stocks %}
+                    <option value="{{ stock.id }}">
+                        {{ stock.name }} ({{ stock.symbol }}) - ${{ stock.price }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="input-group">
+                <i class="fa-solid fa-hashtag"></i>
+                <input type="number" name="quantity" placeholder="Quantity" min="1" required>
+            </div>
+
+            <button class="login-btn">Buy</button>
+        </form>
+
+        <h2>Purchase History</h2>
+
+        <div class="history-list">
+            {% for p in purchases %}
+            <div class="history-card">
+                <div>
+                    <div class="history-name">{{ p.stock.symbol }}</div>
+                    <div class="history-qty">x{{ p.quantity }}</div>
+                </div>
+
+                <div class="history-price">
+                    ${{ p.total_price }}
+                </div>
+            </div>
+            {% empty %}
+            <p class="empty-text">No purchases yet</p>
+            {% endfor %}
+        </div>
+
+        <div class="login-footer">
+            <a href="{% url 'deposit' %}">
+                ← Back to deposit
+            </a>
+        </div>
+
     </div>
 </div>
 

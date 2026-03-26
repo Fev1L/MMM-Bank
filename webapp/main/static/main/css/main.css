@@ -887,14 +887,61 @@ a:hover {
   max-width:420px;
 
   padding:3rem;
+  position:relative;
 
   border-radius:1.5rem;
 
   background:rgba(255,255,255,0.2);
   backdrop-filter:blur(20px);
 
-  color:white;
+  color: white;
   box-shadow:0 20px 60px rgba(0,0,0,0.25);
+}
+
+.page-bell-btn{
+  position:absolute;
+  top:1rem;
+  right:1rem;
+  width:44px;
+  height:44px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  border-radius:999px;
+  background:rgba(255,255,255,0.22);
+  color:white;
+  text-decoration:none;
+
+  box-shadow:0 10px 26px rgba(0,0,0,0.18);
+  backdrop-filter:blur(12px);
+  transition:0.25s;
+}
+
+.page-bell-btn:hover{
+  transform:translateY(-2px);
+  background:rgba(255,255,255,0.3);
+  color:white;
+}
+
+.page-bell-badge{
+  position:absolute;
+  top:-4px;
+  right:-4px;
+  min-width:20px;
+  height:20px;
+  padding:0 6px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  border-radius:999px;
+  background:#ef4444;
+  color:white;
+  font-size:0.7rem;
+  font-weight:700;
 }
 
 .login-card h1{
@@ -921,18 +968,9 @@ a:hover {
   transform:translateY(-50%);
   opacity:0.7;
   color:black;
-  z-index:2;
 }
 
-.input-group input{
-  width:100%;
-  padding:0.7rem 0.7rem 0.7rem 2.2rem;
-  border-radius:0.7rem !important;
-  border:none;
-  outline:none;
-  background:white;
-}
-
+.input-group input,
 .input-group select{
   width:100%;
   padding:0.7rem 0.7rem 0.7rem 2.2rem;
@@ -940,13 +978,9 @@ a:hover {
   border:none;
   outline:none;
   background:white;
-  color:black;
   appearance:none;
   -webkit-appearance:none;
-  -moz-appearance:none;
-  cursor:pointer;
-  position:relative;
-  z-index:1;
+  color:#111827;
 }
 
 /* BUTTON */
@@ -971,6 +1005,128 @@ a:hover {
   transform:translateY(-2px);
   box-shadow:0 10px 20px rgba(0,0,0,0.25);
 }
+
+.login-back-btn{
+  width:100%;
+  margin-top:0.9rem;
+  padding:0.85rem 1rem;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:0.6rem;
+
+  border-radius:1rem;
+  border:1px solid rgba(91,61,245,0.14);
+
+  background:rgba(255,255,255,0.82);
+  color:#5b3df5;
+
+  font-weight:700;
+  letter-spacing:0.01em;
+  text-decoration:none;
+
+  box-shadow:0 12px 30px rgba(31,41,55,0.08);
+  backdrop-filter:blur(10px);
+  transition:0.25s;
+}
+
+.login-back-btn:hover{
+  transform:translateY(-2px);
+  background:white;
+  color:#4c31e0;
+  box-shadow:0 14px 32px rgba(91,61,245,0.16);
+}
+
+.login-back-btn i{
+  font-size:0.9rem;
+}
+
+.login-back-btn.pay-extra-back{
+  background:rgba(238,244,255,0.9);
+  border-color:rgba(59,130,246,0.18);
+  color:#315fcd;
+}
+
+.login-back-btn.pay-extra-back:hover{
+  color:#2347a8;
+  box-shadow:0 14px 32px rgba(49,95,205,0.14);
+}
+
+a.login-back-btn.pay-extra-back:hover{
+  color:#2347a8;
+}
+
+.login-back-btn.available-loans-back{
+  background:rgba(244,240,255,0.9);
+  border-color:rgba(91,61,245,0.16);
+  color:#5b3df5;
+}
+
+.login-back-btn.available-loans-back:hover{
+  color:#4c31e0;
+  box-shadow:0 14px 32px rgba(91,61,245,0.16);
+}
+
+a.login-back-btn.available-loans-back:hover{
+  color:#4c31e0;
+}
+
+.login-back-btn.mortgage-back{
+  background:linear-gradient(90deg, rgba(91,61,245,0.82), rgba(123,97,255,0.68));
+  border-color:rgba(255,255,255,0.18);
+  color:#ffffff;
+}
+
+.login-back-btn.mortgage-back:hover{
+  color:#ffffff;
+  box-shadow:0 14px 32px rgba(91,61,245,0.22);
+}
+
+.mortgage-action-btn{
+  width:100%;
+  padding:0.95rem 1rem;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:0.6rem;
+
+  border:none;
+  border-radius:1rem;
+
+  background:linear-gradient(90deg,#5b3df5 0%, #7b61ff 100%);
+  color:#ffffff;
+
+  font-weight:700;
+  letter-spacing:0.01em;
+
+  box-shadow:0 16px 34px rgba(91,61,245,0.24);
+  cursor:pointer;
+  transition:0.25s;
+}
+
+.mortgage-action-btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 18px 38px rgba(91,61,245,0.28);
+}
+
+.mortgage-action-btn.secondary{
+  background:linear-gradient(90deg, rgba(91,61,245,0.82), rgba(123,97,255,0.68));
+  border:1px solid rgba(255,255,255,0.18);
+  box-shadow:0 14px 30px rgba(91,61,245,0.18);
+  text-decoration:none;
+}
+
+.mortgage-action-btn.secondary:hover{
+  color:#ffffff;
+  box-shadow:0 18px 36px rgba(91,61,245,0.24);
+}
+
+a.mortgage-action-btn.secondary:hover{
+  color:#ffffff;
+}
+
 
 /* FOOTER */
 
@@ -1468,4 +1624,157 @@ a:hover {
 
 .more-card.vip:hover {
   box-shadow: 0 0 20px gold;
+}
+
+@media (max-width: 768px) {
+
+  /* ===== GLOBAL ===== */
+  .dashboard{
+    margin:0;
+    padding:12px;
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+  }
+
+  .row{
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+  }
+
+  .col{
+    gap:16px;
+  }
+
+  /* ===== SIDEBAR → BOTTOM NAV ===== */
+  .sidebar{
+    position:fixed;
+    bottom:0;
+    top:auto;
+    left:0;
+
+    width:100%;
+    height:70px;
+
+    flex-direction:row;
+    justify-content:space-around;
+    align-items:center;
+
+    padding:0 10px;
+    border-radius:20px 20px 0 0;
+
+    z-index:2000;
+  }
+
+  .sidebar-logo,
+  .sidebar-user,
+  .user-greeting,
+  .logout-btn{
+    display:none;
+  }
+
+  .sidebar-links{
+    flex-direction:row;
+    width:100%;
+    justify-content:space-around;
+  }
+
+  .sidebar-item{
+    width:auto;
+    padding:6px;
+  }
+
+  .sidebar-item span{
+    display:none;
+  }
+
+  /* ===== CARDBAR → HIDE ===== */
+  .cardbar{
+    display:none;
+  }
+
+  /* ===== QUICK ACTIONS ===== */
+  .quick-actions{
+    grid-template-columns:repeat(2,1fr);
+    gap:10px;
+  }
+
+  .action-btn{
+    width:100%;
+  }
+
+  /* ===== STATS ===== */
+  .stats-wrapper{
+    grid-template-columns:1fr;
+  }
+
+  /* ===== TRANSACTIONS ===== */
+  .transactions,
+  .contacts{
+    max-height:none;
+  }
+
+  .transaction-list,
+  .contact-list{
+    max-height:none;
+  }
+
+  /* ===== LOGIN PAGE ===== */
+  .login-card{
+    padding:2rem 1.5rem;
+    border-radius:1.2rem;
+  }
+
+  .login-card h1{
+    font-size:1.6rem;
+  }
+
+  /* ===== CONTACTS ===== */
+  .contact-actions{
+    flex-direction:column;
+    gap:6px;
+  }
+
+  /* ===== SETTINGS ===== */
+  .settings-grid{
+    grid-template-columns:1fr;
+  }
+
+  /* ===== PROMO ===== */
+  .bank-promo{
+    flex-direction:column;
+    padding:2rem;
+    text-align:center;
+    gap:2rem;
+  }
+
+  .promo-cards{
+    width:100%;
+    height:auto;
+  }
+
+  .promo-card{
+    position:relative;
+    transform:none !important;
+    margin-bottom:10px;
+  }
+
+  /* ===== QUICK ACTIONS ===== */
+  .quick-actions{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr); /* 🔥 3 в ряд */
+    gap:8px;
+  }
+
+  .action-btn{
+    padding:10px 6px;
+    font-size:13px;
+    border-radius:10px;
+  }
+
+  .action-btn i{
+    font-size:16px;
+    margin-bottom:4px;
+  }
 }

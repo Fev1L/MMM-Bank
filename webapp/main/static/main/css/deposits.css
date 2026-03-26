@@ -287,3 +287,204 @@ input {
   border: 1px solid #ddd;
   margin-bottom: 10px;
 }
+
+.login-card.wide{
+  max-width: 800px;
+}
+
+/* GRID */
+
+.piggy-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(220px,1fr));
+  gap:15px;
+  margin:20px 0;
+}
+
+/* CARD */
+
+.piggy-card{
+  background:#fff;
+  border-radius:1rem;
+  padding:15px;
+  cursor:pointer;
+  transition:0.2s;
+  border:2px solid transparent;
+}
+
+.piggy-card:hover{
+  transform:translateY(-3px);
+}
+
+.piggy-card.active{
+  border-color:#22c55e;
+}
+
+/* HEADER */
+
+.piggy-header{
+  display:flex;
+  justify-content:space-between;
+  font-size:14px;
+  opacity:0.8;
+}
+
+/* BALANCE */
+
+.piggy-balance{
+  font-size:28px;
+  font-weight:600;
+  margin:10px 0;
+}
+
+/* PROGRESS */
+
+.progress{
+  height:6px;
+  background:#eee;
+  border-radius:10px;
+  overflow:hidden;
+}
+
+.bar{
+  height:100%;
+  background:#22c55e;
+}
+
+/* TEXT */
+
+.empty-text{
+  opacity:0.6;
+}
+
+.selected-text{
+  margin:10px 0;
+}
+
+#selected_name{
+  font-weight:600;
+  color:#22c55e;
+}
+
+/* ширше */
+.login-card.wide{
+  max-width:800px;
+}
+
+/* STOCK LIST */
+
+.stocks-list{
+  margin:15px 0;
+}
+
+.stock-card{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:12px;
+  border-radius:0.8rem;
+  background:#fff;
+  margin-bottom:10px;
+  transition:0.2s;
+}
+
+.stock-card:hover{
+  transform:translateY(-2px);
+}
+
+.stock-left{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.stock-icon{
+  width:36px;
+  height:36px;
+  border-radius:50%;
+  background:#eef2ff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.stock-name{
+  font-weight:600;
+}
+
+.stock-symbol{
+  font-size:12px;
+  opacity:0.6;
+}
+
+.stock-right{
+  text-align:right;
+}
+
+.stock-price{
+  font-weight:600;
+}
+
+.stock-change{
+  font-size:12px;
+}
+
+.stock-change.up{
+  color:#22c55e;
+}
+
+/* INFO ROW */
+
+.info-row{
+  display:flex;
+  gap:10px;
+  margin:20px 0;
+}
+
+.info-box{
+  flex:1;
+  background:#fff;
+  padding:10px;
+  border-radius:0.8rem;
+  text-align:center;
+}
+
+.info-box span{
+  display:block;
+  font-size:12px;
+  opacity:0.6;
+}
+
+/* HISTORY */
+
+.history-list{
+  margin-top:10px;
+}
+
+.history-card{
+  display:flex;
+  justify-content:space-between;
+  padding:10px;
+  background:#fff;
+  border-radius:0.8rem;
+  margin-bottom:8px;
+}
+
+.history-name{
+  font-weight:600;
+}
+
+.history-qty{
+  font-size:12px;
+  opacity:0.6;
+}
+
+.history-price{
+  font-weight:600;
+}
+
+/* EMPTY */
+
+.empty-text{
+  opacity:0.6;
+}
