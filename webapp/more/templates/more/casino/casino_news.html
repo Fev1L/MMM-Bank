@@ -1,0 +1,75 @@
+<div class="news">
+    <div class="news-top">
+        <div class="news-actions">
+            <a href="{% url 'inbox' %}" class="icon-btn">
+                <i class="fa-solid fa-bell"></i>
+                {% if unread_count > 0 %}
+                <span class="notif-count">{{ unread_count }}</span>
+                {% endif %}
+            </a>
+
+            <a href="{% url 'profile' %}"  class="icon-btn">
+                <i class="fa-solid fa-gear"></i>
+            </a>
+        </div>
+    </div>
+
+    <div class="news-section">
+        <div class="news-header">
+            <h3>Live Winners</h3>
+        </div>
+
+        <div class="winners-list" id="winnersList">
+            <script>
+                const winnersList = document.getElementById("winnersList");
+
+                const names = ["Alex", "John", "Marta", "Vlad", "Sophie", "Leo", "Anna",
+                    "Dmytro", "Leonid", "Roman", "Olek", "Oguzok", "Jan"];
+                const games = ["Slots", "Poker", "Dice", "Roulette", "Guess"];
+
+                function getRandom(arr) {
+                    return arr[Math.floor(Math.random() * arr.length)];
+                }
+
+                function generateWinner() {
+                    const name = getRandom(names);
+                    const game = getRandom(games);
+                    let amount = (Math.random() * 200 + 20).toFixed(0);
+                    if (Math.random() < 0.1) amount = (Math.random() * 1000 + 500).toFixed(0);
+
+                    const item = document.createElement("div");
+                    item.classList.add("winner-item");
+
+                    if (amount > 1000) {
+                        item.classList.add("big");
+                    }
+
+
+                    item.innerHTML = `
+                        <div class="winner-left">
+                            <div class="winner-avatar">${name[0]}</div>
+                            <div>
+                                <div class="winner-name">${name}</div>
+                                <div class="winner-game">${game}</div>
+                            </div>
+                        </div>
+
+                        <div class="winner-amount">+$${amount}</div>
+                    `;
+
+                    winnersList.prepend(item);
+
+                    if (winnersList.children.length > 6) {
+                        winnersList.removeChild(winnersList.lastChild);
+                    }
+                }
+
+                for (let i = 0; i < 8; i++) {
+                    generateWinner();
+                }
+
+                setInterval(generateWinner, 5000);
+            </script>
+        </div>
+    </div>
+</div>

@@ -40,7 +40,7 @@
     gap: clamp(12px, 1.5vw, 18px);
 }
 
-/* CARD = як stat-card / action-btn */
+/* CARD = stat-card / action-btn */
 .casino-card {
     border-radius: 1.5rem;
     padding: clamp(16px, 1.6vw, 22px);
@@ -85,69 +85,161 @@
     transform: scale(0.97);
 }
 
-/* GRID */
-.more-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 25px;
-    padding: 20px;
+/* CARDBAR */
+.news {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: clamp(260px, 50vw, 1500px);
+    height: 100vh;
+    padding: clamp(16px, 1.8vw, 28px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    z-index: 1000;
+}
+.news-top {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: clamp(18px, 2vw, 28px);
 }
 
-/* BASE CARD */
-.more-card {
-    height: 140px;
-    border-radius: 15px;
+.news-actions {
+    display: flex;
+    gap: 0.6rem;
+}
+
+.icon-btn {
+    position: relative;
+    width: clamp(34px, 2.5vw, 40px);
+    height: clamp(34px, 2.5vw, 40px);
+    border: none;
+    border-radius: 50%;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    transition: 0.25s;
+    flex-shrink: 0;
+}
+
+.icon-btn i {
+    font-size: clamp(14px, 0.95vw, 16px);
+    color: #374151;
+}
+
+.icon-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.12);
+}
+
+.notif-count {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    background: red;
+    color: white;
+    font-size: 11px;
+    padding: 2px 5px;
+    border-radius: 50%;
+    min-width: 16px;
+    text-align: center;
+}
+.news-section {
+    margin-top: clamp(18px, 2vw, 30px);
+}
+
+.news-section:first-of-type {
+    margin-top: 0;
+}
+
+.news-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: clamp(10px, 1vw, 16px);
+}
+
+.news-header h3 {
+    margin: 0;
+    font-size: clamp(14px, 1vw, 18px);
+    font-weight: 600;
+}
+/* LIST */
+.winners-list {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    gap: 10px;
+}
+
+/* ITEM */
+.winner-item {
+    display: flex;
+    justify-content: space-between;
     align-items: center;
-    text-decoration: none;
-    font-size: 1.2rem;
-    font-weight: bold;
-    transition: all 0.25s ease;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+
+    padding: 10px 14px;
+    border-radius: 1rem;
+
+    background: rgba(255,255,255,0.9);
+
+    box-shadow: 0 0 1rem 0.1rem rgba(0,0,0,0.05);
+
+    animation: fadeSlide 0.4s ease;
 }
 
-.more-card i {
-    font-size: 2rem;
-    margin-bottom: 10px;
+/* LEFT */
+.winner-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
-/* HOVER */
-.more-card:hover {
-    transform: translateY(-5px) scale(1.03);
+.winner-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+
+    background: linear-gradient(135deg, #5b3df5, #7b61ff);
+    color: white;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 0.9rem;
 }
 
-/* 🎰 CASINO THEME */
-.more-card.casino {
-    background: radial-gradient(circle, #0b3d0b, #000);
-    color: #fff;
-    border: 2px solid #ff0000;
+/* TEXT */
+.winner-name {
+    font-size: 0.9rem;
+    font-weight: 500;
 }
 
-.more-card.casino:hover {
-    box-shadow: 0 0 20px #ff0000;
+.winner-game {
+    font-size: 0.75rem;
+    opacity: 0.6;
 }
 
-/* 🛠 TOOLS THEME */
-.more-card.tools {
-    background: linear-gradient(135deg, #1e1e1e, #3a3a3a);
-    color: #00d4ff;
+/* AMOUNT */
+.winner-amount {
+    font-weight: 600;
+    color: #16a34a;
 }
 
-/* 📊 STATS THEME */
-.more-card.stats {
-    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-    color: #00ffcc;
+.big {
+    box-shadow: 0 0 15px rgba(91,61,245,0.4);
 }
 
-/* 👑 VIP THEME */
-.more-card.vip {
-    background: linear-gradient(135deg, #000, #3a2c00);
-    color: gold;
-    border: 1px solid gold;
-}
-
-.more-card.vip:hover {
-    box-shadow: 0 0 20px gold;
+/* ANIMATION */
+@keyframes fadeSlide {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

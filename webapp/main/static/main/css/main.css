@@ -349,6 +349,7 @@ a:hover {
   font-size: clamp(14px, 1vw, 18px);
   font-weight: 600;
 }
+
 .add-btn {
   width: clamp(26px, 2vw, 32px);
   height: clamp(26px, 2vw, 32px);
@@ -1408,4 +1409,63 @@ a:hover {
   font-size: clamp(16px,1.4vw,22px);
   letter-spacing: 2px;
   margin-top: clamp(20px,2vw,35px);
+}
+
+/* BASE CARD */
+.more-card {
+  height: 140px;
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  font-size: 1.2rem;
+  font-weight: bold;
+  transition: all 0.25s ease;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.more-card i {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+/* HOVER */
+.more-card:hover {
+  transform: translateY(-5px) scale(1.03);
+}
+
+/* 🎰 CASINO THEME */
+.more-card.casino {
+  background: radial-gradient(circle, #0b3d0b, #000);
+  color: #fff;
+  border: 2px solid #ff0000;
+}
+
+.more-card.casino:hover {
+  box-shadow: 0 0 20px #ff0000;
+}
+
+/* 🛠 TOOLS THEME */
+.more-card.tools {
+  background: linear-gradient(135deg, #1e1e1e, #3a3a3a);
+  color: #00d4ff;
+}
+
+/* 📊 STATS THEME */
+.more-card.stats {
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  color: #00ffcc;
+}
+
+/* 👑 VIP THEME */
+.more-card.vip {
+  background: linear-gradient(135deg, #000, #3a2c00);
+  color: gold;
+  border: 1px solid gold;
+}
+
+.more-card.vip:hover {
+  box-shadow: 0 0 20px gold;
 }
