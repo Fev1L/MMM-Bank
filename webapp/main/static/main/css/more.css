@@ -1,0 +1,328 @@
+/* CASINO PAGE */
+.casino-dashboard {
+    display: flex;
+    flex-direction: column;
+}
+
+/* HEADER CARD (як stat-card / card) */
+.casino-header-card {
+    border-radius: 1.5rem;
+    padding: clamp(16px, 1.8vw, 24px);
+
+    background: linear-gradient(
+            135deg,
+            #5b3df5,
+            #7b61ff,
+            #a594ff
+    );
+
+    color: white;
+
+    box-shadow: 0 10px 30px rgba(91,61,245,0.25);
+}
+
+.casino-header-card h2 {
+    margin: 0;
+    font-size: clamp(1.4rem, 1.6vw, 2rem);
+}
+
+.casino-header-card p {
+    margin-top: 6px;
+    opacity: 0.85;
+}
+
+/* GRID */
+.casino-games {
+    margin-top: 20px;
+
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: clamp(12px, 1.5vw, 18px);
+}
+
+/* CARD = stat-card / action-btn */
+.casino-card {
+    border-radius: 1.5rem;
+    padding: clamp(16px, 1.6vw, 22px);
+
+    background: rgba(255,255,255,0.9);
+    backdrop-filter: blur(10px);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    gap: 10px;
+
+    color: #111;
+    font-weight: 500;
+
+    box-shadow: 0 0 1rem 0.2rem rgba(0,0,0,0.05);
+
+    transition: 0.25s;
+}
+
+/* ICON */
+.casino-card i {
+    font-size: clamp(1.4rem, 1.6vw, 2rem);
+    color: #5b3df5;
+}
+
+/* HOVER */
+.casino-card:hover {
+    transform: translateY(-0.3rem);
+
+    background: white;
+
+    box-shadow:
+            0 10px 25px rgba(0,0,0,0.1),
+            0 0 0.8rem rgba(91,61,245,0.25);
+}
+
+/* ACTIVE */
+.casino-card:active {
+    transform: scale(0.97);
+}
+
+/* CARDBAR */
+.news {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: clamp(260px, 50vw, 1500px);
+    height: 100vh;
+    padding: clamp(16px, 1.8vw, 28px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    z-index: 1000;
+}
+.news-top {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: clamp(18px, 2vw, 28px);
+}
+
+.news-actions {
+    display: flex;
+    gap: 0.6rem;
+}
+
+.icon-btn {
+    position: relative;
+    width: clamp(34px, 2.5vw, 40px);
+    height: clamp(34px, 2.5vw, 40px);
+    border: none;
+    border-radius: 50%;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    transition: 0.25s;
+    flex-shrink: 0;
+}
+
+.icon-btn i {
+    font-size: clamp(14px, 0.95vw, 16px);
+    color: #374151;
+}
+
+.icon-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.12);
+}
+
+.notif-count {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    background: red;
+    color: white;
+    font-size: 11px;
+    padding: 2px 5px;
+    border-radius: 50%;
+    min-width: 16px;
+    text-align: center;
+}
+.news-section {
+    margin-top: clamp(18px, 2vw, 30px);
+}
+
+.news-section:first-of-type {
+    margin-top: 0;
+}
+
+.news-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: clamp(10px, 1vw, 16px);
+}
+
+.news-header h3 {
+    margin: 0;
+    font-size: clamp(14px, 1vw, 18px);
+    font-weight: 600;
+}
+/* LIST */
+.winners-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* ITEM */
+.winner-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 10px 14px;
+    border-radius: 1rem;
+
+    background: rgba(255,255,255,0.9);
+
+    box-shadow: 0 0 1rem 0.1rem rgba(0,0,0,0.05);
+
+    animation: fadeSlide 0.4s ease;
+}
+
+/* LEFT */
+.winner-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.winner-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+
+    background: linear-gradient(135deg, #5b3df5, #7b61ff);
+    color: white;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 0.9rem;
+}
+
+/* TEXT */
+.winner-name {
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.winner-game {
+    font-size: 0.75rem;
+    opacity: 0.6;
+}
+
+/* AMOUNT */
+.winner-amount {
+    font-weight: 600;
+    color: #16a34a;
+}
+
+.big {
+    box-shadow: 0 0 15px rgba(91,61,245,0.4);
+}
+
+/* ANIMATION */
+@keyframes fadeSlide {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.slots-container {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+/* SLOT BOX */
+.slot-machine {
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 1.5rem;
+
+    background: rgba(255,255,255,0.9);
+    backdrop-filter: blur(10px);
+
+    text-align: center;
+
+    box-shadow: 0 0 1.5rem rgba(0,0,0,0.08);
+}
+
+/* REELS */
+.reels {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.reel {
+    width: 80px;
+    height: 80px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 2rem;
+
+    border-radius: 1rem;
+
+    background: #f3f4f6;
+}
+
+/* BUTTON */
+.spin-btn {
+    padding: 12px 30px;
+    border-radius: 1rem;
+
+    border: none;
+    cursor: pointer;
+
+    font-weight: 600;
+    color: white;
+
+    background: linear-gradient(
+            135deg,
+            #5b3df5,
+            #7b61ff
+    );
+
+    transition: 0.2s;
+}
+
+.spin-btn:hover {
+    transform: translateY(-2px);
+}
+
+/* RESULT */
+.result {
+    margin-top: 15px;
+    font-weight: 500;
+}
+
+.casino-foote{
+    margin-top:1.5rem;
+    font-size:0.9rem;
+}
+
+.casino-foote a{
+    color:black;
+    font-weight:600;
+    text-decoration:none;
+}

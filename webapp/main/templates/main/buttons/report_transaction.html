@@ -1,0 +1,66 @@
+{% extends 'main/users/users_layout.html' %}
+
+{% block title %}Report Problem{% endblock %}
+
+{% block content %}
+<div class="login-page">
+
+  <div class="login-card">
+
+    <h1>Report Issue ⚠️</h1>
+
+    <div class="contact-preview">
+      <div class="contact-avatar">
+        <i class="{{ transaction.category.icon }}"></i>
+      </div>
+      <div class="contact-name">
+        {{ transaction.title }}
+      </div>
+    </div>
+
+    {% if error %}
+    <div class="login-error">
+      <p>{{ error }}</p>
+    </div>
+    {% endif %}
+
+    <form method="POST">
+      {% csrf_token %}
+
+      <div class="input-group">
+        <i class="fa-solid fa-circle-question"></i>
+        <select name="reason" class="form-control" required>
+          <option value="">Select problem</option>
+          <option>Unauthorized transaction</option>
+          <option>Wrong amount</option>
+          <option>Scam / fraud</option>
+          <option>Other</option>
+        </select>
+      </div>
+
+      <div class="input-group">
+        <i class="fa-solid fa-comment"></i>
+        <input
+                type="text"
+                name="description"
+                placeholder="Describe the issue"
+                required
+        >
+      </div>
+
+      <button type="submit" class="login-btn danger-btn">
+        Submit Report
+      </button>
+
+    </form>
+
+    <div class="login-footer">
+      <a href="{% url 'contacts_list' %}">
+        ← Back to transfer
+      </a>
+    </div>
+
+  </div>
+
+</div>
+{% endblock %}

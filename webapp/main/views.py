@@ -15,8 +15,8 @@ def index(request):
     if request.user.is_authenticated:
         account = request.user.account
         balance = account.balance
-        contacts = Contact.objects.filter(owner=request.user)[:4]
-        transactions = Transaction.objects.filter(account=account).order_by('-created_at')[:4]
+        contacts = Contact.objects.filter(owner=request.user)[:3]
+        transactions = Transaction.objects.filter(account=account).order_by('-created_at')[:3]
         transactionsStats = Transaction.objects.filter(account=account).order_by('-created_at')
         total_income = 0
         for transaction in transactionsStats:
@@ -53,6 +53,41 @@ def history(request):
 @login_required
 def profile(request):
     return render(request, 'main/profile.html')
+
+@login_required
+def create_an_invoice(request):
+    return render(request, 'main/buttons/create_invoice.html')
+
+@login_required
+def transfer_to_bank(request):
+    return render(request, 'main/buttons/transfer_to_bank.html')
+
+@login_required
+def resolution_centre(request):
+    account = request.user.account
+    transactions = Transaction.objects.filter(account=account, category__type=Category.WITHDRAW ).order_by('-created_at')
+    return render(request, 'main/buttons/resolution_centre.html', {'transactions': transactions})
+
+@login_required
+def report_transaction(request, transaction_id):
+    account = request.user.account
+    transaction = get_object_or_404(Transaction, id=transaction_id, account=account)
+
+    if request.method == 'POST':
+        reason = request.POST.get('reason')
+        description = request.POST.get('description')
+
+        if not reason or not description:
+            return render(request, 'main/buttons/report_transaction.html', {
+                'transaction': transaction,
+                'error': 'All fields are required'
+            })
+
+        return redirect('resolution_centre')
+
+    return render(request, 'main/buttons/report_transaction.html', {
+        'transaction': transaction
+    })
 
 @login_required
 def goals(request):
@@ -137,7 +172,7 @@ def send_money(request, friend_id=None):
                 try:
                     recipient = User.objects.get(email__iexact=username_or_email)
                 except User.DoesNotExist:
-                    return render(request, 'main/contacts/send_money.html', {
+                    return render(request, 'main/buttons/send_money.html', {
                         'error': "User not found"
                     })
 
@@ -145,12 +180,12 @@ def send_money(request, friend_id=None):
             make_transfer(request.user, recipient, amount)
             return redirect('home')
         except ValidationError as e:
-            return render(request, 'main/contacts/send_money.html', {
+            return render(request, 'main/buttons/send_money.html', {
                 'error': str(e),
                 'friend': recipient
             })
 
-    return render(request, 'main/contacts/send_money.html', {
+    return render(request, 'main/buttons/send_money.html', {
         'friend': recipient
     })
 
@@ -193,7 +228,7 @@ def request_money(request, friend_id=None):
 
         return redirect('home')
 
-    return render(request, 'main/contacts/request_money.html', {
+    return render(request, 'main/buttons/request_money.html', {
         'friend': recipient
     })
 
@@ -214,19 +249,19 @@ def send_gift(request):
             try:
                 recipient = User.objects.get(email__iexact=username_or_email)
             except User.DoesNotExist:
-                return render(request, 'main/contacts/send_gift.html', {
+                return render(request, 'main/buttons/send_gift.html', {
                     'error': "User not found"
                 })
 
         if recipient == request.user:
-            return render(request, 'main/contacts/send_gift.html', {
+            return render(request, 'main/buttons/send_gift.html', {
                 'error': "You cannot send gift to yourself"
             })
 
         sender_account = request.user.account
 
         if sender_account.balance < amount:
-            return render(request, 'main/contacts/send_gift.html', {
+            return render(request, 'main/buttons/send_gift.html', {
                 'error': "Not enough balance"
             })
 
@@ -254,7 +289,7 @@ def send_gift(request):
 
         return redirect('home')
 
-    return render(request, 'main/contacts/send_gift.html')
+    return render(request, 'main/buttons/send_gift.html')
 
 @login_required
 def pay_request(request, message_id):
@@ -361,7 +396,13 @@ def register(request):
          return redirect('home')
     
     if request.method == 'POST':
-        user = User.objects.create_user(request.POST['username'], request.POST['email'], request.POST['password'])
+        user = User.objects.create_user(
+            username=request.POST['username'],
+            email=request.POST['email'],
+            password=request.POST['password'],
+            first_name=request.POST['name'],
+            last_name=request.POST['surname'],
+        )
         login(request, user)
         return redirect('home')
     

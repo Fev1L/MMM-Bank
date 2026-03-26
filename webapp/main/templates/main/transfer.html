@@ -17,22 +17,8 @@
                 <div class="card-balance">${{ balance }}</div>
             </div>
         </div>
-        <div class="quick-actions">
-            <a href="/contacts/send/" class="action-btn">
-                <i class="fa-solid fa-paper-plane"></i>
-                <span>Send</span>
-            </a>
-
-            <button class="action-btn">
-                <i class="fa-solid fa-hand-holding-dollar"></i>
-                <span>Request</span>
-            </button>
-
-            <button class="action-btn">
-                <i class="fa-solid fa-gift"></i>
-                <span>Send a Gift</span>
-            </button>
-        </div>
+        {% include 'main/buttons/active_button.html' %}
+        {% include 'main/buttons/active_button_transfer.html' %}
     </div>
 
     <div class="col">
@@ -66,30 +52,6 @@
                 {% endfor %}
             </div>
         </section>
-    </div>
-</div>
-
-<div class="row g-5">
-    <div class="col">
-        <div class="quick-actions">
-            <button class="action-btn">
-                <i class="fa-solid fa-file-lines"></i>
-                <span>Create an Invoice</span>
-            </button>
-
-            <button class="action-btn">
-                <i class="fa-solid fa-building-columns"></i>
-                <span>Transfer to Bank</span>
-            </button>
-
-            <button class="action-btn">
-                <i class="fa-solid fa-left-right"></i>
-                <span>Resolution Centre</span>
-            </button>
-        </div>
-    </div>
-    <div class="col">
-
     </div>
 </div>
 

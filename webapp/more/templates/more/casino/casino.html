@@ -1,9 +1,9 @@
-{% extends 'main/layout/layout.html' %}
+{% extends 'more/casino/casino_layout.html' %}
 
-{% block title%}{{ request.user.username }} Account {% endblock %}
+{% block title %}MMM-Casino{% endblock %}
 
-{% block content%}
-<div class="row g-5">
+{% block content %}
+<div class="row">
     <div class="col">
         <h1 style="font-size: 30px;">MMM Balance </h1>
 
@@ -17,13 +17,14 @@
                 <div class="card-balance">${{ balance }}</div>
             </div>
         </div>
-        {% include 'main/buttons/active_button.html' %}
     </div>
-
+</div>
+<div class="row">
     <div class="col">
         <section class="transactions">
             <div class="transactions-header">
                 <h2>Recent Activity</h2>
+                <a href="/history" class="view-all">More</a>
             </div>
 
             <div class="transaction-list">
@@ -51,11 +52,4 @@
         </section>
     </div>
 </div>
-
-<div class="row g-5">
-    <div class="col">
-        {% include 'main/contacts/contacts.html' %}
-    </div>
-</div>
-
 {% endblock %}

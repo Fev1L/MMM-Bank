@@ -5,11 +5,11 @@
 {% block content %}
 <div class="login-page">
 
-  <div class="login-card">
+  <div class="login-card gift-card">
 
-    <h1>Request Money</h1>
+    <h1>Send Gift 🎁</h1>
     <p class="login-subtitle">
-      Ask someone to send you money
+      Surprise someone with a gift transfer
     </p>
 
     {% if error %}
@@ -21,8 +21,6 @@
     <form method="POST">
       {% csrf_token %}
 
-      {% if not friend %}
-
       <div class="input-group">
         <i class="fa-solid fa-user"></i>
         <input
@@ -33,44 +31,35 @@
         >
       </div>
 
-      {% else %}
-
-      <div class="contact-preview">
-        <div class="contact-avatar">
-          {{ friend.username|first|upper }}
-        </div>
-        <div class="contact-name">
-          {{ friend.username }}
-        </div>
-      </div>
-
-      {% endif %}
-
       <div class="input-group">
-        <i class="fa-solid fa-dollar-sign"></i>
+        <i class="fa-solid fa-gift"></i>
         <input
                 type="number"
                 step="0.01"
                 name="amount"
-                placeholder="Amount"
+                placeholder="Gift amount"
                 required
         >
       </div>
 
-      <button type="submit" class="login-btn">
-        Request money
+      <div class="input-group">
+        <i class="fa-solid fa-message"></i>
+        <input type="text" name="message" placeholder="Add a message (optional)">
+      </div>
+
+      <button type="submit" class="login-btn gift-btn">
+        Send Gift
       </button>
 
     </form>
 
     <div class="login-footer">
       <a href="{% url 'contacts_list' %}">
-        ← Back to contacts
+        ← Back to transfer
       </a>
     </div>
 
   </div>
 
 </div>
-
 {% endblock %}
