@@ -1,65 +1,87 @@
 from decimal import Decimal
-
+from django.contrib import messages
 from django.shortcuts import render, redirect
-from .models import PiggyBank, piggy_transactions, Deposit , Stock, Purchase
+from .models import PiggyBank, PiggyTransaction, Deposit , Stock, Purchase
 from main.models import Transaction, Category
 
-def piggy_bank(request):
 
-    piggy, created = PiggyBank.objects.get_or_create(user=request.user)
+
+def piggy_bank(request):
+    if not request.user.is_authenticated:
+        return redirect('login')  # або куди потрібно
+
+    piggies = PiggyBank.objects.filter(user=request.user).order_by('-created_at')
+
+    selected_piggy = None
+    percent = 0
+    transactions = []
 
     if request.method == "POST":
         action = request.POST.get("action")
-        amount_raw = request.POST.get("amount")
-        goal_raw = request.POST.get("goal")
 
-        if goal_raw:
-            try:
-                piggy.goal = float(goal_raw)
-            except ValueError:
-                pass
+        if action == "create":
+            name = request.POST.get("name", "").strip()
+            if name:
+                PiggyBank.objects.create(
+                    user=request.user,
+                    name=name,
+                    balance=Decimal('0.00'),
+                    goal=Decimal('0.00')
+                )
+            return redirect('piggy_bank')
 
-        if amount_raw:
+        elif action in ["add", "withdraw"]:
             try:
-                amount = float(amount_raw)
+                piggy_id = int(request.POST.get("piggy_id"))
+                amount = Decimal(request.POST.get("amount", 0))
+
+                piggy = PiggyBank.objects.get(id=piggy_id, user=request.user)
 
                 if action == "add" and amount > 0:
                     piggy.balance += amount
-                    piggy_transactions.objects.create(
+                    PiggyTransaction.objects.create(   # ← змінено
                         user=request.user,
-                        amount=amount
+                        piggy=piggy,
+                        amount=amount,
+                        transaction_type='add'
                     )
 
                 elif action == "withdraw" and amount > 0:
                     if piggy.balance >= amount:
                         piggy.balance -= amount
-
-                        piggy_transactions.objects.create(
+                        PiggyTransaction.objects.create(   # ← змінено
                             user=request.user,
-                            amount=-amount
+                            piggy=piggy,
+                            amount=amount,                 # залиш позитивне, тип покаже withdraw
+                            transaction_type='withdraw'
                         )
-            except ValueError:
+
+                piggy.save()
+
+            except Exception as e:
+                # Краще логувати помилку в production, але для розробки можна pass
                 pass
 
-        piggy.save()
+            return redirect('piggy_bank')
 
-        return redirect('piggy_bank')
+    # GET частина
+    if piggies.exists():
+        selected_piggy = piggies.first()
 
+        if selected_piggy.goal > 0:
+            percent = min(int((selected_piggy.balance / selected_piggy.goal) * 100), 100)
 
-    percent = 0
-    if piggy.goal > 0:
-        percent = (piggy.balance / piggy.goal) * 100
-        percent = min(int(percent), 100)
-
-
-    transactions = piggy_transactions.objects.filter(user=request.user).order_by('-timestamp')[:10]
+        # Головне виправлення тут:
+        transactions = PiggyTransaction.objects.filter(   # ← змінено назву моделі
+            piggy=selected_piggy
+        ).order_by('-timestamp')[:10]
 
     return render(request, "deposits/piggy_bank.html", {
-        "piggy": piggy,
+        "piggies": piggies,
+        "selected_piggy": selected_piggy,
         "percent": percent,
         "transactions": transactions,
     })
-
 
 def open_deposit(request):
     if request.method == "POST":
@@ -121,34 +143,77 @@ def index(request):
     })
 
 
+
+
+
+
 def buy_bonds(request):
     stocks = Stock.objects.all()
     purchases = Purchase.objects.filter(user=request.user).order_by("-created_at")[:10]
 
+    user_balance = getattr(request.user.account, 'balance', Decimal('0'))
+
+    MIN_INVESTMENT = Decimal('100.00')
+    MAX_PERCENT_OF_BALANCE = Decimal('0.50')
+
+    lower_bound = MIN_INVESTMENT
+    upper_bound = (user_balance * MAX_PERCENT_OF_BALANCE).quantize(Decimal('0.01'))
+
     if request.method == "POST":
         stock_id = request.POST.get("stock")
-        quantity = request.POST.get("quantity")
+        quantity_str = request.POST.get("quantity")
 
-        if stock_id and quantity:
-            try:
-                stock = Stock.objects.get(id=stock_id)
-                quantity = int(quantity)
+        if not stock_id or not quantity_str:
+            messages.error(request, "Please select a stock and enter quantity.")
+            return redirect("buy_bonds")
 
-                total_price = stock.price * quantity
+        try:
+            stock = get_object_or_404(Stock, id=stock_id)
+            quantity = int(quantity_str)
 
-                Purchase.objects.create(
-                    user=request.user,
-                    stock=stock,
-                    quantity=quantity,
-                    total_price=total_price
-                )
+            if quantity <= 0:
+                raise ValueError("Quantity must be greater than 0")
 
-            except:
-                pass
+            total_price = round(stock.price * quantity, 2)
+
+            if total_price < lower_bound:
+                messages.error(request, f"Minimum investment amount is ${lower_bound}")
+                return redirect("buy_bonds")
+
+            if total_price > upper_bound:
+                messages.error(request, f"Maximum investment amount is ${upper_bound}")
+                return redirect("buy_bonds")
+
+            if total_price > user_balance:
+                messages.error(request, "Insufficient balance!")
+                return redirect("buy_bonds")
+
+
+            account = request.user.account
+            account.balance -= total_price
+            account.save()
+
+
+            Purchase.objects.create(
+                user=request.user,
+                stock=stock,
+                quantity=quantity,
+                total_price=total_price,
+            )
+
+            messages.success(request, f"Successfully purchased {quantity} shares of {stock.name} for ${total_price}")
+
+        except ValueError as e:
+            messages.error(request, str(e))
+        except Exception:
+            messages.error(request, "An error occurred during purchase.")
 
         return redirect("buy_bonds")
 
     return render(request, "deposits/bonds.html", {
         "stocks": stocks,
-        "purchases": purchases
+        "purchases": purchases,
+        "balance": round(user_balance, 2),
+        "lower_bound": lower_bound,
+        "upper_bound": upper_bound,
     })

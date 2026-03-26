@@ -3,59 +3,105 @@
 {% block title %}Piggy Bank{% endblock %}
 
 {% block content %}
- <div class="page">
+<div class="page">
     <div class="wrapper">
-        <div class="balance-card">
-            <p style="font-size: 14px; margin: 0; opacity: 0.9;">Piggy Bank Balance</p>
-            <div style="font-size: 40px;">${{ piggy.balance }}</div>
-        </div>
 
-        <div class="section">
-            <h3 style="margin-top: 0;">Savings Goal</h3>
-            <form method="post" style="display: flex; gap: 10px; margin-bottom: 15px;">
-                {% csrf_token %}
-                <input type="number" name="goal" placeholder="Set Goal" value="{{ piggy.goal }}" style="flex: 1;">
-                <button type="submit" class="btn-outline">Set Goal</button>
-            </form>
+        <h2>My Piggy Banks</h2>
 
-            <div class="progress">
-                <div class="bar" style="width: {{ percent }}%"></div>
-            </div>
-            <p style="color: #666; font-size: 14px; margin-top: 8px;">Goal: ${{ piggy.goal }}</p>
-        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; margin-bottom: 40px;">
+            {% for piggy in piggies %}
+            <div class="balance-card"
+                 style="cursor: pointer;
+                        border: 3px solid {% if selected_piggy == piggy.id %}#2e7d32{% else %}transparent{% endif %};"
+                 onclick="selectPiggy({{ piggy.id }}, '{{ piggy.name|default:"Unnamed Piggy" }}')">
 
-        <div style="display: flex; gap: 15px;">
-            <div class="section" style="flex: 1; background: #e8f5e9; border: none; text-align: center;">
-                <form method="post">
-                    {% csrf_token %}
-                    <input type="number" name="amount" placeholder="Amount" required style="width: 80%; margin-bottom: 10px;">
-                    <input type="hidden" name="action" value="add">
-                    <button type="submit" style="background: none; color: #2e7d32; border: 1px solid #2e7d32; width: 100%;">Add Money</button>
-                </form>
-            </div>
-            <div class="section" style="flex: 1; background: #ffebee; border: none; text-align: center;">
-                <form method="post">
-                    {% csrf_token %}
-                    <input type="number" name="amount" placeholder="Amount" required style="width: 80%; margin-bottom: 10px;">
-                    <input type="hidden" name="action" value="withdraw">
-                    <button type="submit" style="background: none; color: #c62828; border: 1px solid #c62828; width: 100%;">Withdraw</button>
-                </form>
-            </div>
-        </div>
+                <p style="margin: 0; font-size: 15px; opacity: 0.9;">{{ piggy.name|default:"Piggy Bank" }}</p>
+                <div style="font-size: 34px; margin: 12px 0;">${{ piggy.balance }}</div>
 
-        <div class="section">
-            <h3 style="margin-top: 0;">Transactions</h3>
-            {% for tx in transactions %}
-            <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee;">
-                <span style="font-weight: bold; color: {% if tx.amount > 0 %}#2e7d32{% else %}#333{% endif %};">
-                    {% if tx.amount > 0 %}+{% endif %}${{ tx.amount }}
-                </span>
-                <span style="color: #999; font-size: 13px;">{{ tx.timestamp|date:"H:i:s" }}</span>
+                {% if piggy.goal %}
+                <div class="progress" style="margin-top: 12px;">
+                    <div class="bar" style="width: {{ piggy.percent|default:0 }}%"></div>
+                </div>
+                <small>Goal: ${{ piggy.goal }}</small>
+                {% endif %}
             </div>
             {% empty %}
-            <p style="color: #999;">No transactions yet.</p>
+            <p>You don't have any piggy banks yet. Create one below.</p>
             {% endfor %}
         </div>
+
+        <div class="section">
+            <h3>Create New Piggy Bank</h3>
+            <form method="post" style="display: flex; gap: 12px; flex-wrap: wrap;">
+                {% csrf_token %}
+                <input type="text"
+                       name="name"
+                       placeholder="Piggy Bank Name (e.g. Vacation Fund, New Laptop)"
+                       style="flex: 1; min-width: 250px; padding: 14px; font-size: 16px;"
+                       required>
+
+                <button type="submit"
+                        name="action"
+                        value="create"
+                        style="padding: 14px 28px; font-size: 16px;">
+                    Create Piggy Bank
+                </button>
+            </form>
+        </div>
+
+        <hr style="margin: 40px 0;">
+
+        <div class="section">
+            <h3>Operations</h3>
+
+            <p><strong>Selected:</strong>
+               <span id="selected_name" style="font-weight: 600; color: #2e7d32;">— No piggy bank selected —</span>
+            </p>
+
+            <form method="post" id="operation_form">
+                {% csrf_token %}
+
+                <input type="hidden" name="piggy_id" id="piggy_id" value="">
+
+                <div style="display: flex; gap: 15px; margin-bottom: 20px; align-items: end;">
+                    <div style="flex: 1;">
+                        <input type="number"
+                               name="amount"
+                               placeholder="Amount"
+                               step="0.01"
+                               required
+                               style="width: 100%; padding: 14px; font-size: 17px;">
+                    </div>
+
+                    <div>
+                        <select name="action" style="padding: 14px; height: 52px; font-size: 16px;">
+                            <option value="add">Add Money</option>
+                            <option value="withdraw">Withdraw</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit"
+                        style="padding: 14px 32px; font-size: 17px; font-weight: 600;">
+                    Execute
+                </button>
+            </form>
+        </div>
+
     </div>
 </div>
+
+<script>
+function selectPiggy(piggyId, piggyName) {
+
+    document.getElementById('piggy_id').value = piggyId;
+
+
+    document.getElementById('selected_name').textContent = piggyName;
+
+
+    document.getElementById('operation_form').scrollIntoView({ behavior: "smooth" });
+}
+</script>
+
 {% endblock %}
