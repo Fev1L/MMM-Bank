@@ -16,4 +16,9 @@ def casino_home(request):
     return render(request, 'more/casino/casino.html', temp)
 
 def casino_slots(request):
-    return render(request, 'more/casino/slots.html')
+    account = request.user.account
+    balance = account.balance
+    temp = {
+        'balance': balance,
+    }
+    return render(request, 'more/casino/slots.html', temp)

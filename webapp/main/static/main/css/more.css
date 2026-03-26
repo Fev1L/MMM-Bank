@@ -243,3 +243,86 @@
         transform: translateY(0);
     }
 }
+
+.slots-container {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+/* SLOT BOX */
+.slot-machine {
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 1.5rem;
+
+    background: rgba(255,255,255,0.9);
+    backdrop-filter: blur(10px);
+
+    text-align: center;
+
+    box-shadow: 0 0 1.5rem rgba(0,0,0,0.08);
+}
+
+/* REELS */
+.reels {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.reel {
+    width: 80px;
+    height: 80px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 2rem;
+
+    border-radius: 1rem;
+
+    background: #f3f4f6;
+}
+
+/* BUTTON */
+.spin-btn {
+    padding: 12px 30px;
+    border-radius: 1rem;
+
+    border: none;
+    cursor: pointer;
+
+    font-weight: 600;
+    color: white;
+
+    background: linear-gradient(
+            135deg,
+            #5b3df5,
+            #7b61ff
+    );
+
+    transition: 0.2s;
+}
+
+.spin-btn:hover {
+    transform: translateY(-2px);
+}
+
+/* RESULT */
+.result {
+    margin-top: 15px;
+    font-weight: 500;
+}
+
+.casino-foote{
+    margin-top:1.5rem;
+    font-size:0.9rem;
+}
+
+.casino-foote a{
+    color:black;
+    font-weight:600;
+    text-decoration:none;
+}
