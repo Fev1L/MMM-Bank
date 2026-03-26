@@ -4,7 +4,175 @@
 
 {% block content %}
 
-<div class="row">
+<style>
+    .ct-terms-card {
+        background: #ffffff;
+        border-radius: 20px;
+        padding: 16px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+        box-sizing: border-box;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .credits-top-row {
+        align-items: start;
+    }
+
+    .ct-terms-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 10px;
+        margin-bottom: 10px;
+    }
+
+    .ct-terms-header h3 {
+        margin: 0 0 4px;
+        color: #111111;
+        font-size: 22px;
+        font-weight: 700;
+        line-height: 1.1;
+    }
+
+    .ct-terms-header p {
+        margin: 0;
+        color: #555555;
+        font-size: 12px;
+        line-height: 1.35;
+        max-width: 420px;
+    }
+
+    .ct-terms-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 4px 8px;
+        border-radius: 999px;
+        background: #f3f0ff;
+        color: #5b3df5;
+        font-size: 10px;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .ct-terms-list {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .ct-term-item {
+        display: block;
+        padding: 8px 10px;
+        border-radius: 14px;
+        background: #faf9ff;
+        border: 1px solid #ece7ff;
+    }
+
+    .ct-term-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 8px;
+        margin-bottom: 4px;
+    }
+
+    .ct-term-top h4 {
+        margin: 0;
+        color: #111111;
+        font-size: 14px;
+        font-weight: 700;
+        line-height: 1.1;
+    }
+
+    .ct-term-top p {
+        margin: 2px 0 0;
+        color: #666666;
+        font-size: 12px;
+        line-height: 1.2;
+    }
+
+    .ct-term-pill {
+        padding: 3px 8px;
+        border-radius: 999px;
+        background: #ffffff;
+        border: 1px solid #e3dbff;
+        color: #5b3df5;
+        font-size: 10px;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .ct-term-metrics {
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-bottom: 4px;
+        color: #333333;
+        font-size: 12px;
+        font-weight: 600;
+        line-height: 1.2;
+    }
+
+    .ct-term-bar {
+        display: block;
+        width: 100%;
+        height: 6px;
+        border-radius: 999px;
+        background: #e8e1ff;
+        overflow: hidden;
+    }
+
+    .ct-term-bar-fill {
+        display: block;
+        height: 100%;
+        border-radius: inherit;
+        background: linear-gradient(90deg, #5b3df5 0%, #7b61ff 100%);
+    }
+
+    .ct-terms-note {
+        margin-top: 10px;
+        color: #777777;
+        font-size: 11px;
+        line-height: 1.3;
+    }
+
+    .credits-active-loans {
+        margin-top: -46px;
+    }
+
+    .credits-active-loans-panel {
+        margin-top: -72px;
+    }
+
+    .active-loans-list {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        max-height: 360px;
+        overflow-y: auto;
+        padding-right: 6px;
+    }
+
+    @media (max-width: 900px) {
+        .ct-terms-header,
+        .ct-term-top,
+        .ct-term-metrics {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .active-loans-list {
+            max-height: none;
+            overflow-y: visible;
+            padding-right: 0;
+        }
+    }
+</style>
+
+<div class="row credits-top-row">
 
     <!-- КОЛОНКА 1: Credit status → кнопки → Loan activity (коротка) -->
     <div class="col">
@@ -23,78 +191,109 @@
         </div>
 
         <div class="quick-actions">
-            <a href="{% url 'pay_extra' %}" class="action-btn">
-                <i class="fa-solid fa-money-bill"></i>
-                <span>Pay extra</span>
-            </a>
+    <a href="{% url 'pay_extra' %}" class="action-btn">
+        <i class="fa-solid fa-money-bill"></i>
+        <span>Pay extra</span>
+    </a>
 
-            <a href="{% url 'avaible_loans' %}" class="action-btn">
-                <i class="fa-solid fa-sack-dollar"></i>
-                <span>Avaible loans</span>
-            </a>
+    <a href="{% url 'avaible_loans' %}" class="action-btn">
+        <i class="fa-solid fa-sack-dollar"></i>
+        <span>Avaible loans</span>
+    </a>
 
-            <a href="#" class="action-btn">
-                <i class="fa-solid fa-coins"></i>
-                <span>Mortgage</span>
-            </a>
-        </div>
+    <a href="{% url 'mortgage' %}" class="action-btn">
+        <i class="fa-solid fa-coins"></i>
+        <span>Mortgage</span>
+    </a>
+</div>
     </div>
 
     <!-- КОЛОНКА 2: Credit terms → Active loan → Loan activity (детальна) -->
-    <div class="col">
+    <div class="col credits-active-loans">
         <!-- Credit terms -->
-        <div style="
-            background:white;
-            padding:20px;
-            border-radius:20px;
-            box-shadow:0 8px 20px rgba(0,0,0,0.06);
-            flex: 0 0 auto;
-        ">
-            <h3 style="margin-bottom:10px;">Credit terms</h3>
-            <div style="color:#555; font-size:14px; margin-bottom:15px;">
-                Loan service is provided by MMM Bank.
-                Interest depends on client rating and credit history.
-                Early repayment is allowed without penalty.
+        <section class="ct-terms-card">
+            <div class="ct-terms-header">
+                <div>
+                    <h3>Credit terms</h3>
+                    <p>The purple bars show how much extra is paid per each $1,000 borrowed. Shorter bar means better terms.</p>
+                </div>
+                <span class="ct-terms-badge">MMM Bank</span>
             </div>
-            <table style="width:100%; border-collapse:collapse; font-size:14px;">
-                <tr style="background:#f5f5f5;">
-                    <th style="padding:8px; text-align:left;">Loan type</th>
-                    <th style="padding:8px;">Limit</th>
-                    <th style="padding:8px;">Interest</th>
-                    <th style="padding:8px;">Period</th>
-                </tr>
-                <tr>
-                    <td style="padding:8px;">Small loan</td>
-                    <td style="padding:8px;">$500</td>
-                    <td style="padding:8px;">5%</td>
-                    <td style="padding:8px;">1 month</td>
-                </tr>
-                <tr>
-                    <td style="padding:8px;">Medium loan</td>
-                    <td style="padding:8px;">$2000</td>
-                    <td style="padding:8px;">4%</td>
-                    <td style="padding:8px;">3 months</td>
-                </tr>
-                <tr>
-                    <td style="padding:8px;">Big loan</td>
-                    <td style="padding:8px;">$5000</td>
-                    <td style="padding:8px;">3%</td>
-                    <td style="padding:8px;">6 months</td>
-                </tr>
-                <tr>
-                    <td style="padding:8px;">Max limit</td>
-                    <td style="padding:8px;">$10000</td>
-                    <td style="padding:8px;">2%</td>
-                    <td style="padding:8px;">12 months</td>
-                </tr>
-            </table>
-            <div style="margin-top:15px; font-size:13px; color:#777;">
-                • Early repayment allowed
-                • No hidden fees
-                • Monthly payment required
-                • Client rating affects interest
+
+            <div class="ct-terms-list">
+                <article class="ct-term-item">
+                    <div class="ct-term-top">
+                        <div>
+                            <h4>Small</h4>
+                            <p>$500 credit limit</p>
+                        </div>
+                        <div class="ct-term-pill">1 month</div>
+                    </div>
+                    <div class="ct-term-metrics">
+                        <span>Rate: 5%</span>
+                        <span>Extra per $1,000: $50</span>
+                    </div>
+                    <div class="ct-term-bar" aria-hidden="true">
+                        <div class="ct-term-bar-fill" style="width: 100%;"></div>
+                    </div>
+                </article>
+
+                <article class="ct-term-item">
+                    <div class="ct-term-top">
+                        <div>
+                            <h4>Medium</h4>
+                            <p>$2,000 credit limit</p>
+                        </div>
+                        <div class="ct-term-pill">3 months</div>
+                    </div>
+                    <div class="ct-term-metrics">
+                        <span>Rate: 4%</span>
+                        <span>Extra per $1,000: $40</span>
+                    </div>
+                    <div class="ct-term-bar" aria-hidden="true">
+                        <div class="ct-term-bar-fill" style="width: 80%;"></div>
+                    </div>
+                </article>
+
+                <article class="ct-term-item">
+                    <div class="ct-term-top">
+                        <div>
+                            <h4>Big</h4>
+                            <p>$5,000 credit limit</p>
+                        </div>
+                        <div class="ct-term-pill">6 months</div>
+                    </div>
+                    <div class="ct-term-metrics">
+                        <span>Rate: 3%</span>
+                        <span>Extra per $1,000: $30</span>
+                    </div>
+                    <div class="ct-term-bar" aria-hidden="true">
+                        <div class="ct-term-bar-fill" style="width: 60%;"></div>
+                    </div>
+                </article>
+
+                <article class="ct-term-item">
+                    <div class="ct-term-top">
+                        <div>
+                            <h4>Max</h4>
+                            <p>$10,000 credit limit</p>
+                        </div>
+                        <div class="ct-term-pill">12 months</div>
+                    </div>
+                    <div class="ct-term-metrics">
+                        <span>Rate: 2%</span>
+                        <span>Extra per $1,000: $20</span>
+                    </div>
+                    <div class="ct-term-bar" aria-hidden="true">
+                        <div class="ct-term-bar-fill" style="width: 40%;"></div>
+                    </div>
+                </article>
             </div>
-        </div>
+
+            <div class="ct-terms-note">
+                Early repayment is allowed without penalty. Final rate still depends on client rating and credit history.
+            </div>
+        </section>
 
 
 
@@ -108,70 +307,80 @@
         <section class="transactions">
             <div class="transactions-header">
                 <h3>Loan activity</h3>
-                <a href="#" class="view-all">More</a>
+                <a href="{% if show_all_activity %}{% url 'credits' %}{% else %}{% url 'credits' %}?activity=all{% endif %}" class="view-all">
+                    {% if show_all_activity %}Less{% else %}More{% endif %}
+                </a>
             </div>
             <div class="transaction-list">
-                <div class="transaction-item">
-                    <div class="transaction-left">
-                        <div class="icon"><i class="fa-solid fa-circle-arrow-up"></i></div>
-                        <div>
-                            <div class="title">Payment</div>
-                            <div class="category">Monthly</div>
+                {% if loan_activity %}
+                    {% for item in loan_activity %}
+                        <div class="transaction-item">
+                            <div class="transaction-left">
+                                <div class="icon">
+                                    <i class="{% if item.category.type == 'withdraw' %}fa-solid fa-circle-arrow-up{% else %}fa-solid fa-circle-arrow-down{% endif %}"></i>
+                                </div>
+                                <div>
+                                    <div class="title">{{ item.title }}</div>
+                                    <div class="category">{{ item.category.name }}</div>
+                                </div>
+                            </div>
+                            <div class="transaction-right {% if item.category.type == 'withdraw' %}negative{% else %}positive{% endif %}">
+                                <div class="amount">{% if item.category.type == 'withdraw' %}-{% endif %}${{ item.amount }}</div>
+                                <div class="date">{{ item.created_at|date:"j M Y" }}</div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="transaction-item">
+                        <div class="transaction-left">
+                            <div class="icon"><i class="fa-solid fa-receipt"></i></div>
+                            <div>
+                                <div class="title">No credit activity yet</div>
+                                <div class="category">Take a loan or make a payment</div>
+                            </div>
+                        </div>
+                        <div class="transaction-right">
+                            <div class="date">MMM Bank</div>
                         </div>
                     </div>
-                    <div class="transaction-right negative">
-                        <div class="amount"> -$100</div>
-                        <div class="date">7 Mar 2026</div>
-                    </div>
-                </div>
-
-                <div class="transaction-item">
-                    <div class="transaction-left">
-                        <div class="icon"><i class="fa-solid fa-circle-arrow-down"></i></div>
-                        <div>
-                            <div class="title">Loan received</div>
-                            <div class="category">Car loan</div>
-                        </div>
-                    </div>
-                    <div class="transaction-right positive">
-                        <div class="amount"> $2000</div>
-                        <div class="date">5 Mar 2026</div>
-                    </div>
-                </div>
+                {% endif %}
             </div>
         </section>
     </div>
 
-
-    <div class="col">
-        <!-- Active loan -->
-        <div style="
-            background: linear-gradient(90deg,#3c25b8,#7c6ce0);
-            color:white;
-            border-radius:20px;
-            padding:18px;
-            flex: 0 0 auto;
-        ">
-            <div>Car loan</div>
-            <div style="font-size:28px;">$20000</div>
-            <div>Left: $1500</div>
-            <div>Monthly: $100</div>
-            <div>Status: Active</div>
+    <div class="col credits-active-loans-panel">
+        <div class="transactions-header">
+            <h3>Active loans</h3>
+            {% if has_more_credit_cards or show_all_cards %}
+                <a href="{% if show_all_cards %}{% url 'credits' %}{% if show_all_activity %}?activity=all{% endif %}{% else %}{% url 'credits' %}?cards=all{% if show_all_activity %}&activity=all{% endif %}{% endif %}" class="view-all">
+                    {% if show_all_cards %}Less{% else %}More{% endif %}
+                </a>
+            {% endif %}
         </div>
 
-        <div style="
-            background: linear-gradient(90deg,#3c25b8,#7c6ce0);
-            color:white;
-            border-radius:20px;
-            padding:18px;
-            flex: 0 0 auto;
-        ">
-            <div>IPhone loan</div>
-            <div style="font-size:28px;">$1300</div>
-            <div>Left: $400</div>
-            <div>Monthly: $100</div>
-            <div>Status: Active</div>
-        </div>
+        <div class="active-loans-list">
+        {% if has_active_credit_cards %}
+            {% for card in active_credit_cards %}
+                <div style="
+                    background: linear-gradient(90deg,#3c25b8,#7c6ce0);
+                    color:white;
+                    border-radius:20px;
+                        padding:18px;
+                        flex: 0 0 auto;
+                ">
+                    <div>{{ card.title }}</div>
+                    <div style="font-size:28px;">${{ card.amount }}</div>
+                    <div>Left: ${{ card.left }}</div>
+                    <div>Monthly: ${{ card.monthly }}</div>
+                    <div>Rate: {{ card.rate }}%</div>
+                    <div>Status: {{ card.status }}</div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="transaction-item text-center py-4" style="color: #6b7280;">
+                No active loans yet
+            </div>
+        {% endif %}
     </div>
 </div>
 

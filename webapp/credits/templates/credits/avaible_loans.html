@@ -8,94 +8,66 @@
 
     <div class="login-card" style="width: 500px;">
 
-        <a href="{% url 'credits' %}" class="login-btn"
-           style="margin-bottom: 10px; text-align:center; display:block;">
-            ← Back
+        <a href="{% url 'inbox' %}" class="page-bell-btn" aria-label="Open inbox">
+            <i class="fa-regular fa-bell"></i>
+            {% if unread_count %}
+                <span class="page-bell-badge">{{ unread_count }}</span>
+            {% endif %}
         </a>
 
         <h1>Available loans</h1>
         <p class="login-subtitle">
-            Choose your fintech loan
+            Choose what you need the credit for and enter your amount
         </p>
 
+        <form method="POST">
+            {% csrf_token %}
 
-        <!-- КОЛОНКА -->
-
-        <div style="display: flex; flex-direction: column; gap: 12px;">
-
-            <div style="
-                background: linear-gradient(90deg,#5b3df5,#8a7be0);
-                color: white;
-                border-radius: 20px;
-                padding: 18px;
-                text-align: center;
-                cursor: pointer;
-                transition: 0.2s;
-            "
-            onmouseover="this.style.transform='scale(1.03)'"
-            onmouseout="this.style.transform='scale(1)'">
-
-                <div style="font-size:15px;">Small loan</div>
-                <div style="font-size:42px; font-weight:600;">$500</div>
-
+            <div class="input-group">
+                <i class="fa-solid fa-pen"></i>
+                <input
+                    type="text"
+                    name="loan_target"
+                    list="loan-targets"
+                    placeholder="What do you need the credit for?"
+                    required
+                    class="custom-input"
+                >
+                <datalist id="loan-targets">
+                    <option value="Bicycle">
+                    <option value="Motorcycle">
+                    <option value="Car">
+                    <option value="Apartment">
+                    <option value="House">
+                </datalist>
             </div>
 
-
-            <div style="
-                background: linear-gradient(90deg,#4b2fd6,#7c6ce0);
-                color: white;
-                border-radius: 20px;
-                padding: 18px;
-                text-align: center;
-                cursor: pointer;
-                transition: 0.2s;
-            "
-            onmouseover="this.style.transform='scale(1.03)'"
-            onmouseout="this.style.transform='scale(1)'">
-
-                <div style="font-size:15px;">Medium loan</div>
-                <div style="font-size:42px; font-weight:600;">$2000</div>
-
+            <div class="input-group">
+                <i class="fa-solid fa-money-bill"></i>
+                <input
+                    type="number"
+                    name="amount"
+                    placeholder="Amount"
+                    min="1"
+                    max="{{ max_loan_limit|floatformat:'0' }}"
+                    required
+                    class="custom-input"
+                >
             </div>
 
-
-            <div style="
-                background: linear-gradient(90deg,#3c25b8,#6e5de0);
-                color: white;
-                border-radius: 20px;
-                padding: 18px;
-                text-align: center;
-                cursor: pointer;
-                transition: 0.2s;
-            "
-            onmouseover="this.style.transform='scale(1.03)'"
-            onmouseout="this.style.transform='scale(1)'">
-
-                <div style="font-size:15px;">Big loan</div>
-                <div style="font-size:42px; font-weight:600;">$5000</div>
-
+            <div class="login-subtitle" style="margin-top: -8px; margin-bottom: 1rem;">
+                Maximum loan limit: ${{ max_loan_limit|floatformat:"0" }}
             </div>
 
+            <button type="submit" class="login-btn">
+                Take credit
+            </button>
+        </form>
 
-            <div style="
-                background: linear-gradient(90deg,#2d1ea8,#5f4fe0);
-                color: white;
-                border-radius: 20px;
-                padding: 18px;
-                text-align: center;
-                cursor: pointer;
-                transition: 0.2s;
-            "
-            onmouseover="this.style.transform='scale(1.03)'"
-            onmouseout="this.style.transform='scale(1)'">
-
-                <div style="font-size:15px;">Max limit</div>
-                <div style="font-size:42px; font-weight:600;">$10000</div>
-
-            </div>
-
-        </div>
-
+        <a href="{% url 'credits' %}" class="mortgage-action-btn secondary" style="margin-top: 16px;">
+            <i class="fa-solid fa-arrow-left"></i>
+            <span>Back to Credits</span>
+        </a>
 
     </div>
 
