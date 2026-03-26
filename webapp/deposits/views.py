@@ -1,12 +1,10 @@
 from decimal import Decimal
-
+from django.contrib import messages
 from django.shortcuts import render, redirect
 from .models import PiggyBank, PiggyTransaction, Deposit , Stock, Purchase
 from main.models import Transaction, Category
 
-from decimal import Decimal
-from django.shortcuts import render, redirect
-# ... інші імпорти
+
 
 def piggy_bank(request):
     if not request.user.is_authenticated:
@@ -145,34 +143,77 @@ def index(request):
     })
 
 
+
+
+
+
 def buy_bonds(request):
     stocks = Stock.objects.all()
     purchases = Purchase.objects.filter(user=request.user).order_by("-created_at")[:10]
 
+    user_balance = getattr(request.user.account, 'balance', Decimal('0'))
+
+    MIN_INVESTMENT = Decimal('100.00')
+    MAX_PERCENT_OF_BALANCE = Decimal('0.50')
+
+    lower_bound = MIN_INVESTMENT
+    upper_bound = (user_balance * MAX_PERCENT_OF_BALANCE).quantize(Decimal('0.01'))
+
     if request.method == "POST":
         stock_id = request.POST.get("stock")
-        quantity = request.POST.get("quantity")
+        quantity_str = request.POST.get("quantity")
 
-        if stock_id and quantity:
-            try:
-                stock = Stock.objects.get(id=stock_id)
-                quantity = int(quantity)
+        if not stock_id or not quantity_str:
+            messages.error(request, "Please select a stock and enter quantity.")
+            return redirect("buy_bonds")
 
-                total_price = stock.price * quantity
+        try:
+            stock = get_object_or_404(Stock, id=stock_id)
+            quantity = int(quantity_str)
 
-                Purchase.objects.create(
-                    user=request.user,
-                    stock=stock,
-                    quantity=quantity,
-                    total_price=total_price
-                )
+            if quantity <= 0:
+                raise ValueError("Quantity must be greater than 0")
 
-            except:
-                pass
+            total_price = round(stock.price * quantity, 2)
+
+            if total_price < lower_bound:
+                messages.error(request, f"Minimum investment amount is ${lower_bound}")
+                return redirect("buy_bonds")
+
+            if total_price > upper_bound:
+                messages.error(request, f"Maximum investment amount is ${upper_bound}")
+                return redirect("buy_bonds")
+
+            if total_price > user_balance:
+                messages.error(request, "Insufficient balance!")
+                return redirect("buy_bonds")
+
+
+            account = request.user.account
+            account.balance -= total_price
+            account.save()
+
+
+            Purchase.objects.create(
+                user=request.user,
+                stock=stock,
+                quantity=quantity,
+                total_price=total_price,
+            )
+
+            messages.success(request, f"Successfully purchased {quantity} shares of {stock.name} for ${total_price}")
+
+        except ValueError as e:
+            messages.error(request, str(e))
+        except Exception:
+            messages.error(request, "An error occurred during purchase.")
 
         return redirect("buy_bonds")
 
     return render(request, "deposits/bonds.html", {
         "stocks": stocks,
-        "purchases": purchases
+        "purchases": purchases,
+        "balance": round(user_balance, 2),
+        "lower_bound": lower_bound,
+        "upper_bound": upper_bound,
     })

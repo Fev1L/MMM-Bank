@@ -9,7 +9,7 @@ from .models import Transaction, Contact, Category, InboxMessage
 from .forms import AddContactForm
 from decimal import Decimal, InvalidOperation
 from .services import make_transfer
-
+from deposits.models import Purchase
 
 def index(request):
     if request.user.is_authenticated:
@@ -28,6 +28,10 @@ def index(request):
                 total_expenses += transaction.amount
         saving_goal = account.saving_goal
         investments = 0
+        purchases = Purchase.objects.filter(user=request.user)
+        for p in purchases:
+            investments += p.total_price
+
         imrt = {
             "balance" : balance,
             "transactions" : transactions,

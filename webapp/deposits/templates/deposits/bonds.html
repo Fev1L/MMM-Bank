@@ -1,24 +1,12 @@
 ﻿{% extends 'main/layout/layout.html' %}
 {% block content %}
 {% load static %}
-<head>
-    <meta charset="UTF-8">
-    <title>Stocks</title>
-    <link rel="stylesheet" href="{% static 'main/css/main.css' %}">
-</head>
-
-
 
 <div class="dashboard">
-
     <div class="row">
-
-
         <div class="col">
-
             <div class="section">
                 <h3>Available Stocks</h3>
-
                 {% for stock in stocks %}
                 <div class="stock-card">
                     <div class="stock-info">
@@ -26,44 +14,42 @@
                         <span class="stock-name">{{ stock.name }}</span>
                         <span class="stock-symbol">{{ stock.symbol }}</span>
                     </div>
-
                     <div style="text-align:right;">
                         <div class="stock-price">${{ stock.price }}</div>
                         <div class="stock-change up">+1.2%</div>
                     </div>
                 </div>
                 {% endfor %}
-
             </div>
-
         </div>
 
-
         <div class="col">
+            <div class="section">
+                <h3>Investment Bounds</h3>
+                <p><strong>Lower bound:</strong> ${{ lower_bound }}</p>
+                <p><strong>Upper bound:</strong> ${{ upper_bound }}</p>
+                <p>Current balance: <strong>${{ balance }}</strong></p>
+            </div>
 
             <div class="section">
                 <h3>Buy Stock</h3>
-
                 <form method="POST" class="buy-form">
                     {% csrf_token %}
-
-                    <select name="stock">
+                    <select name="stock" required>
+                        <option value="">Select stock...</option>
                         {% for stock in stocks %}
                         <option value="{{ stock.id }}">
-                            {{ stock.name }} ({{ stock.symbol }})
+                            {{ stock.name }} ({{ stock.symbol }}) - ${{ stock.price }}
                         </option>
                         {% endfor %}
                     </select>
-
-                    <input type="number" name="quantity" placeholder="Quantity" required>
-
+                    <input type="number" name="quantity" placeholder="Quantity" min="1" required>
                     <button type="submit">Buy</button>
                 </form>
             </div>
 
             <div class="section">
                 <h3>Purchase History</h3>
-
                 {% for p in purchases %}
                 <div class="history-item">
                     <span>{{ p.stock.symbol }} x{{ p.quantity }}</span>
@@ -73,12 +59,8 @@
                 <p>No purchases yet</p>
                 {% endfor %}
             </div>
-
         </div>
-
     </div>
-
 </div>
 
-</body>
 {% endblock %}
