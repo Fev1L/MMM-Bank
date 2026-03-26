@@ -143,12 +143,31 @@
         margin-top: -46px;
     }
 
+    .credits-active-loans-panel {
+        margin-top: -72px;
+    }
+
+    .active-loans-list {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        max-height: 360px;
+        overflow-y: auto;
+        padding-right: 6px;
+    }
+
     @media (max-width: 900px) {
         .ct-terms-header,
         .ct-term-top,
         .ct-term-metrics {
             flex-direction: column;
             align-items: flex-start;
+        }
+
+        .active-loans-list {
+            max-height: none;
+            overflow-y: visible;
+            padding-right: 0;
         }
     }
 </style>
@@ -329,35 +348,37 @@
         </section>
     </div>
 
-
-    <div class="col">
-        <!-- Active loan -->
-        <div style="
-            background: linear-gradient(90deg,#3c25b8,#7c6ce0);
-            color:white;
-            border-radius:20px;
-            padding:18px;
-            flex: 0 0 auto;
-        ">
-            <div>Car loan</div>
-            <div style="font-size:28px;">$20000</div>
-            <div>Left: $1500</div>
-            <div>Monthly: $100</div>
-            <div>Status: Active</div>
+    <div class="col credits-active-loans-panel">
+        <div class="transactions-header">
+            <h3>Active loans</h3>
+            {% if has_more_credit_cards or show_all_cards %}
+                <a href="{% if show_all_cards %}{% url 'credits' %}{% if show_all_activity %}?activity=all{% endif %}{% else %}{% url 'credits' %}?cards=all{% if show_all_activity %}&activity=all{% endif %}{% endif %}" class="view-all">
+                    {% if show_all_cards %}Less{% else %}More{% endif %}
+                </a>
+            {% endif %}
         </div>
 
-        <div style="
-            background: linear-gradient(90deg,#3c25b8,#7c6ce0);
-            color:white;
-            border-radius:20px;
-            padding:18px;
-            flex: 0 0 auto;
-        ">
-            <div>IPhone loan</div>
-            <div style="font-size:28px;">$1300</div>
-            <div>Left: $400</div>
-            <div>Monthly: $100</div>
-            <div>Status: Active</div>
+        <div class="active-loans-list">
+            {% if active_credit_cards %}
+                {% for card in active_credit_cards %}
+                    <div style="
+                        background: linear-gradient(90deg,#3c25b8,#7c6ce0);
+                        color:white;
+                        border-radius:20px;
+                        padding:18px;
+                        flex: 0 0 auto;
+                    ">
+                        <div>{{ card.title }}</div>
+                        <div style="font-size:28px;">${{ card.amount }}</div>
+                        <div>Left: ${{ card.left }}</div>
+                        <div>Monthly: ${{ card.monthly }}</div>
+                        {% if not card.is_placeholder %}
+                            <div>Rate: {{ card.rate }}%</div>
+                        {% endif %}
+                        <div>Status: {{ card.status }}</div>
+                    </div>
+                {% endfor %}
+            {% endif %}
         </div>
     </div>
 </div>

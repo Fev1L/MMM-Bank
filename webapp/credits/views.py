@@ -11,28 +11,43 @@ from .models import Credit
 from main.models import Category, Transaction
 
 
-AVAILABLE_LOANS = {
-    'small': {
-        'client_name': 'Small loan',
+AVAILABLE_LOANS = [
+    {
+        'key': 'bicycle',
+        'client_name': 'Bicycle loan',
         'amount': Decimal('500.00'),
         'interest_rate': 5.0,
+        'gradient': 'linear-gradient(90deg,#5b3df5,#8a7be0)',
     },
-    'medium': {
-        'client_name': 'Medium loan',
-        'amount': Decimal('2000.00'),
-        'interest_rate': 4.0,
+    {
+        'key': 'motorcycle',
+        'client_name': 'Motorcycle loan',
+        'amount': Decimal('3000.00'),
+        'interest_rate': 4.5,
+        'gradient': 'linear-gradient(90deg,#4b2fd6,#7c6ce0)',
     },
-    'big': {
-        'client_name': 'Big loan',
-        'amount': Decimal('5000.00'),
-        'interest_rate': 3.0,
+    {
+        'key': 'car',
+        'client_name': 'Car loan',
+        'amount': Decimal('20000.00'),
+        'interest_rate': 3.5,
+        'gradient': 'linear-gradient(90deg,#3c25b8,#6e5de0)',
     },
-    'max': {
-        'client_name': 'Max limit',
-        'amount': Decimal('10000.00'),
-        'interest_rate': 2.0,
+    {
+        'key': 'apartment',
+        'client_name': 'Apartment loan',
+        'amount': Decimal('50000.00'),
+        'interest_rate': 2.8,
+        'gradient': 'linear-gradient(90deg,#2d1ea8,#5f4fe0)',
     },
-}
+    {
+        'key': 'house',
+        'client_name': 'House loan',
+        'amount': Decimal('100000.00'),
+        'interest_rate': 2.3,
+        'gradient': 'linear-gradient(90deg,#25198f,#5647d9)',
+    },
+]
 
 
 @login_required
@@ -40,10 +55,11 @@ def index(request):
     account = request.user.account
     balance = account.balance
     show_all_activity = request.GET.get('activity') == 'all'
+    show_all_cards = request.GET.get('cards') == 'all'
     active_credits = Credit.objects.filter(
         user=request.user,
         is_active=True
-    )
+    ).order_by('-created_at')
     loan_activity_queryset = Transaction.objects.filter(
         account=account
     ).filter(
@@ -52,12 +68,49 @@ def index(request):
         | Q(title__startswith='Mortgage approved:')
     ).select_related('category').order_by('-created_at')
     loan_activity = loan_activity_queryset if show_all_activity else loan_activity_queryset[:4]
+    active_credit_cards = []
+    credits_for_cards = active_credits if show_all_cards else active_credits[:2]
+    for credit in credits_for_cards:
+        estimated_monthly = (credit.amount * Decimal(str(1 + credit.interest_rate / 100))) / Decimal('12')
+        active_credit_cards.append({
+            'title': credit.client_name,
+            'amount': credit.amount,
+            'left': credit.amount,
+            'monthly': estimated_monthly.quantize(Decimal('0.01')),
+            'rate': credit.interest_rate,
+            'status': 'Active' if credit.is_active else 'Closed',
+            'is_placeholder': False,
+        })
+    if not active_credit_cards:
+        active_credit_cards = [
+            {
+                'title': 'No active loans yet',
+                'amount': Decimal('0.00'),
+                'left': Decimal('0.00'),
+                'monthly': Decimal('0.00'),
+                'rate': Decimal('0.00'),
+                'status': 'Waiting for application',
+                'is_placeholder': True,
+            },
+            {
+                'title': 'No active loans yet',
+                'amount': Decimal('0.00'),
+                'left': Decimal('0.00'),
+                'monthly': Decimal('0.00'),
+                'rate': Decimal('0.00'),
+                'status': 'Waiting for application',
+                'is_placeholder': True,
+            },
+        ]
 
     return render(request, 'credits/index.html', {
         'has_active_loan': active_credits.exists(),
         'balance': balance,
         'loan_activity': loan_activity,
         'show_all_activity': show_all_activity,
+        'active_credit_cards': active_credit_cards,
+        'show_all_cards': show_all_cards,
+        'has_more_credit_cards': active_credits.count() > 2,
     })
 
 @login_required
@@ -125,7 +178,7 @@ def avaible_loans(request):
 
     if request.method == 'POST':
         loan_key = request.POST.get('loan_type')
-        loan_data = AVAILABLE_LOANS.get(loan_key)
+        loan_data = next((loan for loan in AVAILABLE_LOANS if loan['key'] == loan_key), None)
 
         if loan_data is None:
             messages.error(request, 'Please choose a valid loan option.')
