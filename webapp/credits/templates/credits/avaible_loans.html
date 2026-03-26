@@ -13,91 +13,106 @@
             Choose your fintech loan
         </p>
 
-
-        <!-- КОЛОНКА -->
+        {% if messages %}
+            {% for message in messages %}
+                <div class="{% if message.tags == 'success' %}login-success{% else %}login-error{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
 
         <div style="display: flex; flex-direction: column; gap: 12px;">
 
-            <div style="
-                background: linear-gradient(90deg,#5b3df5,#8a7be0);
-                color: white;
-                border-radius: 20px;
-                padding: 18px;
-                text-align: center;
-                cursor: pointer;
-                transition: 0.2s;
-            "
-            onmouseover="this.style.transform='scale(1.03)'"
-            onmouseout="this.style.transform='scale(1)'">
+            <form method="POST" style="margin: 0;">
+                {% csrf_token %}
+                <input type="hidden" name="loan_type" value="small">
+                <button type="submit" style="
+                    width: 100%;
+                    border: none;
+                    background: linear-gradient(90deg,#5b3df5,#8a7be0);
+                    color: white;
+                    border-radius: 20px;
+                    padding: 18px;
+                    text-align: center;
+                    cursor: pointer;
+                    transition: 0.2s;
+                "
+                onmouseover="this.style.transform='scale(1.03)'"
+                onmouseout="this.style.transform='scale(1)'">
+                    <div style="font-size:15px;">Small loan</div>
+                    <div style="font-size:42px; font-weight:600;">$500</div>
+                </button>
+            </form>
 
-                <div style="font-size:15px;">Small loan</div>
-                <div style="font-size:42px; font-weight:600;">$500</div>
+            <form method="POST" style="margin: 0;">
+                {% csrf_token %}
+                <input type="hidden" name="loan_type" value="medium">
+                <button type="submit" style="
+                    width: 100%;
+                    border: none;
+                    background: linear-gradient(90deg,#4b2fd6,#7c6ce0);
+                    color: white;
+                    border-radius: 20px;
+                    padding: 18px;
+                    text-align: center;
+                    cursor: pointer;
+                    transition: 0.2s;
+                "
+                onmouseover="this.style.transform='scale(1.03)'"
+                onmouseout="this.style.transform='scale(1)'">
+                    <div style="font-size:15px;">Medium loan</div>
+                    <div style="font-size:42px; font-weight:600;">$2000</div>
+                </button>
+            </form>
 
-            </div>
+            <form method="POST" style="margin: 0;">
+                {% csrf_token %}
+                <input type="hidden" name="loan_type" value="big">
+                <button type="submit" style="
+                    width: 100%;
+                    border: none;
+                    background: linear-gradient(90deg,#3c25b8,#6e5de0);
+                    color: white;
+                    border-radius: 20px;
+                    padding: 18px;
+                    text-align: center;
+                    cursor: pointer;
+                    transition: 0.2s;
+                "
+                onmouseover="this.style.transform='scale(1.03)'"
+                onmouseout="this.style.transform='scale(1)'">
+                    <div style="font-size:15px;">Big loan</div>
+                    <div style="font-size:42px; font-weight:600;">$5000</div>
+                </button>
+            </form>
 
-
-            <div style="
-                background: linear-gradient(90deg,#4b2fd6,#7c6ce0);
-                color: white;
-                border-radius: 20px;
-                padding: 18px;
-                text-align: center;
-                cursor: pointer;
-                transition: 0.2s;
-            "
-            onmouseover="this.style.transform='scale(1.03)'"
-            onmouseout="this.style.transform='scale(1)'">
-
-                <div style="font-size:15px;">Medium loan</div>
-                <div style="font-size:42px; font-weight:600;">$2000</div>
-
-            </div>
-
-
-            <div style="
-                background: linear-gradient(90deg,#3c25b8,#6e5de0);
-                color: white;
-                border-radius: 20px;
-                padding: 18px;
-                text-align: center;
-                cursor: pointer;
-                transition: 0.2s;
-            "
-            onmouseover="this.style.transform='scale(1.03)'"
-            onmouseout="this.style.transform='scale(1)'">
-
-                <div style="font-size:15px;">Big loan</div>
-                <div style="font-size:42px; font-weight:600;">$5000</div>
-
-            </div>
-
-
-            <div style="
-                background: linear-gradient(90deg,#2d1ea8,#5f4fe0);
-                color: white;
-                border-radius: 20px;
-                padding: 18px;
-                text-align: center;
-                cursor: pointer;
-                transition: 0.2s;
-            "
-            onmouseover="this.style.transform='scale(1.03)'"
-            onmouseout="this.style.transform='scale(1)'">
-
-                <div style="font-size:15px;">Max limit</div>
-                <div style="font-size:42px; font-weight:600;">$10000</div>
-
-            </div>
+            <form method="POST" style="margin: 0;">
+                {% csrf_token %}
+                <input type="hidden" name="loan_type" value="max">
+                <button type="submit" style="
+                    width: 100%;
+                    border: none;
+                    background: linear-gradient(90deg,#2d1ea8,#5f4fe0);
+                    color: white;
+                    border-radius: 20px;
+                    padding: 18px;
+                    text-align: center;
+                    cursor: pointer;
+                    transition: 0.2s;
+                "
+                onmouseover="this.style.transform='scale(1.03)'"
+                onmouseout="this.style.transform='scale(1)'">
+                    <div style="font-size:15px;">Max limit</div>
+                    <div style="font-size:42px; font-weight:600;">$10000</div>
+                </button>
+            </form>
 
         </div>
 
-
-        <!-- BACK BUTTON DOWN -->
         <a href="{% url 'credits' %}" class="login-btn"
            style="margin-top:10px; display:block; text-align:center;">
             ← Back
         </a>
-
 
     </div>
 

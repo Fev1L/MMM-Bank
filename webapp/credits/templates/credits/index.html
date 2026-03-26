@@ -288,36 +288,43 @@
         <section class="transactions">
             <div class="transactions-header">
                 <h3>Loan activity</h3>
-                <a href="#" class="view-all">More</a>
+                <a href="{% if show_all_activity %}{% url 'credits' %}{% else %}{% url 'credits' %}?activity=all{% endif %}" class="view-all">
+                    {% if show_all_activity %}Less{% else %}More{% endif %}
+                </a>
             </div>
             <div class="transaction-list">
-                <div class="transaction-item">
-                    <div class="transaction-left">
-                        <div class="icon"><i class="fa-solid fa-circle-arrow-up"></i></div>
-                        <div>
-                            <div class="title">Payment</div>
-                            <div class="category">Monthly</div>
+                {% if loan_activity %}
+                    {% for item in loan_activity %}
+                        <div class="transaction-item">
+                            <div class="transaction-left">
+                                <div class="icon">
+                                    <i class="{% if item.category.type == 'withdraw' %}fa-solid fa-circle-arrow-up{% else %}fa-solid fa-circle-arrow-down{% endif %}"></i>
+                                </div>
+                                <div>
+                                    <div class="title">{{ item.title }}</div>
+                                    <div class="category">{{ item.category.name }}</div>
+                                </div>
+                            </div>
+                            <div class="transaction-right {% if item.category.type == 'withdraw' %}negative{% else %}positive{% endif %}">
+                                <div class="amount">{% if item.category.type == 'withdraw' %}-{% endif %}${{ item.amount }}</div>
+                                <div class="date">{{ item.created_at|date:"j M Y" }}</div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="transaction-item">
+                        <div class="transaction-left">
+                            <div class="icon"><i class="fa-solid fa-receipt"></i></div>
+                            <div>
+                                <div class="title">No credit activity yet</div>
+                                <div class="category">Take a loan or make a payment</div>
+                            </div>
+                        </div>
+                        <div class="transaction-right">
+                            <div class="date">MMM Bank</div>
                         </div>
                     </div>
-                    <div class="transaction-right negative">
-                        <div class="amount"> -$100</div>
-                        <div class="date">7 Mar 2026</div>
-                    </div>
-                </div>
-
-                <div class="transaction-item">
-                    <div class="transaction-left">
-                        <div class="icon"><i class="fa-solid fa-circle-arrow-down"></i></div>
-                        <div>
-                            <div class="title">Loan received</div>
-                            <div class="category">Car loan</div>
-                        </div>
-                    </div>
-                    <div class="transaction-right positive">
-                        <div class="amount"> $2000</div>
-                        <div class="date">5 Mar 2026</div>
-                    </div>
-                </div>
+                {% endif %}
             </div>
         </section>
     </div>
