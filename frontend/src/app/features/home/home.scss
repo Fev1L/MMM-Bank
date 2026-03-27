@@ -1,145 +1,301 @@
-/*  FOR NON LOGIN   */
-.bank-promo{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
+$primary-purple: #6315e5;
+$primary-hover: #5011ba;
+$primary-light: rgba(99, 21, 229, 0.08);
+$text-main: #111111;
+$text-muted: #666e75;
+$bg-white: #ffffff;
+$border-color: rgba(0, 0, 0, 0.06);
+$max-width: 1140px;
 
-  padding:4rem;
-  border-radius:1.5rem;
-
-  background:linear-gradient(135deg,#5b3df5,#7b61ff,#a594ff);
-
-  color:white;
-  overflow:hidden;
+:host {
+  display: block;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  color: $text-main;
+  background-color: $bg-white;
 }
 
-.promo-left{
-  max-width:500px;
+.header-sticky {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(15px); // Ефект розмиття фону
+  border-bottom: 1px solid $border-color;
+  transition: all 0.3s ease;
+
+  .navbar {
+    max-width: $max-width;
+    margin: 0 auto;
+    padding: 16px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .logo {
+      font-size: 22px;
+      font-weight: 900;
+      letter-spacing: -1.5px;
+      color: $text-main;
+      cursor: pointer;
+    }
+
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 32px;
+      margin: 0;
+      padding: 0;
+
+      a {
+        text-decoration: none;
+        color: $text-main;
+        font-weight: 600;
+        font-size: 15px;
+        transition: color 0.2s;
+
+        &:hover {
+          color: $primary-purple;
+        }
+      }
+    }
+
+    .auth-buttons {
+      display: flex;
+      gap: 12px;
+    }
+  }
 }
 
-.bank-promo h1{
-  font-size:3rem;
-  margin-bottom:1rem;
+.content-wrapper {
+  max-width: $max-width;
+  margin: 0 auto;
+  padding: 0 24px;
 }
 
-.bank-promo p{
-  font-size:1.2rem;
-  opacity:0.9;
-  margin-bottom:2rem;
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: clamp(60px, 12vw, 140px) 0;
+  gap: 60px;
+
+  .hero-content {
+    flex: 1.2;
+
+    .badge {
+      display: inline-block;
+      background: $primary-light;
+      color: $primary-purple;
+      padding: 6px 14px;
+      border-radius: 100px;
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 24px;
+    }
+
+    h1 {
+      font-size: clamp(40px, 7vw, 84px);
+      font-weight: 800;
+      line-height: 0.95;
+      letter-spacing: -4px;
+      margin-bottom: 24px;
+    }
+
+    p {
+      font-size: clamp(18px, 2.2vw, 22px);
+      color: $text-muted;
+      line-height: 1.4;
+      margin-bottom: 40px;
+      max-width: 520px;
+    }
+
+    .sub-text {
+      display: block;
+      margin-top: 16px;
+      font-size: 13px;
+      color: $text-muted;
+    }
+  }
+
+  .hero-image {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+
+    .phone-mockup {
+      width: clamp(260px, 28vw, 340px);
+      aspect-ratio: 9 / 18.5;
+      background: linear-gradient(135deg, $primary-purple 0%, #8b44ff 100%);
+      border: 12px solid #111;
+      border-radius: 48px;
+      box-shadow: 0 50px 100px -20px rgba(99, 21, 229, 0.3);
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+    }
+  }
 }
 
-/* BUTTONS */
+.stats-bar {
+  display: flex;
+  justify-content: space-between;
+  padding: 60px 0;
+  border-top: 1px solid $border-color;
+  border-bottom: 1px solid $border-color;
 
-.promo-buttons{
-  display:flex;
-  gap:1rem;
-  margin-bottom:2rem;
+  .stat-item {
+    .stat-value {
+      display: block;
+      font-size: 36px;
+      font-weight: 800;
+      letter-spacing: -1px;
+    }
+    .stat-label {
+      font-size: 14px;
+      color: $text-muted;
+      font-weight: 500;
+    }
+  }
 }
 
-.promo-login,
-.promo-register{
-  padding:0.8rem 1.4rem;
-  border-radius:1rem;
-  text-decoration:none;
-  font-weight:500;
-  display:flex;
-  align-items:center;
-  gap:0.5rem;
-  transition:0.25s;
+.features {
+  padding: 120px 0;
+
+  h2 {
+    font-size: clamp(32px, 5vw, 54px);
+    font-weight: 800;
+    letter-spacing: -2px;
+    margin-bottom: 60px;
+    text-align: center;
+  }
+
+  .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 24px;
+
+    .feature-card {
+      padding: 48px;
+      border-radius: 32px;
+      min-height: 320px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+      cursor: default;
+
+      .card-icon {
+        font-size: 44px;
+        margin-bottom: auto;
+      }
+
+      h3 {
+        font-size: 26px;
+        font-weight: 700;
+        margin-bottom: 12px;
+        letter-spacing: -0.5px;
+      }
+
+      p {
+        font-size: 16px;
+        line-height: 1.5;
+      }
+
+      &.dark {
+        background: $primary-purple;
+        color: white;
+        &:hover { transform: scale(1.02); }
+      }
+
+      &.light {
+        background: #f8f9fb;
+        color: $text-main;
+        p { color: $text-muted; }
+        &:hover { background: #f0f2f5; }
+      }
+    }
+  }
 }
 
-.promo-login{
-  background:white;
-  color:#5b3df5;
+button {
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
+  font-weight: 600;
+  border-radius: 100px;
+  transition: all 0.2s ease;
 }
 
-.promo-login:hover{
-  transform:translateY(-3px);
+.btn-primary {
+  background: $primary-purple;
+  color: white;
+  padding: 16px 36px;
+  font-size: 17px;
+  box-shadow: 0 10px 25px rgba(99, 21, 229, 0.2);
+
+  &:hover {
+    background: $primary-hover;
+    transform: translateY(-2px);
+    box-shadow: 0 15px 30px rgba(99, 21, 229, 0.3);
+  }
 }
 
-.promo-register{
-  border:1px solid rgba(255,255,255,0.6);
-  color:white;
+.btn-signup {
+  background: $primary-purple;
+  color: white;
+  padding: 10px 22px;
+  font-size: 14px;
+  &:hover { background: $primary-hover; }
 }
 
-.promo-register:hover{
-  background:rgba(255,255,255,1);
-  transform:translateY(-2px);
+.btn-login {
+  background: transparent;
+  color: $text-main;
+  padding: 10px 22px;
+  font-size: 14px;
+  &:hover { background: #f0f0f0; }
 }
 
-/* FEATURES */
-
-.promo-features{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:1rem;
+.final-cta {
+  text-align: center;
+  padding: 100px 0;
+  background: #f9fafb;
+  border-radius: 40px;
+  margin-bottom: 60px;
+  h2 { font-size: 40px; margin-bottom: 30px; letter-spacing: -1px; }
 }
 
-.feature{
-  background:rgba(255,255,255,0.15);
-  padding:0.7rem 1rem;
-  border-radius:0.8rem;
+@media (max-width: 992px) {
+  .hero {
+    flex-direction: column;
+    text-align: center;
+    padding-top: 60px;
+
+    .hero-content {
+      p { margin: 24px auto 40px; }
+    }
+    .hero-image {
+      justify-content: center;
+      width: 100%;
+    }
+  }
+
+  .nav-links {
+    display: none !important;
+  }
 }
 
-/* CARDS */
+@media (max-width: 600px) {
+  .stats-bar {
+    flex-direction: column;
+    gap: 32px;
+    text-align: center;
+  }
 
-.promo-cards{
-  position:relative;
-  width:320px;
-  height:200px;
-}
-
-.promo-card{
-  position:absolute;
-  width:260px;
-  height:160px;
-
-  border-radius:1.2rem;
-  padding:1rem;
-
-  background:linear-gradient(135deg,#1f2937,#374151);
-
-  box-shadow:0 15px 40px rgba(0,0,0,0.4);
-
-  transition:0.4s;
-}
-
-/* card styles */
-
-.card1{
-  top:0;
-  left:0;
-  transform:rotate(-10deg);
-}
-
-.card2{
-  top:40px;
-  left:40px;
-  transform:rotate(10deg);
-}
-
-/* hover animation */
-
-.bank-promo:hover .card1{
-  transform:rotate(-5deg) translateY(-10px);
-}
-
-.bank-promo:hover .card2{
-  transform:rotate(5deg) translateY(-15px);
-}
-
-/* chip */
-
-.card-chip{
-  width:40px;
-  height:30px;
-  background:gold;
-  border-radius:5px;
-  margin-bottom:2rem;
-}
-
-.card-number{
-  font-size: clamp(16px,1.4vw,22px);
-  letter-spacing: 2px;
-  margin-top: clamp(20px,2vw,35px);
+  .navbar .btn-login {
+    display: none;
+  }
 }
