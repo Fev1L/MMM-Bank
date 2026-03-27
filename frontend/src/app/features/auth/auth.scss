@@ -1,0 +1,74 @@
+$primary-purple: #6315e5;
+
+.auth-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f8f9fb;
+  padding: 20px;
+}
+
+.auth-card {
+  background: white;
+  padding: 48px;
+  border-radius: 32px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.05);
+  width: 100%;
+  max-width: 440px;
+  text-align: center;
+
+  .auth-header {
+    margin-bottom: 32px;
+    .logo { font-weight: 900; font-size: 24px; margin-bottom: 16px; color: $primary-purple; }
+    h1 { font-size: 28px; font-weight: 800; letter-spacing: -1px; margin-bottom: 8px; }
+    p { color: #666e75; font-size: 16px; }
+  }
+}
+
+.form-group {
+  text-align: left;
+  margin-bottom: 20px;
+
+  label { display: block; font-weight: 600; font-size: 14px; margin-bottom: 8px; }
+
+  input {
+    width: 100%;
+    padding: 14px 18px;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+    font-size: 16px;
+    transition: all 0.2s;
+    box-sizing: border-box;
+
+    &:focus {
+      outline: none;
+      border-color: $primary-purple;
+      box-shadow: 0 0 0 4px rgba(99, 21, 229, 0.1);
+    }
+
+    &.error { border-color: #ff4d4d; }
+  }
+}
+
+.btn-primary {
+  width: 100%;
+  background: $primary-purple;
+  color: white;
+  padding: 16px;
+  border: none;
+  border-radius: 100px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: opacity 0.2s;
+
+  &:disabled { opacity: 0.5; cursor: not-allowed; }
+}
+
+.auth-footer {
+  margin-top: 24px;
+  p { color: #666e75; font-size: 14px; }
+  span { color: $primary-purple; font-weight: 700; cursor: pointer; &:hover { text-decoration: underline; } }
+}
