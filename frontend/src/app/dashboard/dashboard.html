@@ -1,22 +1,65 @@
-<div class="dashboard-container">
+<div class="dashboard-wrapper">
+
   <aside class="sidebar">
-    <div class="logo">MMM Bank</div>
-    <nav>
-      <a href="#" class="active">Home</a>
-      <a href="#">My cards</a>
-      <a href="#">History</a>
+    <div class="user-profile">
+      <div class="avatar">{{ user.initials }}</div>
+      <div class="user-info">
+        <h3>{{ user.firstName }} {{ user.lastName }}</h3>
+        <p>{{ user.plan }} <i class="fa-solid fa-chevron-down"></i></p>
+      </div>
+    </div>
+
+    <nav class="side-nav">
+      <a class="active"><i class="fa-solid fa-wallet"></i> Accounts</a>
+      <a><i class="fa-regular fa-credit-card"></i> Cards</a>
+      <a><i class="fa-solid fa-money-bill-transfer"></i> Transfers</a>
+      <a><i class="fa-solid fa-piggy-bank"></i> Deposits</a>
+      <a><i class="fa-solid fa-hand-holding-dollar"></i> Loans</a>
+      <a><i class="fa-solid fa-chart-pie"></i> Statistics</a>
     </nav>
+
+    <div class="bottom-nav">
+      <a><i class="fa-solid fa-circle-question"></i> Help</a>
+      <a (click)="onLogout()" class="logout"><i class="fa-solid fa-right-from-bracket"></i> Log out</a>
+    </div>
   </aside>
 
   <main class="main-content">
-    <header>
-      <h1>Hello, user!</h1>
-      <button class="logout-btn" (click)="onLogout()">Log out</button>
+
+    <header class="balance-header">
+      <div class="balance-info">
+        <h1>{{ totalBalance | currency:'UAH':'symbol':'1.2-2' }}</h1>
+        <p>Total balance across all accounts</p>
+        <div class="quick-actions">
+          <button class="btn-light"><i class="fa-solid fa-plus"></i> Add money</button>
+          <button class="btn-light"><i class="fa-solid fa-arrow-right-arrow-left"></i> Exchange</button>
+        </div>
+      </div>
     </header>
 
-    <div class="balance-card">
-      <p>Your balance</p>
-      <h2>$4,500.00</h2>
+    <div class="tabs">
+      <button [class.active]="activeTab === 'accounts'" (click)="activeTab = 'accounts'">Accounts</button>
+      <button [class.active]="activeTab === 'transactions'" (click)="activeTab = 'transactions'">Transactions</button>
     </div>
+
+    <div class="accounts-grid" *ngIf="activeTab === 'accounts'">
+      <div class="account-card" *ngFor="let acc of accounts">
+        <div class="card-top">
+          <div class="currency-info">
+            <h4>{{ acc.currency }}</h4>
+            <span>{{ acc.code }}</span>
+          </div>
+          <div class="flag-icon">{{ acc.flag }}</div>
+        </div>
+        <div class="card-bottom">
+          <h2>{{ acc.symbol }}{{ acc.balance | number:'1.2-2' }}</h2>
+        </div>
+      </div>
+    </div>
+
+    <div class="transactions-view" *ngIf="activeTab === 'transactions'">
+      <p class="empty-state">No recent transactions.</p>
+    </div>
+
   </main>
 </div>

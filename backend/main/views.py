@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from django.http import JsonResponse
@@ -44,6 +45,13 @@ def api_register(request):
                 first_name=data.get('firstName', ''),
                 last_name=data.get('lastName', '')
             )
+
+            profile = user.profile
+            profile.nationality = data.get('nationality', '')
+            profile.address_city = data.get('city', '')
+            profile.address_street = data.get('street', '')
+            profile.address_building = data.get('building', '')
+            profile.save()
 
             login(request, user)
 
@@ -113,3 +121,54 @@ def check_username(request):
             })
         except Exception:
             return JsonResponse({'error': 'Invalid data'}, status=400)
+
+def get_user_profile(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({'error': 'Not authenticated'}, status=401)
+
+    profile = request.user.profile
+    accounts = request.user.accounts.all()
+
+    return JsonResponse({
+        'personal': {
+            'fullName': f"{request.user.first_name} {request.user.last_name}",
+            'initials': f"{request.user.first_name[0]}{request.user.last_name[0]}" if request.user.first_name else "??",
+            'nationality': profile.nationality,
+            'avatar': profile.avatar.url if profile.avatar else None,
+        },
+        'settings': {
+            'baseCurrency': profile.base_currency,
+            'language': profile.language,
+            'savingGoal': float(profile.saving_goal)
+        },
+        'accounts': [
+            {'currency': acc.currency, 'balance': float(acc.balance)}
+            for acc in accounts
+        ]
+    })
+
+@login_required
+def api_dashboard_data(request):
+    user = request.user
+    accounts = user.accounts.all()
+
+    accounts_data = []
+    total_balance_uah = 0
+
+    for acc in accounts:
+        accounts_data.append({
+            'currency': acc.get_currency_display(),
+            'code': acc.currency,
+            'balance': float(acc.balance),
+        })
+        total_balance_uah += float(acc.balance)
+
+    return JsonResponse({
+        'user': {
+            'firstName': user.first_name,
+            'lastName': user.last_name,
+            'initials': f"{user.first_name[0]}{user.last_name[0]}" if user.first_name else "US",
+        },
+        'totalBalance': total_balance_uah,
+        'accounts': accounts_data,
+    })

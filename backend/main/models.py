@@ -1,4 +1,7 @@
+from django.contrib.auth.models import User
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.utils import timezone
 
 class EmailVerification(models.Model):
@@ -8,3 +11,46 @@ class EmailVerification(models.Model):
 
     def is_valid(self):
         return (timezone.now() - self.created_at).seconds < 600
+
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+
+    avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
+    nationality = models.CharField(max_length=100, blank=True)
+    address_city = models.CharField(max_length=100, blank=True)
+    address_street = models.CharField(max_length=100, blank=True)
+    address_building = models.CharField(max_length=20, blank=True)
+
+    base_currency = models.CharField(max_length=3, default='USD')
+    language = models.CharField(max_length=5, default='en')
+
+    saving_goal = models.DecimalField(max_digits=12, decimal_places=2, default=0)
+
+    def __str__(self):
+        return f"Profile for {self.user.username}"
+class Account(models.Model):
+    user = models.ForeignKey(User, related_name='accounts', on_delete=models.CASCADE)
+
+    CURRENCY_CHOICES = [
+        ('UAH', 'Ukrainian Hryvnia'),
+        ('USD', 'US Dollar'),
+        ('EUR', 'Euro'),
+        ('GBP', 'United Kingdom'),
+        ('PLN', 'Polish Zloty'),
+    ]
+    currency = models.CharField(max_length=3, choices=CURRENCY_CHOICES, default='UAH')
+
+    balance = models.DecimalField(max_digits=12, decimal_places=2, default=0)
+
+    class Meta:
+        unique_together = ('user', 'currency')
+
+    def __str__(self):
+        return f"{self.user.username} - {self.currency} account"
+
+@receiver(post_save, sender=User)
+def create_user_bank_data(sender, instance, created, **kwargs):
+    if created:
+        UserProfile.objects.create(user=instance)
+        Account.objects.create(user=instance, currency='USD', balance=0)
