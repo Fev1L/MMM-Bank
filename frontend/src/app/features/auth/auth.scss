@@ -72,3 +72,66 @@ $primary-purple: #6315e5;
   p { color: #666e75; font-size: 14px; }
   span { color: $primary-purple; font-weight: 700; cursor: pointer; &:hover { text-decoration: underline; } }
 }
+
+.error-text {
+  color: #ff4d4d;
+  font-size: 12px;
+  margin-top: 4px;
+  display: block;
+}
+input.ng-invalid.ng-touched {
+  border-color: #ff4d4d;
+}
+
+.password-field {
+  position: relative;
+  .eye-icon {
+    position: absolute;
+    right: 15px;
+    top: 38px;
+    cursor: pointer;
+    font-size: 18px;
+    opacity: 0.6;
+    &:hover { opacity: 1; }
+  }
+}
+
+.stepper {
+  display: flex;
+  gap: 10px;
+  margin: 20px 0;
+  .step {
+    flex: 1;
+    height: 4px;
+    background: #e0e0e0;
+    border-radius: 2px;
+    &.active { background: #6315e5; }
+  }
+}
+
+.btn-group {
+  display: flex;
+  gap: 15px;
+  margin-top: 20px;
+  .btn-secondary {
+    flex: 1;
+    background: #f1f1f1;
+    color: #333;
+    border: none;
+    padding: 12px;
+    border-radius: 12px;
+    cursor: pointer;
+  }
+  .btn-primary, .btn-success { flex: 2; }
+}
+
+.btn-success {
+  background: #28a745;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  &:disabled { opacity: 0.5; cursor: not-allowed; }
+}

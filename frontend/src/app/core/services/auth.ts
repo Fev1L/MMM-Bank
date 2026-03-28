@@ -10,4 +10,8 @@ export class AuthService {
   login(credentials: any) {
     return this.http.post(`${this.API_URL}/api/login/`, credentials, { withCredentials: true });
   }
+
+  register(userData: any) {
+    return this.http.post(`${this.API_URL}/api/register/`, userData, { withCredentials: true });
+  }
 }

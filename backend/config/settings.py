@@ -18,10 +18,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
 
-    'main',
-    'more',
-    'credits',
-    'deposits',
+    'config',
+    'main'
 ]
 
 MIDDLEWARE = [
@@ -54,13 +52,13 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'main.context_processors.unread_messages',
+                # 'main.context_processors.unread_messages',
             ],
         },
     },
 ]
 
-WSGI_APPLICATION = 'webapp.wsgi.application'
+WSGI_APPLICATION = 'config.wsgi.application'
 
 DATABASES = {
     'default': {
@@ -105,6 +103,7 @@ LOGIN_URL = '/login'
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:4200",
+    "http://127.0.0.1:4200",
 ]
 
 CORS_ALLOW_CREDENTIALS = True

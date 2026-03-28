@@ -1,0 +1,26 @@
+.dashboard-container {
+  display: flex;
+  min-height: 100vh;
+  background: #f4f7fe;
+
+  .sidebar {
+    width: 260px;
+    background: #6315e5; // Твій колір!
+    color: white;
+    padding: 30px;
+  }
+
+  .main-content {
+    flex: 1;
+    padding: 40px;
+
+    .balance-card {
+      background: white;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+      max-width: 400px;
+      h2 { color: #6315e5; font-size: 32px; }
+    }
+  }
+}
