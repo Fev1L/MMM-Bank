@@ -30,6 +30,9 @@
         <div class="form-group" *ngIf="!isCodeSent">
           <label>Email Address</label>
           <input type="email" formControlName="email" placeholder="name@email.com" [readonly]="isCodeSent">
+          <small class="error-text" *ngIf="emailError">
+            {{ emailError }}
+          </small>
         </div>
 
         <div class="otp-wrapper" *ngIf="isCodeSent">
@@ -66,55 +69,101 @@
       <div *ngIf="!isLogin && currentStep === 2">
         <div class="form-group">
           <label>Create Username</label>
-          <input type="text" formControlName="username" placeholder="At least 3 characters">
+          <input type="text" formControlName="username" (input)="onUsernameChange()" placeholder="At least 3 characters">
+          <small class="error-text" *ngIf="usernameError">{{ usernameError }}</small>
+          <small class="error-text" *ngIf="authForm.get('username')?.touched && authForm.get('username')?.errors?.['minlength']">
+            Username must be at least 3 characters.
+          </small>
         </div>
         <div class="form-group password-field">
           <label>Password</label>
           <input [type]="showPassword ? 'text' : 'password'" formControlName="password" placeholder="Min. 8 characters">
           <i class="eye-icon {{ showPassword ? 'fa-solid fa-eye' : 'fa-solid fa-eye-slash'  }}" (click)="togglePassword()"></i>
+          <small class="error-text" *ngIf="authForm.get('password')?.touched && authForm.get('password')?.errors?.['minlength']">
+            Password is too short (min 8).
+          </small>
         </div>
         <div class="form-group password-field">
           <label>Confirm Password</label>
           <input [type]="showConfirmPassword ? 'text' : 'password'" formControlName="confirmPassword" placeholder="Repeat password">
-          <i class="eye-icon {{ showPassword ? 'fa-solid fa-eye' : 'fa-solid fa-eye-slash'  }}" (click)="togglePassword()"></i>
+          <i class="eye-icon {{ showConfirmPassword ? 'fa-solid fa-eye' : 'fa-solid fa-eye-slash'  }}" (click)="toggleConfirmPassword()"></i>
+          <small class="error-text" *ngIf="authForm.hasError('passwordMismatch') && authForm.get('confirmPassword')?.touched">
+            Passwords do not match.
+          </small>
         </div>
         <div class="btn-group">
-          <button type="button" class="btn-secondary" (click)="prevStep()">Back</button>
-          <button type="button" class="btn-primary" (click)="nextStep()"
-                  [disabled]="authForm.get('username')?.invalid || authForm.get('password')?.invalid || authForm.hasError('mismatch')">Next</button>
+          <button type="button" class="btn-primary"
+                  (click)="nextStep()"
+                  [disabled]="authForm.get('username')?.invalid ||
+                   authForm.get('password')?.invalid ||
+                   authForm.get('confirmPassword')?.invalid ||
+                   authForm.hasError('passwordMismatch') ||
+                   !!usernameError">
+            Next
+          </button>
         </div>
       </div>
 
       <div *ngIf="!isLogin && currentStep === 3">
+        <div class="step-header">
+          <h2>Personal data</h2>
+          <p>This information is required to open an account</p>
+        </div>
+
         <div class="row">
           <div class="form-group">
             <label>First Name</label>
-            <input type="text" formControlName="firstName">
+            <input type="text" formControlName="firstName" placeholder="John">
           </div>
           <div class="form-group">
             <label>Last Name</label>
-            <input type="text" formControlName="lastName">
+            <input type="text" formControlName="lastName" placeholder="Doe">
           </div>
         </div>
+
         <div class="form-group">
           <label>Nationality</label>
-          <select formControlName="nationality">
-            <option value="Ukrainian">Ukrainian</option>
-            <option value="Polish">Polish</option>
+          <select formControlName="nationality" class="custom-select">
+            <option value="" disabled selected>Select your country</option>
+            <option value="Ukrainian">Ukraine 🇺🇦</option>
+            <option value="Polish">Poland 🇵🇱</option>
+            <option value="German">Germany 🇩🇪</option>
+            <option value="French">France 🇫🇷</option>
+            <option value="USA">USA 🇺🇸</option>
             <option value="Other">Other</option>
           </select>
         </div>
-        <div class="form-group">
-          <label>Residential Address</label>
-          <input type="text" formControlName="address" placeholder="City, Street, Building">
+
+        <div class="address-grid">
+          <div class="form-group city">
+            <label>City</label>
+            <input type="text" formControlName="city" placeholder="Kyiv">
+          </div>
+          <div class="form-group street">
+            <label>Street</label>
+            <input type="text" formControlName="street" placeholder="Khreshchatyk St">
+          </div>
+          <div class="form-group building">
+            <label>Bld.</label>
+            <input type="text" formControlName="building" placeholder="10/2">
+          </div>
         </div>
+
         <div class="btn-group">
-          <button type="button" class="btn-secondary" (click)="prevStep()">Back</button>
-          <button type="submit" class="btn-success" [disabled]="authForm.invalid">Complete & Open Account</button>
+          <button type="submit" class="btn-success"
+                  [disabled]="authForm.invalid"
+                  (click)="onSubmit()">
+            Complete & Open Account
+          </button>
         </div>
       </div>
 
-      <button type="submit" class="btn-primary" *ngIf="isLogin" [disabled]="authForm.get('username')?.invalid || authForm.get('password')?.invalid">
+      <button
+        type="button"
+        class="btn-primary"
+        *ngIf="isLogin"
+        [disabled]="authForm.get('username')?.invalid || authForm.get('password')?.invalid"
+        (click)="onSubmit()">
         Log In
       </button>
     </form>

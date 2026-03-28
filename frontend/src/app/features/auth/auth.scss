@@ -1,4 +1,5 @@
 $primary-purple: #6315e5;
+$primary-hover: #5011ba;
 
 .auth-container {
   min-height: 100vh;
@@ -70,7 +71,7 @@ $primary-purple: #6315e5;
 .auth-footer {
   margin-top: 24px;
   p { color: #666e75; font-size: 14px; }
-  span { color: $primary-purple; font-weight: 700; cursor: pointer; &:hover { text-decoration: underline; } }
+  span { color: $primary-purple; font-weight: 700; cursor: pointer;  &:hover { text-decoration: underline; } }
 }
 
 .error-text {
@@ -123,6 +124,17 @@ input.ng-invalid.ng-touched {
     cursor: pointer;
   }
   .btn-primary, .btn-success { flex: 2; }
+
+}
+
+.btn-primary{
+  box-shadow: 0 10px 25px rgba(99, 21, 229, 0.2);
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: $primary-hover;
+    box-shadow: 0 15px 30px rgba(99, 21, 229, 0.3);
+  }
 }
 
 .btn-success {
@@ -159,5 +171,31 @@ input.ng-invalid.ng-touched {
       box-shadow: 0 0 8px rgba(99, 21, 229, 0.2);
       outline: none;
     }
+  }
+}
+
+.address-grid {
+  display: grid;
+  grid-template-columns: 2fr 2fr 1fr;
+  gap: 15px;
+}
+
+.custom-select {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  background-color: #f8f9fa;
+  font-size: 16px;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 15px center;
+  background-size: 15px;
+  cursor: pointer;
+
+  &:focus {
+    border-color: #6315e5;
+    outline: none;
   }
 }

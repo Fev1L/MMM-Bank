@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path
 
-from main.views import api_login, api_register, send_verification_code, verify_code
+from main.views import api_login, api_register, send_verification_code, verify_code , check_username
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -11,4 +11,5 @@ urlpatterns = [
 
     path('api/send-code/', send_verification_code, name='send_verification_code'),
     path('api/verify-code/', verify_code, name='verify_code'),
+    path('api/check-username/', check_username, name='check_username'),
 ]

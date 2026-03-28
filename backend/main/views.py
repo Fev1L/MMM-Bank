@@ -3,12 +3,14 @@ from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from django.http import JsonResponse
 from django.utils import timezone
+from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_exempt
 import json
 import random
 
 from main.models import EmailVerification
 
+@never_cache
 @csrf_exempt
 def api_login(request):
     if request.method == 'POST':
@@ -39,8 +41,8 @@ def api_register(request):
                 username=data.get('username'),
                 email=data.get('email'),
                 password=data.get('password'),
-                first_name=data.get('name', ''),
-                last_name=data.get('surname', '')
+                first_name=data.get('firstName', ''),
+                last_name=data.get('lastName', '')
             )
 
             login(request, user)
@@ -61,6 +63,12 @@ def send_verification_code(request):
         data = json.loads(request.body)
         email = data.get('email')
         code = str(random.randint(100000, 999999))
+
+        if User.objects.filter(email=email).exists():
+            return JsonResponse({
+                'status': 'error',
+                'message': 'A user with this email address is already registered!'
+            }, status=400)
 
         EmailVerification.objects.update_or_create(
             email=email, defaults={'code': code, 'created_at': timezone.now()}
@@ -87,3 +95,21 @@ def verify_code(request):
             verify_obj.delete()
             return JsonResponse({'status': 'ok', 'message': 'Email confirmed!'})
         return JsonResponse({'status': 'error', 'message': 'Incorrect or expired code'}, status=400)
+
+@csrf_exempt
+def check_username(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            username = data.get('username', '').strip()
+
+            if not username or len(username) < 3:
+                return JsonResponse({'available': False, 'message': 'Too short'}, status=200)
+
+            exists = User.objects.filter(username=username).exists()
+            return JsonResponse({
+                'available': not exists,
+                'message': 'Username is taken' if exists else 'Available'
+            })
+        except Exception:
+            return JsonResponse({'error': 'Invalid data'}, status=400)
