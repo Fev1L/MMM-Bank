@@ -2,20 +2,18 @@
 
   <aside class="sidebar">
     <div class="user-profile">
-      <div class="avatar">{{ user.initials }}</div>
+      <div class="avatar">{{ user?.initials }}</div>
       <div class="user-info">
-        <h3>{{ user.firstName }} {{ user.lastName }}</h3>
-        <p>{{ user.plan }} <i class="fa-solid fa-chevron-down"></i></p>
+        <h3>{{ user?.firstName }} {{ user?.lastName }}</h3>
+        <p>{{ user?.plan }}</p>
       </div>
     </div>
 
     <nav class="side-nav">
       <a class="active"><i class="fa-solid fa-wallet"></i> Accounts</a>
-      <a><i class="fa-regular fa-credit-card"></i> Cards</a>
-      <a><i class="fa-solid fa-money-bill-transfer"></i> Transfers</a>
       <a><i class="fa-solid fa-piggy-bank"></i> Deposits</a>
       <a><i class="fa-solid fa-hand-holding-dollar"></i> Loans</a>
-      <a><i class="fa-solid fa-chart-pie"></i> Statistics</a>
+      <a><i class="fa-solid fa-ellipsis-vertical"></i> More</a>
     </nav>
 
     <div class="bottom-nav">
@@ -28,11 +26,23 @@
 
     <header class="balance-header">
       <div class="balance-info">
-        <h1>{{ totalBalance | currency:'UAH':'symbol':'1.2-2' }}</h1>
+        <h1>{{ totalBalance | currency:'$':'symbol':'1.2-2' }}</h1>
         <p>Total balance across all accounts</p>
         <div class="quick-actions">
           <button class="btn-light"><i class="fa-solid fa-plus"></i> Add money</button>
           <button class="btn-light"><i class="fa-solid fa-arrow-right-arrow-left"></i> Exchange</button>
+        </div>
+      </div>
+
+      <div class="add-account-section">
+        <h4>Open new account:</h4>
+        <div class="currency-buttons">
+          <button
+            *ngFor="let cur of availableCurrencies"
+            (click)="openNewAccount(cur)"
+            class="btn-mini-add">
+            + {{ cur }}
+          </button>
         </div>
       </div>
     </header>
@@ -43,6 +53,7 @@
     </div>
 
     <div class="accounts-grid" *ngIf="activeTab === 'accounts'">
+
       <div class="account-card" *ngFor="let acc of accounts">
         <div class="card-top">
           <div class="currency-info">
@@ -55,6 +66,7 @@
           <h2>{{ acc.symbol }}{{ acc.balance | number:'1.2-2' }}</h2>
         </div>
       </div>
+
     </div>
 
     <div class="transactions-view" *ngIf="activeTab === 'transactions'">

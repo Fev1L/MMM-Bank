@@ -2,7 +2,7 @@ $bg-color: #f3f4f6;
 $surface-color: #ffffff;
 $text-main: #191c1f;
 $text-muted: #8a929a;
-$accent-blue: #0050ff;
+$accent-blue: #6315e5;
 $border-color: #e5e7eb;
 
 .dashboard-wrapper {
@@ -173,4 +173,31 @@ $border-color: #e5e7eb;
   }
 
   .empty-state { color: $text-muted; text-align: center; padding: 40px; }
+}
+
+.add-account-section {
+  margin-top: 20px;
+  h4 { font-size: 0.9rem; color: #8a929a; margin-bottom: 10px; }
+
+  .currency-buttons {
+    display: flex;
+    gap: 10px;
+
+    .btn-mini-add {
+      background: white;
+      border: 1px dashed #0050ff;
+      color: #0050ff;
+      padding: 6px 12px;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+
+      &:hover {
+        background: #0050ff;
+        color: white;
+        border-style: solid;
+      }
+    }
+  }
 }

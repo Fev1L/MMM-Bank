@@ -2,6 +2,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
+from django.db import IntegrityError
 from django.http import JsonResponse
 from django.utils import timezone
 from django.views.decorators.cache import never_cache
@@ -9,7 +10,7 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 import random
 
-from main.models import EmailVerification
+from .models import EmailVerification , Account
 
 @never_cache
 @csrf_exempt
@@ -147,8 +148,10 @@ def get_user_profile(request):
         ]
     })
 
-@login_required
 def api_dashboard_data(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({'error': 'Unauthorized'}, status=401)
+
     user = request.user
     accounts = user.accounts.all()
 
@@ -172,3 +175,29 @@ def api_dashboard_data(request):
         'totalBalance': total_balance_uah,
         'accounts': accounts_data,
     })
+
+@csrf_exempt
+def create_account(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            currency_code = data.get('currency')
+
+            new_acc = Account.objects.create(
+                user=request.user,
+                currency=currency_code,
+                balance=0.00
+            )
+
+            return JsonResponse({
+                'status': 'success',
+                'account': {
+                    'currency': new_acc.currency,
+                    'balance': float(new_acc.balance)
+                }
+            })
+
+        except IntegrityError:
+            return JsonResponse({'status': 'error', 'message': 'You already have an account in this currency'}, status=400)
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=500)

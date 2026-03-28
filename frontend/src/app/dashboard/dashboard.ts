@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import { AuthService } from '../core/services/auth';
 import {CommonModule} from '@angular/common';
 
@@ -11,29 +11,51 @@ import {CommonModule} from '@angular/common';
 })
 export class Dashboard implements OnInit {
   activeTab = 'accounts';
+  availableCurrencies = ['USD', 'EUR', 'UAH', 'GBP', 'PLN'];
 
-  user = {
-    firstName: 'Влад',
-    lastName: 'Девелопер',
-    initials: 'ВД',
-    plan: 'Premium'
-  };
+  user: any = null;
+  accounts: any[] = [];
+  totalBalance: number = 0;
+  recentTransactions: any[] = [];
 
-  totalBalance = 15420.50;
+  constructor(
+    public authService: AuthService,
+    private cdr: ChangeDetectorRef
+  ) {}
 
-  accounts = [
-    { currency: 'Ukrainian Hryvnia', code: 'UAH', symbol: '₴', balance: 12500.00, flag: '🇺🇦' },
-    { currency: 'US Dollar', code: 'USD', symbol: '$', balance: 45.50, flag: '🇺🇸' },
-    { currency: 'Euro', code: 'EUR', symbol: '€', balance: 35.00, flag: '🇪🇺' }
-  ];
-
-  constructor(public authService: AuthService) {}
-
-  ngOnInit() {}
+  ngOnInit() {
+    this.loadUserData();
+  }
 
   onLogout() {
     if (confirm('Are you sure you want to log out?')) {
       this.authService.logout();
     }
+  }
+
+  openNewAccount(currency: string) {
+    this.authService.createAccount(currency).subscribe({
+      next: (res) => {
+        this.accounts.push(res.account);
+        alert(`Your account in ${currency} has been successfully opened!`);
+      },
+      error: (err) => {
+        alert(err.error.message || 'Error opening an account');
+      }
+    });
+  }
+
+  loadUserData() {
+    this.authService.getProfile().subscribe({
+      next: (data) => {
+        this.user = data.user;
+        this.accounts = data.accounts;
+        this.totalBalance = data.totalBalance;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Error loading profile', err);
+      }
+    });
   }
 }

@@ -5,7 +5,7 @@ import { BehaviorSubject, tap, Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private API_URL = 'http://127.0.0.1:8000';
+  private API_URL = 'http://localhost:8000';
 
   private loggedIn = new BehaviorSubject<boolean>(this.hasToken());
   isLoggedIn$ = this.loggedIn.asObservable();
@@ -20,7 +20,7 @@ export class AuthService {
   }
 
   login(credentials: any): Observable<any> {
-    return this.http.post(`${this.API_URL}/api/login/`, credentials).pipe(
+    return this.http.post(`${this.API_URL}/api/login/`, credentials, { withCredentials: true }).pipe(
       tap(() => {
         localStorage.setItem('user_session', 'active');
         this.loggedIn.next(true);
@@ -53,5 +53,13 @@ export class AuthService {
 
   checkUsername(username: string) {
     return this.http.post(`${this.API_URL}/api/check-username/`, { username });
+  }
+
+  createAccount(currency: string): Observable<any> {
+    return this.http.post(`${this.API_URL}/api/accounts/create/`, { currency }, { withCredentials: true });
+  }
+
+  getProfile(): Observable<any> {
+    return this.http.get(`${this.API_URL}/api/dashboard/`, { withCredentials: true });
   }
 }
