@@ -88,7 +88,7 @@ input.ng-invalid.ng-touched {
   .eye-icon {
     position: absolute;
     right: 15px;
-    top: 38px;
+    top: 45px;
     cursor: pointer;
     font-size: 18px;
     opacity: 0.6;
@@ -134,4 +134,30 @@ input.ng-invalid.ng-touched {
   font-weight: 600;
   cursor: pointer;
   &:disabled { opacity: 0.5; cursor: not-allowed; }
+}
+
+.otp-inputs {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin: 20px 0;
+
+  input {
+    width: 45px;
+    height: 55px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    background: #f8f9fa;
+    transition: all 0.3s;
+
+    &:focus {
+      border-color: #6315e5;
+      background: white;
+      box-shadow: 0 0 8px rgba(99, 21, 229, 0.2);
+      outline: none;
+    }
+  }
 }

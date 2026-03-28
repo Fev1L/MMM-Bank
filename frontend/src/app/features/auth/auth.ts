@@ -1,13 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, ElementRef, OnInit, QueryList, ViewChildren , ChangeDetectorRef} from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
+import {
+  ReactiveFormsModule,
+  FormBuilder,
+  FormGroup,
+  Validators,
+  AbstractControl,
+  ValidationErrors,
+  FormsModule
+} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth';
 
 @Component({
   selector: 'app-auth',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule],
   templateUrl: './auth.html',
   styleUrl: './auth.scss',
 })
@@ -19,11 +27,16 @@ export class Auth implements OnInit {
   showPassword = false;
   showConfirmPassword = false;
 
+  isCodeSent = false;
+  verificationCode = '';
+  isLoading = false;
+
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private cdr : ChangeDetectorRef,
   ) {
     this.authForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -37,6 +50,71 @@ export class Auth implements OnInit {
       nationality: ['', Validators.required],
       address: ['', Validators.required]
     }, { validators: this.passwordMatchValidator });
+  }
+
+  sendEmailCode() {
+    const email = this.authForm.get('email')?.value;
+    if (!email || this.authForm.get('email')?.invalid) {
+      alert('Please enter a valid email');
+      return;
+    }
+
+    this.isLoading = true;
+    this.authService.sendCode(email).subscribe({
+      next: () => {
+        this.isCodeSent = true;
+        this.isLoading = false;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        this.isLoading = false;
+        this.cdr.detectChanges();
+        alert('Error');
+      }
+    });
+  }
+
+  checkCode() {
+    const email = this.authForm.get('email')?.value;
+    if (!email || this.verificationCode.length < 6 || this.isLoading) return;
+
+    this.isLoading = true;
+
+    this.authService.verifyCode(email, this.verificationCode).subscribe({
+      next: (res: any) => {
+        this.isLoading = false;
+        this.currentStep = 2;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        this.isLoading = false;
+        alert(err.error?.message || 'Invalid code');
+        this.verificationCode = '';
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  @ViewChildren('otpInput') otpInputs!: QueryList<ElementRef>;
+
+  onOtpInput(event: any, index: number) {
+    const value = event.target.value;
+    const inputs = this.otpInputs.toArray();
+
+    if (value && index < 5) {
+      inputs[index + 1].nativeElement.focus();
+    }
+
+    this.collectAndVerify();
+  }
+
+  collectAndVerify() {
+    const inputs = this.otpInputs.toArray();
+    const fullCode = inputs.map(input => input.nativeElement.value).join('');
+
+    if (fullCode.length === 6) {
+      this.verificationCode = fullCode;
+    }
   }
 
   ngOnInit() {
@@ -73,35 +151,6 @@ export class Auth implements OnInit {
   prevStep() {
     if (this.currentStep > 1) {
       this.currentStep--;
-    }
-  }
-
-  onSubmit() {
-    if (this.isLogin) {
-      const loginData = {
-        username: this.authForm.value.username,
-        password: this.authForm.value.password
-      };
-
-      this.authService.login(loginData).subscribe({
-        next: (response: any) => {
-          this.router.navigate(['/dashboard']);
-        },
-        error: (err: any) => alert('Login Error: ' + err.error.message)
-      });
-
-    } else {
-      if (this.currentStep < 3) {
-        this.nextStep();
-      } else if (this.authForm.valid) {
-        this.authService.register(this.authForm.value).subscribe({
-          next: (response: any) => {
-            console.log('User registered with full info!', response);
-            this.router.navigate(['/dashboard']);
-          },
-          error: (err: any) => alert('Registration Error: ' + (err.error?.message || 'Check your data'))
-        });
-      }
     }
   }
 }

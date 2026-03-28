@@ -12,7 +12,7 @@
       </div>
     </div>
 
-    <form [formGroup]="authForm" (ngSubmit)="onSubmit()">
+    <form [formGroup]="authForm" (submit)="$event.preventDefault()">
 
       <div *ngIf="isLogin">
         <div class="form-group">
@@ -22,18 +22,44 @@
         <div class="form-group password-field">
           <label>Password</label>
           <input [type]="showPassword ? 'text' : 'password'" formControlName="password" placeholder="••••••••">
-          <span class="eye-icon" (click)="togglePassword()">{{ showPassword ? '👁️' : '🙈' }}</span>
+          <i class="eye-icon {{ showPassword ? 'fa-solid fa-eye' : 'fa-solid fa-eye-slash'  }}" (click)="togglePassword()"></i>
         </div>
       </div>
 
       <div *ngIf="!isLogin && currentStep === 1">
-        <p class="step-desc">Enter your email to receive a verification code.</p>
-        <div class="form-group">
+        <div class="form-group" *ngIf="!isCodeSent">
           <label>Email Address</label>
-          <input type="email" formControlName="email" placeholder="name@email.com">
+          <input type="email" formControlName="email" placeholder="name@email.com" [readonly]="isCodeSent">
         </div>
-        <button type="button" class="btn-primary" (click)="nextStep()" [disabled]="authForm.get('email')?.invalid">
-          Verify Email
+
+        <div class="otp-wrapper" *ngIf="isCodeSent">
+          <p>We have sent the code to {{ authForm.get('email')?.value }}</p>
+          <div class="otp-inputs">
+            <input #otpInput type="text" maxlength="1" (input)="onOtpInput($event, 0)">
+            <input #otpInput type="text" maxlength="1" (input)="onOtpInput($event, 1)">
+            <input #otpInput type="text" maxlength="1" (input)="onOtpInput($event, 2)">
+            <input #otpInput type="text" maxlength="1" (input)="onOtpInput($event, 3)">
+            <input #otpInput type="text" maxlength="1" (input)="onOtpInput($event, 4)">
+            <input #otpInput type="text" maxlength="1" (input)="onOtpInput($event, 5)">
+          </div>
+        </div>
+
+        <button
+          type="button"
+          class="btn-primary"
+          *ngIf="!isCodeSent"
+          (click)="sendEmailCode()"
+          [disabled]="isLoading || authForm.get('email')?.invalid">
+          {{ isLoading ? 'Sending...' : 'Send Verification Code' }}
+        </button>
+
+        <button
+          type="button"
+          class="btn-success"
+          *ngIf="isCodeSent"
+          (click)="checkCode()"
+          [disabled]="verificationCode.length < 6">
+          Verify Code & Continue
         </button>
       </div>
 
@@ -45,12 +71,12 @@
         <div class="form-group password-field">
           <label>Password</label>
           <input [type]="showPassword ? 'text' : 'password'" formControlName="password" placeholder="Min. 8 characters">
-          <span class="eye-icon" (click)="togglePassword()">{{ showPassword ? '👁️' : '🙈' }}</span>
+          <i class="eye-icon {{ showPassword ? 'fa-solid fa-eye' : 'fa-solid fa-eye-slash'  }}" (click)="togglePassword()"></i>
         </div>
         <div class="form-group password-field">
           <label>Confirm Password</label>
           <input [type]="showConfirmPassword ? 'text' : 'password'" formControlName="confirmPassword" placeholder="Repeat password">
-          <span class="eye-icon" (click)="toggleConfirmPassword()">{{ showConfirmPassword ? '👁️' : '🙈' }}</span>
+          <i class="eye-icon {{ showPassword ? 'fa-solid fa-eye' : 'fa-solid fa-eye-slash'  }}" (click)="togglePassword()"></i>
         </div>
         <div class="btn-group">
           <button type="button" class="btn-secondary" (click)="prevStep()">Back</button>

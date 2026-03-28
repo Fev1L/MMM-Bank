@@ -52,7 +52,6 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                # 'main.context_processors.unread_messages',
             ],
         },
     },
@@ -107,3 +106,11 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 CORS_ALLOW_CREDENTIALS = True
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'mmmbankmail@gmail.com'
+EMAIL_HOST_PASSWORD = 'wfra udij oqtw utvv'
+DEFAULT_FROM_EMAIL = 'MMM Bank <mmmbankmail@gmail.com>'

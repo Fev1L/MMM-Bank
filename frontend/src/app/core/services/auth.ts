@@ -14,4 +14,12 @@ export class AuthService {
   register(userData: any) {
     return this.http.post(`${this.API_URL}/api/register/`, userData, { withCredentials: true });
   }
+
+  sendCode(email: string) {
+    return this.http.post(`${this.API_URL}/api/send-code/`, { email });
+  }
+
+  verifyCode(email: string, code: string) {
+    return this.http.post(`${this.API_URL}/api/verify-code/`, { email, code });
+  }
 }
