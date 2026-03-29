@@ -67,6 +67,33 @@
         </div>
       </div>
 
+      <div class="add-account-wrapper" *ngIf="filteredCurrencies.length > 0">
+        <button class="add-btn" (click)="openAddAccountModal()">
+          <i class="fa-solid fa-plus"></i>
+        </button>
+      </div>
+
+    </div>
+
+    <div class="modal-overlay" *ngIf="isModalOpen" (click)="closeAddAccountModal()">
+      <div class="modal-content" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h3>Open a new account</h3>
+          <button class="close-icon" (click)="closeAddAccountModal()">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+
+        <p>Select a currency to create an account:</p>
+
+        <div class="currency-list">
+          <button class="currency-item" *ngFor="let curr of filteredCurrencies" (click)="createNewAccount(curr.code)">
+            <span class="flag">{{ curr.flag }}</span>
+            <span class="name">{{ curr.name }}</span>
+            <span class="code">{{ curr.code }}</span>
+          </button>
+        </div>
+      </div>
     </div>
 
     <div class="transactions-view" *ngIf="activeTab === 'transactions'">

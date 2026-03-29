@@ -39,19 +39,20 @@ class Currency(models.Model):
     def __str__(self):
         return f"{self.code} ({self.name})"
 
-def get_default_currency():
-    currency, created = Currency.objects.get_or_create(
-        code='USD',
-        defaults={'name': 'US Dollar', 'symbol': '$', 'flag': '🇺🇸'}
-    )
-    return currency.pk
-
 class Account(models.Model):
     user = models.ForeignKey(User, related_name='accounts', on_delete=models.CASCADE)
 
-    currency_type = models.ForeignKey(Currency, on_delete=models.PROTECT, default=get_default_currency)
+    currency_type = models.ForeignKey(Currency, on_delete=models.PROTECT)
 
     balance = models.DecimalField(max_digits=12, decimal_places=2, default=0)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['user', 'currency_type'],
+                name='unique_user_currency'
+            )
+        ]
 
     def __str__(self):
         return f"{self.user.username} - {self.currency_type} account"
@@ -60,4 +61,3 @@ class Account(models.Model):
 def create_user_bank_data(sender, instance, created, **kwargs):
     if created:
         UserProfile.objects.create(user=instance)
-        Account.objects.create(user=instance, currency='USD', balance=0)

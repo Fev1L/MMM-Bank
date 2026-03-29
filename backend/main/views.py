@@ -10,7 +10,8 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 import random
 
-from .models import EmailVerification , Account
+from .models import EmailVerification, Account, Currency
+
 
 @never_cache
 @csrf_exempt
@@ -154,6 +155,16 @@ def api_dashboard_data(request):
 
     user = request.user
     accounts = user.accounts.select_related('currency_type').all()
+    all_currencies = Currency.objects.all()
+
+    currencies_list = []
+    for c in all_currencies:
+        currencies_list.append({
+            'code': c.code,
+            'name': c.name,
+            'symbol': c.symbol,
+            'flag': c.flag
+        })
 
     accounts_data = []
     total_balance_uah = 0
@@ -176,6 +187,7 @@ def api_dashboard_data(request):
         },
         'totalBalance': total_balance_uah,
         'accounts': accounts_data,
+        'availableCurrencies' : currencies_list
     })
 
 @csrf_exempt
@@ -185,16 +197,21 @@ def create_account(request):
             data = json.loads(request.body)
             currency_code = data.get('currency')
 
+            currency_obj = Currency.objects.get(code=currency_code)
+
             new_acc = Account.objects.create(
                 user=request.user,
-                currency=currency_code,
+                currency_type=currency_obj,
                 balance=0.00
             )
 
             return JsonResponse({
                 'status': 'success',
                 'account': {
-                    'currency': new_acc.currency,
+                    'code': new_acc.currency_type.code,
+                    'currency': new_acc.currency_type.name,
+                    'symbol': new_acc.currency_type.symbol,
+                    'flag': new_acc.currency_type.flag,
                     'balance': float(new_acc.balance)
                 }
             })
