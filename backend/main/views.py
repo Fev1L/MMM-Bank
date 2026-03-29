@@ -153,16 +153,18 @@ def api_dashboard_data(request):
         return JsonResponse({'error': 'Unauthorized'}, status=401)
 
     user = request.user
-    accounts = user.accounts.all()
+    accounts = user.accounts.select_related('currency_type').all()
 
     accounts_data = []
     total_balance_uah = 0
 
     for acc in accounts:
         accounts_data.append({
-            'currency': acc.get_currency_display(),
-            'code': acc.currency,
+            'currency': acc.currency_type.name,
+            'code': acc.currency_type.code,
             'balance': float(acc.balance),
+            'symbol': acc.currency_type.symbol,
+            'flag': acc.currency_type.flag,
         })
         total_balance_uah += float(acc.balance)
 

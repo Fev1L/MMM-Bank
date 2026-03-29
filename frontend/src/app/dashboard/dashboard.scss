@@ -50,35 +50,49 @@ $border-color: #e5e7eb;
     display: flex;
     flex-direction: column;
     gap: 8px;
+    padding: 20px 0;
 
     a {
+      position: relative;
       display: flex;
       align-items: center;
       gap: 12px;
-      padding: 12px;
+      padding: 12px 24px;
       color: $text-main;
       text-decoration: none;
       border-radius: 8px;
       font-weight: 500;
       cursor: pointer;
-      transition: background 0.2s;
+      transition: all 0.2s ease;
 
-      i { width: 20px; color: $text-muted; transition: color 0.2s; }
+      i { width: 20px; color: $text-muted; transition: color 0.2s; z-index: 2;}
 
-      &:hover { background-color: $bg-color; }
+      &:hover { background-color: rgba($bg-color, 0.5); }
 
       &.active {
-        background-color: rgba($accent-blue, 0.1);
         color: $accent-blue;
         i { color: $accent-blue; }
+
+        &::before {
+          content: "";
+          position: absolute;
+          left: 0;
+          width: 4px;
+          height: 100%;
+          background: #8e44ad;
+          border-radius: 0 4px 4px 0;
+          transition: all 0.3s ease;
+        }
+      }
+      &.logout { color: #ff4757; i { color: #ff4757; } }
       }
 
-      &.logout { color: #ff4757; i { color: #ff4757; } }
+
     }
   }
 
   .bottom-nav { margin-top: auto; }
-}
+
 
 .main-content {
   flex: 1;
@@ -163,7 +177,7 @@ $border-color: #e5e7eb;
 
         h4 { margin: 0; font-size: 1rem; color: $text-main; }
         span { color: $text-muted; font-size: 0.85rem; font-weight: 500;}
-        .flag-icon { font-size: 1.5rem; background: #f0f0f0; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; }
+        .flag-icon { font-size: 1.5rem; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; }
       }
 
       .card-bottom {

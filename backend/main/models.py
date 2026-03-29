@@ -29,25 +29,32 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return f"Profile for {self.user.username}"
+
+class Currency(models.Model):
+    code = models.CharField(max_length=3, primary_key=True)
+    name = models.CharField(max_length=50)
+    symbol = models.CharField(max_length=5)
+    flag = models.CharField(max_length=50)
+
+    def __str__(self):
+        return f"{self.code} ({self.name})"
+
+def get_default_currency():
+    currency, created = Currency.objects.get_or_create(
+        code='USD',
+        defaults={'name': 'US Dollar', 'symbol': '$', 'flag': '🇺🇸'}
+    )
+    return currency.pk
+
 class Account(models.Model):
     user = models.ForeignKey(User, related_name='accounts', on_delete=models.CASCADE)
 
-    CURRENCY_CHOICES = [
-        ('UAH', 'Ukrainian Hryvnia'),
-        ('USD', 'US Dollar'),
-        ('EUR', 'Euro'),
-        ('GBP', 'United Kingdom'),
-        ('PLN', 'Polish Zloty'),
-    ]
-    currency = models.CharField(max_length=3, choices=CURRENCY_CHOICES, default='UAH')
+    currency_type = models.ForeignKey(Currency, on_delete=models.PROTECT, default=get_default_currency)
 
     balance = models.DecimalField(max_digits=12, decimal_places=2, default=0)
 
-    class Meta:
-        unique_together = ('user', 'currency')
-
     def __str__(self):
-        return f"{self.user.username} - {self.currency} account"
+        return f"{self.user.username} - {self.currency_type} account"
 
 @receiver(post_save, sender=User)
 def create_user_bank_data(sender, instance, created, **kwargs):
