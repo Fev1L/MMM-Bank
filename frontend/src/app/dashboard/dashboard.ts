@@ -1,6 +1,7 @@
 import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import { AuthService } from '../core/services/auth';
 import {CommonModule} from '@angular/common';
+import {AlertService} from '../core/services/alert';
 
 @Component({
   selector: 'app-dashboard',
@@ -22,7 +23,8 @@ export class Dashboard implements OnInit {
 
   constructor(
     public authService: AuthService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private alertService: AlertService
   ) {}
 
   ngOnInit() {
@@ -45,7 +47,7 @@ export class Dashboard implements OnInit {
         this.cdr.detectChanges();
       },
       error: (err) => {
-        console.error('Error loading profile', err);
+        this.alertService.error(err.error.message || 'Error loading profile');
       }
     });
   }
@@ -69,10 +71,10 @@ export class Dashboard implements OnInit {
       next: (res) => {
         this.closeAddAccountModal();
         this.loadUserData();
-        alert(`Your account in ${currencyCode} has been successfully opened!`);
+        this.alertService.success(`Your account in ${currencyCode} has been successfully opened!`);
       },
       error: (err) => {
-        alert(err.error.message || 'Error opening an account');
+        this.alertService.error(err.error.message || 'Error opening an account');
       }
     });
 

@@ -1,0 +1,17 @@
+<div class="alerts-container">
+  <div *ngFor="let alert of alerts"
+       class="alert-box"
+       [ngClass]="[alert.type, alert.isClosing ? 'closing' : '']">
+
+    <div class="alert-content">
+      <i class="fa-solid" [ngClass]="alert.type === 'success' ? 'fa-circle-check' : 'fa-circle-exclamation'"></i>
+      <span>{{ alert.text }}</span>
+    </div>
+
+    <button class="close-btn" (click)="closeAlert(alert.id)">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+
+    <div class="progress-bar"></div>
+  </div>
+</div>

@@ -1,0 +1,89 @@
+.alerts-container {
+  position: fixed;
+  top: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  pointer-events: none;
+}
+
+.alert-box {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 320px;
+  max-width: 450px;
+  background: #fff;
+  padding: 16px 20px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  animation: slideDownFade 0.4s ease-out forwards;
+  position: relative;
+  overflow: hidden;
+
+  &.success {
+    border-left: 6px solid #2ecc71;
+    i { color: #2ecc71; }
+    .progress-bar { background: #2ecc71; }
+  }
+
+  &.error {
+    border-left: 6px solid #e74c3c;
+    i { color: #e74c3c; }
+    .progress-bar { background: #e74c3c; }
+  }
+
+  .alert-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 500;
+    color: #333;
+    font-size: 15px;
+
+    i { font-size: 20px; }
+  }
+
+  .close-btn {
+    background: none;
+    border: none;
+    color: #999;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 4px;
+    transition: 0.2s;
+    &:hover { color: #333; }
+  }
+
+  .progress-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    width: 100%;
+    animation: progressShrink 5s linear forwards;
+  }
+
+  &.closing {
+    animation: fadeOutUp 0.4s ease-in forwards;
+  }
+}
+
+@keyframes slideDownFade {
+  0% { transform: translateY(-30px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes fadeOutUp {
+  0% { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(-20px); opacity: 0; }
+}
+
+@keyframes progressShrink {
+  0% { width: 100%; }
+  100% { width: 0%; }
+}
