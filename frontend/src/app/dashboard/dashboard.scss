@@ -1,3 +1,4 @@
+@use "sass:color";
 $bg-color: #f3f4f6;
 $surface-color: #ffffff;
 $text-main: #191c1f;
@@ -259,12 +260,13 @@ $border-color: #e5e7eb;
 }
 
 .modal-content {
-  background: #ffffff;
+  background: $surface-color;
   width: 100%;
-  max-width: 400px;
-  padding: 24px;
-  border-radius: 16px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  max-width: 450px;
+  padding: 32px;
+  border-radius: 24px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  animation: modalSlideUp 0.3s ease-out;
 
   .modal-header {
     display: flex;
@@ -272,15 +274,125 @@ $border-color: #e5e7eb;
     align-items: center;
     margin-bottom: 16px;
 
-    h3 { margin: 0; font-size: 20px; }
+    h3 {
+      margin: 0 0 24px 0;
+      font-size: 1.5rem;
+      color: $text-main;
+      font-weight: 700;
+      text-align: center;
+    }
 
     .close-icon {
-      background: none; border: none; font-size: 20px; cursor: pointer; color: #666;
-      &:hover { color: #ff4757; }
+      background: none;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      color: #666;
+
+      &:hover {
+        color: #ff4757;
+      }
     }
   }
 
-  p { color: #666; margin-bottom: 20px; font-size: 14px; }
+  .form-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: $text-muted;
+      margin-left: 4px;
+    }
+
+    input, select, textarea {
+      padding: 14px 16px;
+      border: 1px solid $border-color;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-family: inherit;
+      color: $text-main;
+      background-color: #f9fafb;
+      transition: all 0.2s ease;
+
+      &::placeholder {
+        color: #b1b9c1;
+      }
+
+      &:focus {
+        outline: none;
+        border-color: $accent-blue;
+        background-color: #fff;
+        box-shadow: 0 0 0 4px rgba($accent-blue, 0.1);
+      }
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    select {
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%238a929a'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+      background-size: 18px;
+    }
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+
+  .modal-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 32px;
+
+    button {
+      flex: 1;
+      padding: 14px;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: none;
+    }
+
+    .btn-cancel {
+      background-color: #f1f2f6;
+      color: $text-main;
+
+      &:hover {
+        background-color: #dfe4ea;
+      }
+    }
+
+    .btn-confirm {
+      background-color: $accent-blue;
+      color: white;
+      box-shadow: 0 4px 12px rgba($accent-blue, 0.2);
+
+      &:hover {
+        background-color: color.adjust($accent-blue, $lightness: -5%);
+        transform: translateY(-1px);
+        box-shadow: 0 6px 16px rgba($accent-blue, 0.3);
+      }
+
+      &:active {
+        transform: translateY(0);
+      }
+    }
+  }
 }
 
 .currency-list {
@@ -436,6 +548,12 @@ $border-color: #e5e7eb;
   }
 }
 
+.form-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 15px;
+}
+
 .fade-in {
   animation: fadeIn 0.4s ease-in-out;
 }
@@ -444,3 +562,16 @@ $border-color: #e5e7eb;
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+@keyframes modalSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+

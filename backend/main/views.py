@@ -1,17 +1,21 @@
+from decimal import Decimal
+
 import requests
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.core.cache import cache
 from django.core.mail import send_mail
-from django.db import IntegrityError
+from django.db import IntegrityError, transaction
 from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_exempt
 import json
 import random
 
-from .models import EmailVerification, Account, Currency, Transaction
+from .models import EmailVerification, Account, Currency, Transaction, Category, PaymentRequest
+from django.conf import settings
 
 
 @never_cache
@@ -263,3 +267,263 @@ def get_real_rates():
             rates = {"USD": 1.0, "UAH": 41.5, "EUR": 0.92}
 
     return rates
+
+@csrf_exempt
+def api_send_money(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({'status': 'error', 'message': 'Unauthorized'}, status=401)
+
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        amount = Decimal(data.get('amount', 0))
+        currency_code = data.get('currency')
+        username_or_email = data.get('user')
+
+        if amount <= 0:
+            return JsonResponse({'status': 'error', 'message': 'The amount must be greater than zero'}, status=400)
+
+        try:
+            recipient = User.objects.get(username__iexact=username_or_email)
+        except User.DoesNotExist:
+            try:
+                recipient = User.objects.get(email__iexact=username_or_email)
+            except User.DoesNotExist:
+                return JsonResponse({'status': 'error', 'message': 'Users not found'}, status=404)
+
+        if recipient == request.user:
+            return JsonResponse({'status': 'error', 'message': 'You cannot send money to yourself'}, status=400)
+
+        try:
+            sender_account = Account.objects.get(user=request.user, currency_type__code=currency_code)
+        except Account.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': f'You do not have an account with {currency_code}'}, status=400)
+
+        if sender_account.balance < amount:
+            return JsonResponse({'status': 'error', 'message': 'Not enough funds'}, status=400)
+
+        recipient_account = Account.objects.filter(user=recipient, currency_type__code=currency_code).first()
+
+        deposit_amount = amount
+        recipient_currency_code = currency_code
+
+        if not recipient_account:
+            recipient_account = Account.objects.filter(user=recipient).order_by('id').first()
+
+            if not recipient_account:
+                return JsonResponse({'status': 'error', 'message': 'The user does not have any open accounts'}, status=400)
+
+            recipient_currency_code = recipient_account.currency_type.code
+
+            if recipient_currency_code != currency_code:
+                rates = get_real_rates()
+
+                if currency_code not in rates or recipient_currency_code not in rates:
+                    return JsonResponse({'status': 'error', 'message': 'A currency conversion error has occurred on the server. Please try again later.'}, status=500)
+
+                rate_sender = Decimal(str(rates[currency_code]))
+                rate_receiver = Decimal(str(rates[recipient_currency_code]))
+
+                deposit_amount = (amount / rate_sender) * rate_receiver
+                deposit_amount = deposit_amount.quantize(Decimal('0.01'))
+
+        transfer_cat, _ = Category.objects.get_or_create(name="Translation", type=Category.WITHDRAW)
+        deposit_cat, _ = Category.objects.get_or_create(name="Receiving a money transfer", type=Category.DEPOSIT)
+
+        with transaction.atomic():
+            Transaction.objects.create(
+                account=sender_account, amount=amount, category=transfer_cat, transaction_type=Category.WITHDRAW,
+                title=f"Transfer to {recipient.username}"
+            )
+            Transaction.objects.create(
+                account=recipient_account, amount=deposit_amount, category=deposit_cat, transaction_type=Category.DEPOSIT,
+                title=f"Transfer from {request.user.username} (Original: {amount} {currency_code})"
+            )
+
+        if recipient.email:
+            msg = f'Dear, {recipient.username}!\n\nUser {request.user.username} sent to you {amount} {currency_code}.'
+
+            if recipient_currency_code != currency_code:
+                msg += f'\nThe funds have been automatically converted and credited to your account: +{deposit_amount} {recipient_currency_code}.'
+            else:
+                msg += f'\nThe funds have been successfully credited to your account.'
+
+            send_mail(
+                subject='You have received a money transfer! 💸',
+                message=msg,
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[recipient.email],
+                fail_silently=True,
+            )
+
+        return JsonResponse({'status': 'success', 'message': 'The transfer has been successfully completed'})
+
+@csrf_exempt
+def api_request_money(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({'status': 'error', 'message': 'Unauthorized'}, status=401)
+
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        amount = Decimal(data.get('amount', 0))
+        currency_code = data.get('currency')
+        username_or_email = data.get('user')
+
+        try:
+            recipient = User.objects.get(username__iexact=username_or_email)
+        except User.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'User not found'}, status=404)
+
+        if recipient == request.user:
+            return JsonResponse({'status': 'error', 'message': 'You cannot request money from yourself'}, status=400)
+
+        payment_request = PaymentRequest.objects.create(
+            sender=request.user,
+            receiver=recipient,
+            amount=amount,
+            currency_code=currency_code,
+            type=PaymentRequest.REQUEST,
+            message=f"{request.user.username} is asking you for {amount} {currency_code}"
+        )
+
+        if recipient.email:
+            pay_link = f"http://localhost:4200/pay-request/{payment_request.id}"
+            send_mail(
+                subject='Money Request 📩',
+                message=f'Hello!\n\n{request.user.username} requested {amount} {currency_code} from you.\n'
+                        f'To pay, click here: {pay_link}',
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[recipient.email],
+            )
+
+        return JsonResponse({'status': 'success', 'message': 'Request sent successfully'})
+
+@csrf_exempt
+def api_confirm_payment_request(request, request_id):
+    if not request.user.is_authenticated:
+        return JsonResponse({'status': 'error', 'message': 'Unauthorized'}, status=401)
+
+    pay_req = get_object_or_404(PaymentRequest, id=request_id, receiver=request.user, type=PaymentRequest.REQUEST)
+
+    if pay_req.is_completed:
+        return JsonResponse({'status': 'error', 'message': 'This request has already been paid'}, status=400)
+
+    try:
+        sender_acc = Account.objects.get(user=request.user, currency_type__code=pay_req.currency_code)
+    except Account.DoesNotExist:
+        return JsonResponse({'status': 'error', 'message': f'You dont have a {pay_req.currency_code} account to pay this'}, status=400)
+
+    if sender_acc.balance < pay_req.amount:
+        return JsonResponse({'status': 'error', 'message': 'Insufficient funds'}, status=400)
+
+    receiver_acc = Account.objects.filter(user=pay_req.sender, currency_type__code=pay_req.currency_code).first()
+
+    recipient = pay_req.sender
+    recipient_account = Account.objects.filter(user=recipient, currency_type__code=pay_req.currency_code).first()
+
+    deposit_amount = pay_req.amount
+
+    if not recipient_account:
+        recipient_account = Account.objects.filter(user=recipient).order_by('id').first()
+        if not recipient_account:
+            return JsonResponse({'status': 'error', 'message': 'Recipient has no accounts'}, status=400)
+
+        final_currency = recipient_account.currency_type.code
+        rates = get_real_rates()
+
+        rate_from = Decimal(str(rates[pay_req.currency_code]))
+        rate_to = Decimal(str(rates[final_currency]))
+
+        deposit_amount = (pay_req.amount / rate_from) * rate_to
+        deposit_amount = deposit_amount.quantize(Decimal('0.01'))
+
+    with transaction.atomic():
+        Transaction.objects.create(
+            account=sender_acc, amount=pay_req.amount, transaction_type=Category.WITHDRAW,
+            title=f"Payment for request from {pay_req.sender.username}"
+        )
+        Transaction.objects.create(
+            account=receiver_acc, amount=deposit_amount, transaction_type=Category.DEPOSIT,
+            title=f"Money received from request to {request.user.username}"
+        )
+
+        pay_req.is_completed = True
+        pay_req.save()
+
+    return JsonResponse({'status': 'success', 'message': 'Payment successful!'})
+
+@csrf_exempt
+def api_send_gift(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({'status': 'error', 'message': 'Unauthorized'}, status=401)
+
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        amount = Decimal(data.get('amount', 0))
+        currency_code = data.get('currency')
+        username_or_email = data.get('user')
+        message = data.get('message', 'A gift for you! 🎁')
+
+        try:
+            recipient = User.objects.get(username__iexact=username_or_email)
+        except User.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'User not found'}, status=404)
+
+        try:
+            sender_account = Account.objects.get(user=request.user, currency_type__code=currency_code)
+        except Account.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': f'You do not have an account with {currency_code}'}, status=400)
+
+        if sender_account.balance < amount:
+            return JsonResponse({'status': 'error', 'message': 'Not enough funds'}, status=400)
+
+        gift_cat, _ = Category.objects.get_or_create(name="Gift", type=Category.WITHDRAW)
+
+        with transaction.atomic():
+            Transaction.objects.create(
+                account=sender_account, amount=amount, category=gift_cat, transaction_type=Category.WITHDRAW,
+                title=f"Sending a gift {recipient.username}"
+            )
+
+            gift_req = PaymentRequest.objects.create(
+                sender=request.user, receiver=recipient, amount=amount,
+                currency_code=currency_code, type=PaymentRequest.GIFT, message=message
+            )
+
+        if recipient.email:
+            claim_link = f"http://localhost:4200/claim-gift/{gift_req.id}"
+            send_mail(
+                subject='You have received a cash gift! 🎁',
+                message=f'Hello!\n\n{request.user.username} sent you {amount} {currency_code}.\nMessage: {message}\n\nClick the link to collect your money:\n{claim_link}',
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[recipient.email],
+            )
+
+        return JsonResponse({'status': 'success', 'message': 'The gift has been successfully sent'})
+
+@csrf_exempt
+def api_claim_gift(request, request_id):
+    if not request.user.is_authenticated:
+        return JsonResponse({'status': 'error', 'message': 'Unauthorized'}, status=401)
+
+    gift_req = get_object_or_404(PaymentRequest, id=request_id, receiver=request.user, type=PaymentRequest.GIFT)
+
+    if gift_req.is_completed:
+        return JsonResponse({'status': 'error', 'message': 'This gift has already been received'}, status=400)
+
+    recipient_account, _ = Account.objects.get_or_create(
+        user=request.user,
+        currency_type_id=gift_req.currency_code,
+        defaults={'balance': 0}
+    )
+
+    deposit_cat, _ = Category.objects.get_or_create(name="Receiving a gift", type=Category.DEPOSIT)
+
+    with transaction.atomic():
+        Transaction.objects.create(
+            account=recipient_account, amount=gift_req.amount, category=deposit_cat, transaction_type=Category.DEPOSIT,
+            title=f"Gift from {gift_req.sender.username}"
+        )
+        gift_req.is_completed = True
+        gift_req.save()
+
+    return JsonResponse({'status': 'success', 'message': f'A gift of {gift_req.amount} {gift_req.currency_code} credited!'})

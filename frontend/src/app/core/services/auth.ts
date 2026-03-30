@@ -70,4 +70,24 @@ export class AuthService {
   getTransactions(): Observable<any[]> {
     return this.http.get<any[]>(`${this.API_URL}/api/transactions/`, { withCredentials: true });
   }
+
+  sendMoney(data: any): Observable<any> {
+    return this.http.post(`${this.API_URL}/api/send-money/`, data, { withCredentials: true });
+  }
+
+  requestMoney(data: any): Observable<any> {
+    return this.http.post(`${this.API_URL}/api/request-money/`, data, { withCredentials: true });
+  }
+
+  sendGift(data: any): Observable<any> {
+    return this.http.post(`${this.API_URL}/api/send-gift/`, data, { withCredentials: true });
+  }
+
+  claimGift(requestId: string): Observable<any> {
+    return this.http.post(`${this.API_URL}/api/claim-gift/${requestId}/`, {}, { withCredentials: true });
+  }
+
+  payRequest(requestId: string): Observable<any> {
+    return this.http.post(`${this.API_URL}/api/api-confirm-payment-request/${requestId}/`, {}, { withCredentials: true });
+  }
 }

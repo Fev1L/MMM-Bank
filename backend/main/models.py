@@ -1,3 +1,5 @@
+import uuid
+
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db import models, transaction
@@ -121,3 +123,26 @@ class Transaction(models.Model):
 
     def __str__(self):
         return f"{self.transaction_type.upper()} | {self.amount} {self.account.currency_type.code} | {self.created_at.strftime('%Y-%m-%d')}"
+
+class PaymentRequest(models.Model):
+    REQUEST = 'request'
+    GIFT = 'gift'
+    TYPES = [
+        (REQUEST, "Запит коштів"),
+        (GIFT, "Подарунок"),
+    ]
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    sender = models.ForeignKey(User, related_name='sent_requests', on_delete=models.CASCADE)
+    receiver = models.ForeignKey(User, related_name='received_requests', on_delete=models.CASCADE)
+
+    amount = models.DecimalField(max_digits=12, decimal_places=2)
+    currency_code = models.CharField(max_length=10)
+
+    type = models.CharField(max_length=20, choices=TYPES)
+    message = models.TextField(blank=True, null=True)
+    is_completed = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.type.upper()} | {self.amount} {self.currency_code} | {self.sender.username} -> {self.receiver.username}"

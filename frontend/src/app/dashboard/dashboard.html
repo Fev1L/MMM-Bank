@@ -29,9 +29,9 @@
         <h1>{{ getConvertedTotal() | currency:'$':'symbol':'1.2-2' }}</h1>
         <p>Total balance across all accounts</p>
         <div class="quick-actions">
-          <button class="btn-light"><i class="fa-solid fa-paper-plane"></i> Send</button>
-          <button class="btn-light"><i class="fa-solid fa-hand-holding-dollar"></i> Request</button>
-          <button class="btn-light"><i class="fa-solid fa-gift"></i> Send a Gift</button>
+          <button (click)="openActionModal('send')" class="btn-light"><i class="fa-solid fa-paper-plane"></i> Send</button>
+          <button (click)="openActionModal('request')" class="btn-light"><i class="fa-solid fa-hand-holding-dollar"></i> Request</button>
+          <button (click)="openActionModal('gift')" class="btn-light"><i class="fa-solid fa-gift"></i> Send a Gift</button>
         </div>
       </div>
     </header>
@@ -124,6 +124,46 @@
         <div class="modal-actions">
           <button class="btn-secondary" (click)="closeLogoutModal()">Cancel</button>
           <button class="btn-danger" (click)="confirmLogout()">Exit</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-overlay" *ngIf="activeModal" (click)="closeActionModal()">
+      <div class="modal-content" (click)="$event.stopPropagation()">
+        <h3>
+          {{ activeModal === 'send' ? 'Send money' :
+          activeModal === 'request' ? 'Request money' : 'Send a Gift' }}
+        </h3>
+
+        <div class="form-group">
+          <label>To whom (Username or Email)</label>
+          <input type="text" [(ngModel)]="transferData.user" placeholder="Enter the recipient's details">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Sum</label>
+            <input type="number" [(ngModel)]="transferData.amount" placeholder="0.00">
+          </div>
+
+          <div class="form-group">
+            <label>Account currency</label>
+            <select [(ngModel)]="transferData.currency">
+              <option *ngFor="let acc of accounts" [value]="acc.code">
+                {{ acc.code }}
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group" *ngIf="activeModal === 'gift'">
+          <label>Greetings (optional)</label>
+          <textarea [(ngModel)]="transferData.message" placeholder="Write something nice..."></textarea>
+        </div>
+
+        <div class="modal-actions">
+          <button class="btn-cancel" (click)="closeActionModal()">Cancel</button>
+          <button class="btn-confirm" (click)="handleTransfer()">Confirm</button>
         </div>
       </div>
     </div>

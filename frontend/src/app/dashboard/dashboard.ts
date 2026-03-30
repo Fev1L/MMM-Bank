@@ -3,13 +3,15 @@ import { AuthService } from '../core/services/auth';
 import {CommonModule} from '@angular/common';
 import {AlertService} from '../core/services/alert';
 import {Router} from '@angular/router';
+import {Observable} from 'rxjs';
+import {FormsModule} from '@angular/forms';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
   templateUrl: './dashboard.html',
   styleUrls: ['./dashboard.scss'],
-  imports: [CommonModule]
+  imports: [CommonModule, FormsModule]
 })
 export class Dashboard implements OnInit {
   activeTab = 'accounts';
@@ -24,6 +26,14 @@ export class Dashboard implements OnInit {
 
   isModalOpen: boolean = false;
   showLogoutModal: boolean = false;
+
+  activeModal: 'send' | 'request' | 'gift' | null = null;
+  transferData = {
+    user: '',
+    amount: 0,
+    currency: '',
+    message: ''
+  };
 
   constructor(
     public authService: AuthService,
@@ -138,5 +148,44 @@ export class Dashboard implements OnInit {
     const targetRate = this.rates[this.viewCurrency] || 1;
     return this.totalBalance * targetRate;
   }
+
+  openActionModal(type: 'send' | 'request' | 'gift') {
+    this.activeModal = type;
+    if (this.accounts.length > 0) {
+      this.transferData.currency = this.accounts[0].currency_code;
+    }
+  }
+
+  closeActionModal() {
+    this.activeModal = null;
+    this.transferData = { user: '', amount: 0, currency: '', message: '' };
+  }
+
+  handleTransfer() {
+    if (this.transferData.amount <= 0 || !this.transferData.user) {
+      this.alertService.error('Please fill in all the fields');
+      return;
+    }
+
+    let request: Observable<any>;
+
+    if (this.activeModal === 'send') request = this.authService.sendMoney(this.transferData);
+    else if (this.activeModal === 'request') request = this.authService.requestMoney(this.transferData);
+    else request = this.authService.sendGift(this.transferData);
+
+    request.subscribe({
+      next: (res) => {
+        this.alertService.success(res.message);
+        this.closeActionModal();
+        this.loadUserData();
+        this.loadTransactions();
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        this.alertService.error(err.error.message || 'An error has occurred');
+      }
+    });
+  }
+
 }
 
