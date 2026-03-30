@@ -1,6 +1,7 @@
+import requests
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.core.cache import cache
 from django.core.mail import send_mail
 from django.db import IntegrityError
 from django.http import JsonResponse
@@ -172,7 +173,6 @@ def api_dashboard_data(request):
         })
 
     accounts_data = []
-    total_balance_uah = 0
 
     for acc in accounts:
         accounts_data.append({
@@ -182,7 +182,6 @@ def api_dashboard_data(request):
             'symbol': acc.currency_type.symbol,
             'flag': acc.currency_type.flag,
         })
-        total_balance_uah += float(acc.balance)
 
     return JsonResponse({
         'user': {
@@ -190,7 +189,7 @@ def api_dashboard_data(request):
             'lastName': user.last_name,
             'initials': f"{user.first_name[0]}{user.last_name[0]}" if user.first_name else "US",
         },
-        'totalBalance': total_balance_uah,
+        'rates': get_real_rates(),
         'accounts': accounts_data,
         'availableCurrencies' : currencies_list
     })
@@ -246,3 +245,21 @@ def get_transactions(request):
         })
 
     return JsonResponse(data, safe=False)
+
+def get_real_rates():
+    rates = cache.get('exchange_rates')
+
+    if not rates:
+        try:
+            api_key = "68f3333843fa6b81c7e5ac5e"
+            url = f"https://v6.exchangerate-api.com/v6/{api_key}/latest/USD"
+            response = requests.get(url)
+            data = response.json()
+
+            if data['result'] == 'success':
+                rates = data['conversion_rates']
+                cache.set('exchange_rates', rates, 43200)
+        except Exception as e:
+            rates = {"USD": 1.0, "UAH": 41.5, "EUR": 0.92}
+
+    return rates

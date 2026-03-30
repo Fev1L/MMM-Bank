@@ -18,6 +18,8 @@ export class Dashboard implements OnInit {
   user: any = null;
   accounts: any[] = [];
   totalBalance: number = 0;
+  rates: { [key: string]: number } = {};
+  viewCurrency: string = 'USD';
   recentTransactions: any[] = [];
 
   isModalOpen: boolean = false;
@@ -64,8 +66,9 @@ export class Dashboard implements OnInit {
       next: (data) => {
         this.user = data.user;
         this.accounts = data.accounts;
-        this.totalBalance = data.totalBalance;
+        this.rates = data.rates;
         this.availableCurrencies = data.availableCurrencies;
+        this.calculateTotal();;
         this.cdr.detectChanges();
       },
       error: (err) => {
@@ -112,6 +115,28 @@ export class Dashboard implements OnInit {
     });
 
     this.closeAddAccountModal();
+  }
+
+  calculateTotal() {
+    if (!this.accounts.length || Object.keys(this.rates).length === 0) {
+      this.totalBalance = 0;
+      return;
+    }
+
+    this.totalBalance = this.accounts.reduce((total, acc) => {
+      const currencyKey = acc.currency_code || acc.code;
+      const rate = this.rates[currencyKey];
+
+      if (rate) {
+        return total + (acc.balance / rate);
+      }
+      return total;
+    }, 0);
+  }
+
+  getConvertedTotal(): number {
+    const targetRate = this.rates[this.viewCurrency] || 1;
+    return this.totalBalance * targetRate;
   }
 }
 

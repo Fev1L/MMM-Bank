@@ -26,7 +26,7 @@
 
     <header class="balance-header">
       <div class="balance-info">
-        <h1>{{ totalBalance | currency:'$':'symbol':'1.2-2' }}</h1>
+        <h1>{{ getConvertedTotal() | currency:'$':'symbol':'1.2-2' }}</h1>
         <p>Total balance across all accounts</p>
         <div class="quick-actions">
           <button class="btn-light"><i class="fa-solid fa-paper-plane"></i> Send</button>
