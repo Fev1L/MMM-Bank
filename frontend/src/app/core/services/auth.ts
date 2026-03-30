@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { BehaviorSubject, tap, Observable } from 'rxjs';
+import {BehaviorSubject, tap, Observable, of} from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -37,10 +37,14 @@ export class AuthService {
     );
   }
 
-  logout() {
-    localStorage.removeItem('user_session');
-    this.loggedIn.next(false);
-    this.router.navigate(['']);
+  logout(): Observable<any> {
+    return this.http.post(`${this.API_URL}/api/logout/`, {}, { withCredentials: true }).pipe(
+      tap(() => {
+        localStorage.removeItem('user_session');
+        this.loggedIn.next(false);
+        this.router.navigate(['']);
+      })
+    );
   }
 
   sendCode(email: string) {
@@ -61,5 +65,9 @@ export class AuthService {
 
   getProfile(): Observable<any> {
     return this.http.get(`${this.API_URL}/api/dashboard/`, { withCredentials: true });
+  }
+
+  getTransactions(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.API_URL}/api/transactions/`, { withCredentials: true });
   }
 }

@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
-from django.db import models
+from django.core.exceptions import ValidationError
+from django.db import models, transaction
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils import timezone
@@ -61,3 +62,62 @@ class Account(models.Model):
 def create_user_bank_data(sender, instance, created, **kwargs):
     if created:
         UserProfile.objects.create(user=instance)
+
+class Category(models.Model):
+    DEPOSIT = "deposit"
+    WITHDRAW = "withdraw"
+    TRANSACTION_TYPES = [
+        (DEPOSIT, "Top-up"),
+        (WITHDRAW, "Consumption"),
+    ]
+
+    name = models.CharField(max_length=100)
+    icon = models.CharField(max_length=100, default="fa-solid fa-question")
+    type = models.CharField(max_length=20, choices=TRANSACTION_TYPES)
+
+    def __str__(self):
+        return f"{self.name} ({self.get_type_display()})"
+
+
+class Transaction(models.Model):
+    DEPOSIT = "deposit"
+    WITHDRAW = "withdraw"
+    TRANSACTION_TYPES = [
+        (DEPOSIT, "Top-up"),
+        (WITHDRAW, "Consumption"),
+    ]
+
+    account = models.ForeignKey('Account', on_delete=models.CASCADE, related_name='transactions')
+
+    title = models.CharField(max_length=255, default="Transaction")
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
+
+    transaction_type = models.CharField(max_length=20, choices=TRANSACTION_TYPES)
+
+    amount = models.DecimalField(max_digits=12, decimal_places=2)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    @transaction.atomic
+    def save(self, *args, **kwargs):
+        if self.pk:
+            raise ValidationError("Transactions cannot be modified once they have been created!")
+
+        if self.amount <= 0:
+            raise ValidationError("The transaction amount must be greater than zero.")
+
+        if not self.transaction_type and self.category:
+            self.transaction_type = self.category.type
+
+        if self.transaction_type == self.DEPOSIT:
+            self.account.balance += self.amount
+
+        elif self.transaction_type == self.WITHDRAW:
+            if self.account.balance < self.amount:
+                raise ValidationError("There are insufficient funds in your account!")
+            self.account.balance -= self.amount
+
+        self.account.save()
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.transaction_type.upper()} | {self.amount} {self.account.currency_type.code} | {self.created_at.strftime('%Y-%m-%d')}"

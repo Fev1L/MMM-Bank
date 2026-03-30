@@ -29,22 +29,11 @@
         <h1>{{ totalBalance | currency:'$':'symbol':'1.2-2' }}</h1>
         <p>Total balance across all accounts</p>
         <div class="quick-actions">
-          <button class="btn-light"><i class="fa-solid fa-plus"></i> Add money</button>
-          <button class="btn-light"><i class="fa-solid fa-arrow-right-arrow-left"></i> Exchange</button>
+          <button class="btn-light"><i class="fa-solid fa-paper-plane"></i> Send</button>
+          <button class="btn-light"><i class="fa-solid fa-hand-holding-dollar"></i> Request</button>
+          <button class="btn-light"><i class="fa-solid fa-gift"></i> Send a Gift</button>
         </div>
       </div>
-
-<!--      <div class="add-account-section">-->
-<!--        <h4>Open new account:</h4>-->
-<!--        <div class="currency-buttons">-->
-<!--          <button-->
-<!--            *ngFor="let cur of availableCurrencies"-->
-<!--            (click)="openNewAccount(cur)"-->
-<!--            class="btn-mini-add">-->
-<!--            + {{ cur }}-->
-<!--          </button>-->
-<!--        </div>-->
-<!--      </div>-->
     </header>
 
     <div class="tabs">
@@ -52,7 +41,7 @@
       <button [class.active]="activeTab === 'transactions'" (click)="activeTab = 'transactions'">Transactions</button>
     </div>
 
-    <div class="accounts-grid" *ngIf="activeTab === 'accounts'">
+    <div class="accounts-grid fade-in" *ngIf="activeTab === 'accounts'">
 
       <div class="account-card" *ngFor="let acc of accounts">
         <div class="card-top">
@@ -73,6 +62,34 @@
         </button>
       </div>
 
+    </div>
+
+    <div *ngIf="activeTab === 'transactions'" class="tab-content fade-in">
+
+      <div class="empty-state" *ngIf="recentTransactions.length === 0">
+        <i class="fa-solid fa-receipt"></i>
+        <p>You don't have any transactions yet</p>
+      </div>
+
+      <div class="transactions-list" *ngIf="recentTransactions.length > 0">
+        <div class="transaction-item" *ngFor="let tx of recentTransactions">
+
+          <div class="tx-icon" [ngClass]="tx.type">
+            <i [class]="tx.category_icon"></i>
+          </div>
+
+          <div class="tx-info">
+            <h4>{{ tx.title }}</h4>
+            <span>{{ tx.date | date:'d MMMM, HH:mm' }} &bull; {{ tx.category_name }}</span>
+          </div>
+
+          <div class="tx-amount" [ngClass]="tx.type">
+            {{ tx.type === 'deposit' ? '+' : '-' }}
+            {{ tx.amount | number:'1.2-2' }}
+            {{ tx.currency_code }}
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="modal-overlay" *ngIf="isModalOpen" (click)="closeAddAccountModal()">
@@ -96,8 +113,19 @@
       </div>
     </div>
 
-    <div class="transactions-view" *ngIf="activeTab === 'transactions'">
-      <p class="empty-state">No recent transactions.</p>
+    <div class="modal-overlay" *ngIf="showLogoutModal" (click)="closeLogoutModal()">
+      <div class="modal-content confirm-modal" (click)="$event.stopPropagation()">
+        <div class="modal-icon warning">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i>
+        </div>
+        <h3>Log out</h3>
+        <p>Are you sure you want to log out? You’ll have to enter your password again.</p>
+
+        <div class="modal-actions">
+          <button class="btn-secondary" (click)="closeLogoutModal()">Cancel</button>
+          <button class="btn-danger" (click)="confirmLogout()">Exit</button>
+        </div>
+      </div>
     </div>
 
   </main>

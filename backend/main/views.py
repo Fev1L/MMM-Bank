@@ -1,4 +1,4 @@
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
@@ -10,7 +10,7 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 import random
 
-from .models import EmailVerification, Account, Currency
+from .models import EmailVerification, Account, Currency, Transaction
 
 
 @never_cache
@@ -66,6 +66,11 @@ def api_register(request):
             return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
 
     return JsonResponse({'status': 'error', 'message': 'POST requests only'}, status=405)
+
+@csrf_exempt
+def api_logout(request):
+    logout(request)
+    return JsonResponse({'status': 'success', 'message': 'Logged out'})
 
 @csrf_exempt
 def send_verification_code(request):
@@ -220,3 +225,24 @@ def create_account(request):
             return JsonResponse({'status': 'error', 'message': 'You already have an account in this currency'}, status=400)
         except Exception as e:
             return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+
+def get_transactions(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({'status': 'error', 'message': 'Not authorized'}, status=401)
+
+    transactions = Transaction.objects.filter(account__user=request.user).select_related('category', 'account__currency_type').order_by('-created_at')
+
+    data = []
+    for tx in transactions:
+        data.append({
+            'id': tx.id,
+            'title': tx.title,
+            'amount': float(tx.amount),
+            'type': tx.transaction_type,
+            'date': tx.created_at.isoformat(),
+            'currency_code': tx.account.currency_type.code,
+            'category_name': tx.category.name if tx.category else "Uncategorised",
+            'category_icon': tx.category.icon if tx.category else "fa-solid fa-money-bill-transfer"
+        })
+
+    return JsonResponse(data, safe=False)

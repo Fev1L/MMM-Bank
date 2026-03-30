@@ -2,6 +2,7 @@ import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import { AuthService } from '../core/services/auth';
 import {CommonModule} from '@angular/common';
 import {AlertService} from '../core/services/alert';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -20,21 +21,42 @@ export class Dashboard implements OnInit {
   recentTransactions: any[] = [];
 
   isModalOpen: boolean = false;
+  showLogoutModal: boolean = false;
 
   constructor(
     public authService: AuthService,
     private cdr: ChangeDetectorRef,
+    private router: Router,
     private alertService: AlertService
   ) {}
 
   ngOnInit() {
     this.loadUserData();
+    this.loadTransactions();
   }
 
   onLogout() {
-    if (confirm('Are you sure you want to log out?')) {
-      this.authService.logout();
-    }
+    this.showLogoutModal = true;
+  }
+
+  closeLogoutModal() {
+    this.showLogoutModal = false;
+  }
+
+  confirmLogout() {
+    this.showLogoutModal = false;
+
+    this.authService.logout().subscribe({
+      next: () => {
+        this.alertService.success('You have successfully logged out');
+        setTimeout(() => {
+          this.router.navigate(['']);
+        }, 1500);
+      },
+      error: (err) => {
+        this.alertService.error('Something went wrong when I tried to log out');
+      }
+    });
   }
 
   loadUserData() {
@@ -48,6 +70,17 @@ export class Dashboard implements OnInit {
       },
       error: (err) => {
         this.alertService.error(err.error.message || 'Error loading profile');
+      }
+    });
+  }
+
+  loadTransactions() {
+    this.authService.getTransactions().subscribe({
+      next: (data) => {
+        this.recentTransactions = data;
+      },
+      error: (err) => {
+        this.alertService.error('Unable to load transaction history');
       }
     });
   }
