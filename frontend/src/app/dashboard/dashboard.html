@@ -66,27 +66,33 @@
 
     <div *ngIf="activeTab === 'transactions'" class="tab-content fade-in">
 
-      <div class="empty-state" *ngIf="recentTransactions.length === 0">
-        <i class="fa-solid fa-receipt"></i>
-        <p>You don't have any transactions yet</p>
-      </div>
+      <div *ngFor="let group of groupedTransactions" class="date-group">
+        <div class="date-divider">
+          <span>{{ group.date }}</span>
+        </div>
 
-      <div class="transactions-list" *ngIf="recentTransactions.length > 0">
-        <div class="transaction-item" *ngFor="let tx of recentTransactions">
+        <div class="empty-state" *ngIf="groupedTransactions.length === 0">
+          <i class="fa-solid fa-receipt"></i>
+          <p>You don't have any transactions yet</p>
+        </div>
 
-          <div class="tx-icon" [ngClass]="tx.type">
-            <i [class]="tx.category_icon"></i>
-          </div>
+        <div class="transactions-list" *ngIf="groupedTransactions.length > 0">
+          <div class="transaction-item" *ngFor="let tx of group.items">
 
-          <div class="tx-info">
-            <h4>{{ tx.title }}</h4>
-            <span>{{ tx.date | date:'d MMMM, HH:mm' }} &bull; {{ tx.category_name }}</span>
-          </div>
+            <div class="tx-icon" [ngClass]="tx.type">
+              <i [class]="tx.category_icon"></i>
+            </div>
 
-          <div class="tx-amount" [ngClass]="tx.type">
-            {{ tx.type === 'deposit' ? '+' : '-' }}
-            {{ tx.amount | number:'1.2-2' }}
-            {{ tx.currency_code }}
+            <div class="tx-info">
+              <h4>{{ tx.title }}</h4>
+              <span>{{ tx.date | date:'d MMMM, HH:mm' }} &bull; {{ tx.category_name }}</span>
+            </div>
+
+            <div class="tx-amount" [ngClass]="tx.type">
+              {{ tx.type === 'deposit' ? '+' : '-' }}
+              {{ tx.amount | number:'1.2-2' }}
+              {{ tx.currency_code }}
+            </div>
           </div>
         </div>
       </div>

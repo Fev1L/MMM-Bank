@@ -6,6 +6,11 @@ import {Router} from '@angular/router';
 import {Observable} from 'rxjs';
 import {FormsModule} from '@angular/forms';
 
+interface GroupedTransactions {
+  date: string;
+  items: any[];
+}
+
 @Component({
   selector: 'app-dashboard',
   standalone: true,
@@ -13,6 +18,7 @@ import {FormsModule} from '@angular/forms';
   styleUrls: ['./dashboard.scss'],
   imports: [CommonModule, FormsModule]
 })
+
 export class Dashboard implements OnInit {
   activeTab = 'accounts';
 
@@ -22,7 +28,7 @@ export class Dashboard implements OnInit {
   totalBalance: number = 0;
   rates: { [key: string]: number } = {};
   viewCurrency: string = 'USD';
-  recentTransactions: any[] = [];
+  groupedTransactions: GroupedTransactions[] = [];
 
   isModalOpen: boolean = false;
   showLogoutModal: boolean = false;
@@ -90,12 +96,45 @@ export class Dashboard implements OnInit {
   loadTransactions() {
     this.authService.getTransactions().subscribe({
       next: (data) => {
-        this.recentTransactions = data;
+        this.groupedTransactions = this.groupTransactions(data);
+        this.cdr.detectChanges();
       },
       error: (err) => {
         this.alertService.error('Unable to load transaction history');
       }
     });
+  }
+
+  groupTransactions(transactions: any[]): GroupedTransactions[] {
+    const groups = transactions.reduce((acc, transaction) => {
+      const date = new Date(transaction.date).toLocaleDateString('en-GB', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+      });
+
+      if (!acc[date]) {
+        acc[date] = [];
+      }
+      acc[date].push(transaction);
+      return acc;
+    }, {} as { [key: string]: any[] });
+
+    return Object.keys(groups).map(date => ({
+      date: this.formatDateLabel(date),
+      items: groups[date]
+    }));
+  }
+
+  formatDateLabel(dateStr: string): string {
+    const today = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    const yesterdayStr = yesterday.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+
+    if (dateStr === today) return 'Today';
+    if (dateStr === yesterdayStr) return 'Yesterday';
+    return dateStr;
   }
 
   openAddAccountModal() {
