@@ -55,7 +55,7 @@
       </div>
 
       <div class="accounts-grid">
-        <div class="account-card" *ngFor="let acc of accounts">
+        <div class="account-card" *ngFor="let acc of accounts" (click)="openAccountDetails(acc)">
           <div class="card-top">
             <div class="currency-info">
               <h4>{{ acc.currency }}</h4>
@@ -185,6 +185,63 @@
         </div>
       </div>
     </div>
+
+    <div class="modal-overlay fade-in" *ngIf="isAccountModalOpen" (click)="closeAccountDetails()">
+      <div class="modal-content" (click)="$event.stopPropagation()">
+
+        <div class="modal-header">
+          <h3>Account details</h3>
+          <button class="close-icon" (click)="closeAccountDetails()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+
+        <div class="account-details-body" *ngIf="selectedAccount">
+          <div class="balance-display">
+            <span class="currency-badge">{{ selectedAccount.code }}</span>
+            <h2>{{ selectedAccount.symbol }}{{ selectedAccount.balance | number:'1.2-2' }}</h2>
+          </div>
+
+          <div class="action-grid">
+            <button class="action-btn" (click)="openActionModal('send'); closeAccountDetails()">
+              <i class="fa-solid fa-paper-plane"></i>
+              <span>Send</span>
+            </button>
+
+            <button class="action-btn">
+              <i class="fa-solid fa-rotate"></i>
+              <span>Exchange</span>
+            </button>
+
+            <button class="action-btn">
+              <i class="fa-solid fa-qrcode"></i>
+              <span>Bank details</span>
+            </button>
+          </div>
+
+          <div class="danger-zone">
+            <button class="btn-danger-outline" (click)="openDeleteAccountDetails()">
+              <i class="fa-regular fa-trash-can"></i> Close account
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="modal-overlay" *ngIf="isDeleteAccountModalOpen" (click)="closeDeleteAccountDetails()">
+      <div class="modal-content confirm-modal" *ngIf="selectedAccount" (click)="$event.stopPropagation()">
+        <div class="modal-icon warning">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i>
+        </div>
+        <h3>Close account</h3>
+        <p>Are you sure you want to close account?</p>
+
+        <div class="modal-actions">
+          <button class="btn-secondary" (click)="closeDeleteAccountDetails()">Cancel</button>
+          <button class="btn-danger" (click)="deleteAccount(selectedAccount.id)">Close</button>
+        </div>
+      </div>
+    </div>
+
 
   </main>
 </div>

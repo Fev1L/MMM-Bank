@@ -29,9 +29,12 @@ export class Dashboard implements OnInit {
   rates: { [key: string]: number } = {};
   viewCurrency: string = 'USD';
   groupedTransactions: GroupedTransactions[] = [];
+  selectedAccount: any = null;
 
   isModalOpen: boolean = false;
   showLogoutModal: boolean = false;
+  isAccountModalOpen: boolean = false;
+  isDeleteAccountModalOpen: boolean = false;
 
   activeModal: 'send' | 'request' | 'gift' | null = null;
   transferData = {
@@ -225,6 +228,37 @@ export class Dashboard implements OnInit {
         this.alertService.error(err.error.message || 'An error has occurred');
       }
     });
+  }
+
+  openAccountDetails(account: any) {
+    this.selectedAccount = account;
+    this.isAccountModalOpen = true;
+  }
+
+  closeAccountDetails() {
+    this.isAccountModalOpen = false;
+    this.selectedAccount = null;
+  }
+
+  openDeleteAccountDetails() {
+    this.isAccountModalOpen = false;
+    this.isDeleteAccountModalOpen = true;
+  }
+
+  closeDeleteAccountDetails() {
+    this.isAccountModalOpen = true;
+    this.isDeleteAccountModalOpen = false;
+  }
+
+  deleteAccount(accountId: number) {
+    if (this.selectedAccount.balance > 0) {
+      this.alertService.error('You cannot delete an account that contains funds!');
+      return;
+    }else{
+      this.alertService.success('The account has been successfully closed (for now, only visually)');
+      this.isAccountModalOpen = false;
+      this.isDeleteAccountModalOpen = false;
+    }
   }
 
   protected readonly length = length;

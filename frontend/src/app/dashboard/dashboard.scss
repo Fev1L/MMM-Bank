@@ -166,6 +166,7 @@ $border-color: #e5e7eb;
       display: flex;
       flex-direction: column;
       gap: 30px;
+      cursor: pointer;
       border: 1px solid rgba(0,0,0,0.02);
       transition: transform 0.2s, box-shadow 0.2s;
 
@@ -583,6 +584,104 @@ $border-color: #e5e7eb;
   }
 }
 
+.account-details-body {
+  padding: 20px 0 0;
+  text-align: center;
+
+  .balance-display {
+    margin-bottom: 30px;
+
+    .currency-badge {
+      display: inline-block;
+      background: #f0f4f8;
+      color: $accent-blue;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      font-size: 2.5rem;
+      margin: 0;
+      color: #1e293b;
+    }
+
+    .close-icon {
+      background: none;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      color: #666;
+
+      &:hover {
+        color: #ff4757;
+      }
+    }
+  }
+
+  .action-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-bottom: 30px;
+
+    .action-btn {
+      background: none;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 15px 10px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.2s ease;
+
+      i {
+        font-size: 1.2rem;
+        color: #64748b;
+      }
+
+      span {
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: #475569;
+      }
+
+      &:hover {
+        background: #f8fafc;
+        border-color: #cbd5e1;
+        transform: translateY(-2px);
+
+        i { color: $accent-blue; }
+      }
+    }
+  }
+
+  .danger-zone {
+    border-top: 1px solid #e2e8f0;
+    padding-top: 20px;
+
+    .btn-danger-outline {
+      width: 100%;
+      background: transparent;
+      border: 1px solid #ef4444;
+      color: #ef4444;
+      padding: 12px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s;
+
+      &:hover {
+        background: #fef2f2;
+      }
+    }
+  }
+}
+
 .fade-in {
   animation: fadeIn 0.4s ease-in-out;
 }
@@ -602,5 +701,3 @@ $border-color: #e5e7eb;
     transform: translateY(0) scale(1);
   }
 }
-
-
