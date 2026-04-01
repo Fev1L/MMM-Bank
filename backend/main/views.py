@@ -577,6 +577,8 @@ def api_exchange_money(request):
                 title=f"Exchange from {from_currency} (Rate: {rate_from}/{rate_to})"
             )
 
+        amount = amount.quantize(Decimal('0.01'))
+
         return JsonResponse({
             'status': 'success',
             'message': f'{amount} {from_currency} has been successfully exchanged for {converted_amount} {to_currency}'
