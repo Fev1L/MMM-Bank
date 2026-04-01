@@ -527,3 +527,57 @@ def api_claim_gift(request, request_id):
         gift_req.save()
 
     return JsonResponse({'status': 'success', 'message': f'A gift of {gift_req.amount} {gift_req.currency_code} credited!'})
+
+@csrf_exempt
+def api_exchange_money(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({'status': 'error', 'message': 'Unauthorized'}, status=401)
+
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        amount = Decimal(data.get('amount', 0))
+        from_currency = data.get('from_currency')
+        to_currency = data.get('to_currency')
+
+        if amount <= 0:
+            return JsonResponse({'status': 'error', 'message': 'The sum must be greater than zero'}, status=400)
+
+        if from_currency == to_currency:
+            return JsonResponse({'status': 'error', 'message': 'Select different accounts for the exchange'}, status=400)
+
+        try:
+            from_account = Account.objects.get(user=request.user, currency_type__code=from_currency)
+            to_account = Account.objects.get(user=request.user, currency_type__code=to_currency)
+        except Account.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'Account not found'}, status=404)
+
+        if from_account.balance < amount:
+            return JsonResponse({'status': 'error', 'message': 'Insufficient funds in the account'}, status=400)
+
+        rates = get_real_rates()
+        if from_currency not in rates or to_currency not in rates:
+            return JsonResponse({'status': 'error', 'message': 'Error retrieving exchange rates'}, status=500)
+
+        rate_from = Decimal(str(rates[from_currency]))
+        rate_to = Decimal(str(rates[to_currency]))
+
+        converted_amount = (amount / rate_from) * rate_to
+        converted_amount = converted_amount.quantize(Decimal('0.01'))
+
+        exchange_out_cat, _ = Category.objects.get_or_create(name="Currency Exchange (Out)", type=Category.WITHDRAW)
+        exchange_in_cat, _ = Category.objects.get_or_create(name="Currency Exchange (In)", type=Category.DEPOSIT)
+
+        with transaction.atomic():
+            Transaction.objects.create(
+                account=from_account, amount=amount, category=exchange_out_cat, transaction_type=Category.WITHDRAW,
+                title=f"Exchange to {to_currency}"
+            )
+            Transaction.objects.create(
+                account=to_account, amount=converted_amount, category=exchange_in_cat, transaction_type=Category.DEPOSIT,
+                title=f"Exchange from {from_currency} (Rate: {rate_from}/{rate_to})"
+            )
+
+        return JsonResponse({
+            'status': 'success',
+            'message': f'{amount} {from_currency} has been successfully exchanged for {converted_amount} {to_currency}'
+        })

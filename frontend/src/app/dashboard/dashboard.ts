@@ -35,13 +35,18 @@ export class Dashboard implements OnInit {
   showLogoutModal: boolean = false;
   isAccountModalOpen: boolean = false;
   isDeleteAccountModalOpen: boolean = false;
+  activeModal: 'send' | 'request' | 'gift' | 'exchange' | null = null;
 
-  activeModal: 'send' | 'request' | 'gift' | null = null;
   transferData = {
     user: '',
     amount: 0,
     currency: '',
     message: ''
+  };
+  exchangeData = {
+    amount: 0,
+    from_currency: '',
+    to_currency: ''
   };
 
   constructor(
@@ -192,11 +197,37 @@ export class Dashboard implements OnInit {
     return this.totalBalance * targetRate;
   }
 
-  openActionModal(type: 'send' | 'request' | 'gift') {
+  openActionModal(type: 'send' | 'request' | 'gift' | 'exchange') {
     this.activeModal = type;
-    if (this.accounts.length > 0) {
-      this.transferData.currency = this.accounts[0].currency_code;
+
+    if (type === 'exchange' && this.accounts.length >= 2) {
+      if (this.selectedAccount) {
+        this.exchangeData.from_currency = this.selectedAccount.currency_code || this.selectedAccount.code;
+        const otherAcc = this.accounts.find(a => (a.currency_code || a.code) !== this.exchangeData.from_currency);
+        if (otherAcc) this.exchangeData.to_currency = otherAcc.currency_code || otherAcc.code;
+      } else {
+        this.exchangeData.from_currency = this.accounts[0].currency_code || this.accounts[0].code;
+        this.exchangeData.to_currency = this.accounts[1].currency_code || this.accounts[1].code;
+      }
     }
+
+    if(this.selectedAccount) {
+      this.transferData.currency = this.selectedAccount.currency_code || this.selectedAccount.code;
+    }else if (this.accounts.length > 0) {
+      this.transferData.currency = this.accounts[0].currency_code || this.accounts[0].code;
+    }
+  }
+
+  get estimatedExchangeAmount(): number {
+    if (!this.exchangeData.amount || !this.exchangeData.from_currency || !this.exchangeData.to_currency) return 0;
+
+    const rateFrom = this.rates[this.exchangeData.from_currency];
+    const rateTo = this.rates[this.exchangeData.to_currency];
+
+    if (rateFrom && rateTo) {
+      return (this.exchangeData.amount / rateFrom) * rateTo;
+    }
+    return 0;
   }
 
   closeActionModal() {
@@ -205,15 +236,11 @@ export class Dashboard implements OnInit {
   }
 
   handleTransfer() {
-    if (this.transferData.amount <= 0 || !this.transferData.user) {
-      this.alertService.error('Please fill in all the fields');
-      return;
-    }
-
     let request: Observable<any>;
 
     if (this.activeModal === 'send') request = this.authService.sendMoney(this.transferData);
     else if (this.activeModal === 'request') request = this.authService.requestMoney(this.transferData);
+    else if (this.activeModal === 'exchange') request = this.authService.exchangeMoney(this.exchangeData);
     else request = this.authService.sendGift(this.transferData);
 
     request.subscribe({
@@ -241,12 +268,10 @@ export class Dashboard implements OnInit {
   }
 
   openDeleteAccountDetails() {
-    this.isAccountModalOpen = false;
     this.isDeleteAccountModalOpen = true;
   }
 
   closeDeleteAccountDetails() {
-    this.isAccountModalOpen = true;
     this.isDeleteAccountModalOpen = false;
   }
 

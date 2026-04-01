@@ -148,40 +148,83 @@
 
     <div class="modal-overlay" *ngIf="activeModal" (click)="closeActionModal()">
       <div class="modal-content" (click)="$event.stopPropagation()">
-        <h3>
-          {{ activeModal === 'send' ? 'Send money' :
-          activeModal === 'request' ? 'Request money' : 'Send a Gift' }}
-        </h3>
+        <div *ngIf="activeModal != 'exchange'">
+          <h3>
+            {{ activeModal === 'send' ? 'Send money' :
+            activeModal === 'request' ? 'Request money' : 'Send a Gift' }}
+          </h3>
 
-        <div class="form-group">
-          <label>To whom (Username or Email)</label>
-          <input type="text" [(ngModel)]="transferData.user" placeholder="Enter the recipient's details">
+          <div class="form-group">
+            <label>To whom (Username or Email)</label>
+            <input type="text" [(ngModel)]="transferData.user" placeholder="Enter the recipient's details">
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Sum</label>
+              <input type="number" [(ngModel)]="transferData.amount" placeholder="0.00">
+            </div>
+
+            <div class="form-group">
+              <label>Account currency</label>
+              <select [(ngModel)]="transferData.currency">
+                <option *ngFor="let acc of accounts" [value]="acc.code">
+                  {{ acc.code }}
+                </option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group" *ngIf="activeModal === 'gift'">
+            <label>Greetings (optional)</label>
+            <textarea [(ngModel)]="transferData.message" placeholder="Write something nice..."></textarea>
+          </div>
+
+          <div class="modal-actions">
+            <button class="btn-cancel" (click)="closeActionModal()">Cancel</button>
+            <button class="btn-confirm" (click)="handleTransfer()">Confirm</button>
+          </div>
         </div>
 
-        <div class="form-row">
-          <div class="form-group">
-            <label>Sum</label>
-            <input type="number" [(ngModel)]="transferData.amount" placeholder="0.00">
+        <div *ngIf="activeModal === 'exchange'">
+          <div class="modal-header">
+            <h3>Currency exchange</h3>
           </div>
 
           <div class="form-group">
-            <label>Account currency</label>
-            <select [(ngModel)]="transferData.currency">
-              <option *ngFor="let acc of accounts" [value]="acc.code">
-                {{ acc.code }}
+            <label>From account</label>
+            <select [(ngModel)]="exchangeData.from_currency">
+              <option *ngFor="let acc of accounts" [value]="acc.currency_code || acc.code">
+                {{ acc.currency_code || acc.code }} (Balance: {{ acc.balance | number:'1.2-2' }})
               </option>
             </select>
           </div>
-        </div>
 
-        <div class="form-group" *ngIf="activeModal === 'gift'">
-          <label>Greetings (optional)</label>
-          <textarea [(ngModel)]="transferData.message" placeholder="Write something nice..."></textarea>
-        </div>
+          <div class="form-group">
+            <label>To account</label>
+            <select [(ngModel)]="exchangeData.to_currency">
+              <ng-container *ngFor="let acc of accounts">
+                <option *ngIf="(acc.currency_code || acc.code) !== exchangeData.from_currency" [value]="acc.currency_code || acc.code">
+                  {{ acc.currency_code || acc.code }} (Balance: {{ acc.balance | number:'1.2-2' }})
+                </option>
+              </ng-container>
+            </select>
+          </div>
 
-        <div class="modal-actions">
-          <button class="btn-cancel" (click)="closeActionModal()">Cancel</button>
-          <button class="btn-confirm" (click)="handleTransfer()">Confirm</button>
+          <div class="form-group">
+            <label>Amount debited</label>
+            <input type="number" [(ngModel)]="exchangeData.amount" placeholder="0.00">
+          </div>
+
+          <div class="exchange-preview" *ngIf="exchangeData.amount > 0">
+            <i class="fa-solid fa-arrow-down"></i>
+            <p>You will receive: <strong>{{ estimatedExchangeAmount | number:'1.2-2' }} {{ exchangeData.to_currency }}</strong></p>
+          </div>
+
+          <div class="modal-actions">
+            <button class="btn-cancel" (click)="closeActionModal()">Cancel</button>
+            <button class="btn-confirm" (click)="handleTransfer()">Exchange</button>
+          </div>
         </div>
       </div>
     </div>
@@ -206,7 +249,7 @@
               <span>Send</span>
             </button>
 
-            <button class="action-btn">
+            <button class="action-btn" (click)="openActionModal('exchange'); closeAccountDetails()">
               <i class="fa-solid fa-rotate"></i>
               <span>Exchange</span>
             </button>

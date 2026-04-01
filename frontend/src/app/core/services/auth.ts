@@ -90,4 +90,9 @@ export class AuthService {
   payRequest(requestId: string): Observable<any> {
     return this.http.post(`${this.API_URL}/api/api-confirm-payment-request/${requestId}/`, {}, { withCredentials: true });
   }
+
+  exchangeMoney(data: any): Observable<any> {
+    return this.http.post(`${this.API_URL}/api/exchange/`, data, { withCredentials: true });
+  }
+
 }
