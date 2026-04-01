@@ -185,6 +185,7 @@ def api_dashboard_data(request):
             'balance': float(acc.balance),
             'symbol': acc.currency_type.symbol,
             'flag': acc.currency_type.flag,
+            'iban': acc.iban,
         })
 
     return JsonResponse({

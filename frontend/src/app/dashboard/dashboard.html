@@ -254,7 +254,7 @@
               <span>Exchange</span>
             </button>
 
-            <button class="action-btn">
+            <button class="action-btn" (click)="openBankDetails()">
               <i class="fa-solid fa-qrcode"></i>
               <span>Bank details</span>
             </button>
@@ -281,6 +281,51 @@
         <div class="modal-actions">
           <button class="btn-secondary" (click)="closeDeleteAccountDetails()">Cancel</button>
           <button class="btn-danger" (click)="deleteAccount(selectedAccount.code)">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-overlay fade-in" *ngIf="showBankDetails" (click)="closeBankDetails()">
+      <div class="modal-content" (click)="$event.stopPropagation()">
+        <div class="details-header">
+          <button class="back-btn" (click)="closeBankDetails()">
+            <i class="fa-solid fa-arrow-left"></i> Back
+          </button>
+          <h4>Account Details</h4>
+        </div>
+
+        <div class="details-list">
+
+          <div class="detail-item">
+            <span class="label">Account Holder</span>
+            <div class="value-row">
+              <span class="value">{{ user?.firstName + " " + user?.lastName }}</span>
+              <button class="copy-btn" (click)="copyToClipboard(user?.firstName + ' ' + user?.lastName, 'Account Holder')">
+                <i class="fa-regular fa-copy"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="detail-item">
+            <span class="label">IBAN</span>
+            <div class="value-row">
+              <span class="value">{{ selectedAccount.iban }}</span>
+              <button class="copy-btn" (click)="copyToClipboard(selectedAccount.iban, 'IBAN')">
+                <i class="fa-regular fa-copy"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="detail-item">
+            <span class="label">BIC / SWIFT</span>
+            <div class="value-row">
+              <span class="value">MMMBUATERN</span>
+              <button class="copy-btn" (click)="copyToClipboard('MMMBUATERN', 'SWIFT code')">
+                <i class="fa-regular fa-copy"></i>
+              </button>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>

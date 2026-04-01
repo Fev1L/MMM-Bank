@@ -35,6 +35,7 @@ export class Dashboard implements OnInit {
   showLogoutModal: boolean = false;
   isAccountModalOpen: boolean = false;
   isDeleteAccountModalOpen: boolean = false;
+  showBankDetails: boolean = false;
   activeModal: 'send' | 'request' | 'gift' | 'exchange' | null = null;
 
   transferData = {
@@ -92,7 +93,7 @@ export class Dashboard implements OnInit {
         this.accounts = data.accounts;
         this.rates = data.rates;
         this.availableCurrencies = data.availableCurrencies;
-        this.calculateTotal();;
+        this.calculateTotal();
         this.cdr.detectChanges();
       },
       error: (err) => {
@@ -292,6 +293,22 @@ export class Dashboard implements OnInit {
         }
       });
     }
+  }
+
+  openBankDetails() {
+    this.showBankDetails = true;
+  }
+
+  closeBankDetails() {
+    this.showBankDetails = false;
+  }
+
+  copyToClipboard(text: string, fieldName: string) {
+    navigator.clipboard.writeText(text).then(() => {
+      this.alertService.success(`${fieldName} copied to clipboard!`);
+    }).catch(err => {
+      this.alertService.error('Failed to copy');
+    });
   }
 
   protected readonly length = length;

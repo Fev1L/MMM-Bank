@@ -1,3 +1,5 @@
+import random
+import string
 import uuid
 
 from django.contrib.auth.models import User
@@ -42,12 +44,28 @@ class Currency(models.Model):
     def __str__(self):
         return f"{self.code} ({self.name})"
 
+def generate_fake_iban(country_code="UA"):
+    check_digits = f"{random.randint(10, 99)}"
+    bank_code = "170420"
+    account_number = ''.join(random.choices(string.digits, k=19))
+    return f"{country_code}{check_digits}{bank_code}{account_number}"
+
 class Account(models.Model):
     user = models.ForeignKey(User, related_name='accounts', on_delete=models.CASCADE)
 
     currency_type = models.ForeignKey(Currency, on_delete=models.PROTECT)
-
+    iban = models.CharField(max_length=34, unique=True, blank=True, null=True)
     balance = models.DecimalField(max_digits=12, decimal_places=2, default=0)
+
+    def save(self, *args, **kwargs):
+        if not self.iban:
+            while True:
+                new_iban = generate_fake_iban()
+                if not Account.objects.filter(iban=new_iban).exists():
+                    self.iban = new_iban
+                    break
+
+        super().save(*args, **kwargs)
 
     class Meta:
         constraints = [
@@ -128,8 +146,8 @@ class PaymentRequest(models.Model):
     REQUEST = 'request'
     GIFT = 'gift'
     TYPES = [
-        (REQUEST, "Запит коштів"),
-        (GIFT, "Подарунок"),
+        (REQUEST, "Request for funds"),
+        (GIFT, "Gift"),
     ]
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
