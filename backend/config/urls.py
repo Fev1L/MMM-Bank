@@ -5,7 +5,7 @@ from main.views import (api_login, api_register, send_verification_code,
                         verify_code , check_username, create_account, api_dashboard_data,
                         api_logout, get_transactions, api_send_money, api_send_gift,
                         api_request_money, api_claim_gift, api_confirm_payment_request,
-                        api_exchange_money)
+                        api_exchange_money, api_delete_account)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -29,4 +29,5 @@ urlpatterns = [
     path('api/api-confirm-payment-request/<uuid:request_id>/', api_confirm_payment_request, name='api_confirm_payment_request'),
 
     path('api/exchange/', api_exchange_money, name='api_exchange_money'),
+    path('api/accounts/<str:currency_code>/delete/', api_delete_account, name='api_delete_account'),
 ]

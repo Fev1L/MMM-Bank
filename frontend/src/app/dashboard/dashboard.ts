@@ -275,14 +275,22 @@ export class Dashboard implements OnInit {
     this.isDeleteAccountModalOpen = false;
   }
 
-  deleteAccount(accountId: number) {
+  deleteAccount(currencyCode: string) {
     if (this.selectedAccount.balance > 0) {
       this.alertService.error('You cannot delete an account that contains funds!');
       return;
     }else{
-      this.alertService.success('The account has been successfully closed (for now, only visually)');
-      this.isAccountModalOpen = false;
-      this.isDeleteAccountModalOpen = false;
+      this.authService.deleteAccount(currencyCode).subscribe({
+        next: (res) => {
+          this.alertService.success(res.message);
+          this.closeAccountDetails();
+          this.closeDeleteAccountDetails();
+          this.loadUserData();
+        },
+        error: (err) => {
+          this.alertService.error(err.error.message || 'Deletion error');
+        }
+      });
     }
   }
 

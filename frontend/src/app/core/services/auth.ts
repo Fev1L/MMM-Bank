@@ -95,4 +95,7 @@ export class AuthService {
     return this.http.post(`${this.API_URL}/api/exchange/`, data, { withCredentials: true });
   }
 
+  deleteAccount(currencyCode: string): Observable<any> {
+    return this.http.delete(`${this.API_URL}/api/accounts/${currencyCode}/delete/`, { withCredentials: true });
+  }
 }

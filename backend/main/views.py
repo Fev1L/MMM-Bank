@@ -581,3 +581,21 @@ def api_exchange_money(request):
             'status': 'success',
             'message': f'{amount} {from_currency} has been successfully exchanged for {converted_amount} {to_currency}'
         })
+
+@csrf_exempt
+def api_delete_account(request, currency_code):
+    if not request.user.is_authenticated:
+        return JsonResponse({'status': 'error', 'message': 'Unauthorized'}, status=401)
+
+    if request.method == 'DELETE':
+        try:
+            account = Account.objects.get(user=request.user, currency_type__code=currency_code)
+
+            if account.balance > 0:
+                return JsonResponse({'status': 'error', 'message': 'It is not possible to close an account with a positive balance. Please transfer the funds.'}, status=400)
+
+            account.delete()
+            return JsonResponse({'status': 'success', 'message': 'The account has been successfully closed'})
+
+        except Account.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'Account not found'}, status=404)
