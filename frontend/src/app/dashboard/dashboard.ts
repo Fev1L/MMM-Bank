@@ -156,6 +156,7 @@ export class Dashboard implements OnInit {
       next: (res) => {
         this.closeAddAccountModal();
         this.loadUserData();
+        this.cdr.detectChanges();
         this.alertService.success(`Your account in ${currencyCode} has been successfully opened!`);
       },
       error: (err) => {
@@ -226,5 +227,6 @@ export class Dashboard implements OnInit {
     });
   }
 
+  protected readonly length = length;
 }
 

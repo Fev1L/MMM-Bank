@@ -41,39 +41,51 @@
       <button [class.active]="activeTab === 'transactions'" (click)="activeTab = 'transactions'">Transactions</button>
     </div>
 
-    <div class="accounts-grid fade-in" *ngIf="activeTab === 'accounts'">
+    <div class="tab-content fade-in" *ngIf="activeTab === 'accounts'">
 
-      <div class="account-card" *ngFor="let acc of accounts">
-        <div class="card-top">
-          <div class="currency-info">
-            <h4>{{ acc.currency }}</h4>
-            <span>{{ acc.code }}</span>
-          </div>
-          <div class="flag-icon">{{ acc.flag }}</div>
-        </div>
-        <div class="card-bottom">
-          <h2>{{ acc.symbol }}{{ acc.balance | number:'1.2-2' }}</h2>
-        </div>
+      <div class="empty-state" *ngIf="accounts.length === 0">
+        <i class="fa-solid fa-circle-user"></i>
+        <p>You don't have any accounts yet</p>
       </div>
 
-      <div class="add-account-wrapper" *ngIf="filteredCurrencies.length > 0">
+      <div class="add-account-wrapper" *ngIf="filteredCurrencies.length > 0 && accounts.length === 0">
         <button class="add-btn" (click)="openAddAccountModal()">
           <i class="fa-solid fa-plus"></i>
         </button>
       </div>
 
+      <div class="accounts-grid">
+        <div class="account-card" *ngFor="let acc of accounts">
+          <div class="card-top">
+            <div class="currency-info">
+              <h4>{{ acc.currency }}</h4>
+              <span>{{ acc.code }}</span>
+            </div>
+            <div class="flag-icon">{{ acc.flag }}</div>
+          </div>
+          <div class="card-bottom">
+            <h2>{{ acc.symbol }}{{ acc.balance | number:'1.2-2' }}</h2>
+          </div>
+        </div>
+
+        <div class="add-account-wrapper" *ngIf="filteredCurrencies.length > 0 && accounts.length > 0">
+          <button class="add-btn" (click)="openAddAccountModal()">
+            <i class="fa-solid fa-plus"></i>
+          </button>
+        </div>
+      </div>
     </div>
 
     <div *ngIf="activeTab === 'transactions'" class="tab-content fade-in">
 
+      <div class="empty-state" *ngIf="groupedTransactions.length === 0">
+        <i class="fa-solid fa-receipt"></i>
+        <p>You don't have any transactions yet</p>
+      </div>
+
       <div *ngFor="let group of groupedTransactions" class="date-group">
         <div class="date-divider">
           <span>{{ group.date }}</span>
-        </div>
-
-        <div class="empty-state" *ngIf="groupedTransactions.length === 0">
-          <i class="fa-solid fa-receipt"></i>
-          <p>You don't have any transactions yet</p>
         </div>
 
         <div class="transactions-list" *ngIf="groupedTransactions.length > 0">
