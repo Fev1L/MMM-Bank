@@ -11,7 +11,7 @@
 
     <nav class="side-nav">
       <a class="active"><i class="fa-solid fa-wallet"></i> Accounts</a>
-      <a><i class="fa-solid fa-hand-holding-dollar"></i> Loans</a>
+      <a routerLink="/credits"><i class="fa-solid fa-hand-holding-dollar"></i> Loans</a>
       <a><i class="fa-solid fa-piggy-bank"></i> Deposits</a>
       <a><i class="fa-solid fa-ellipsis"></i> More</a>
     </nav>
@@ -194,8 +194,8 @@
           <div class="form-group">
             <label>From account</label>
             <select [(ngModel)]="exchangeData.from_currency">
-              <option *ngFor="let acc of accounts" [value]="acc.currency_code || acc.code">
-                {{ acc.currency_code || acc.code }} (Balance: {{ acc.balance | number:'1.2-2' }})
+              <option *ngFor="let acc of accounts" [value]="acc.code">
+                {{ acc.code }} (Balance: {{ acc.balance | number:'1.2-2' }})
               </option>
             </select>
           </div>
@@ -204,8 +204,8 @@
             <label>To account</label>
             <select [(ngModel)]="exchangeData.to_currency">
               <ng-container *ngFor="let acc of accounts">
-                <option *ngIf="(acc.currency_code || acc.code) !== exchangeData.from_currency" [value]="acc.currency_code || acc.code">
-                  {{ acc.currency_code || acc.code }} (Balance: {{ acc.balance | number:'1.2-2' }})
+                <option *ngIf="acc.code !== exchangeData.from_currency" [value]="acc.currency_code || acc.code">
+                  {{ acc.code }} (Balance: {{ acc.balance | number:'1.2-2' }})
                 </option>
               </ng-container>
             </select>

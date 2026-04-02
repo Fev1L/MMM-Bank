@@ -2,7 +2,7 @@ import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import { AuthService } from '../core/services/auth';
 import {CommonModule} from '@angular/common';
 import {AlertService} from '../core/services/alert';
-import {Router} from '@angular/router';
+import {Router , RouterLink} from '@angular/router';
 import {Observable} from 'rxjs';
 import {FormsModule} from '@angular/forms';
 
@@ -16,7 +16,7 @@ interface GroupedTransactions {
   standalone: true,
   templateUrl: './dashboard.html',
   styleUrls: ['./dashboard.scss'],
-  imports: [CommonModule, FormsModule]
+  imports: [CommonModule, FormsModule, RouterLink]
 })
 
 export class Dashboard implements OnInit {
@@ -87,7 +87,7 @@ export class Dashboard implements OnInit {
   }
 
   loadUserData() {
-    this.authService.getProfile().subscribe({
+    this.authService.getUserData().subscribe({
       next: (data) => {
         this.user = data.user;
         this.accounts = data.accounts;
@@ -183,7 +183,7 @@ export class Dashboard implements OnInit {
     }
 
     this.totalBalance = this.accounts.reduce((total, acc) => {
-      const currencyKey = acc.currency_code || acc.code;
+      const currencyKey = acc.code;
       const rate = this.rates[currencyKey];
 
       if (rate) {
@@ -203,19 +203,19 @@ export class Dashboard implements OnInit {
 
     if (type === 'exchange' && this.accounts.length >= 2) {
       if (this.selectedAccount) {
-        this.exchangeData.from_currency = this.selectedAccount.currency_code || this.selectedAccount.code;
-        const otherAcc = this.accounts.find(a => (a.currency_code || a.code) !== this.exchangeData.from_currency);
-        if (otherAcc) this.exchangeData.to_currency = otherAcc.currency_code || otherAcc.code;
+        this.exchangeData.from_currency = this.selectedAccount.code;
+        const otherAcc = this.accounts.find(a => a.code !== this.exchangeData.from_currency);
+        if (otherAcc) this.exchangeData.to_currency = otherAcc.code;
       } else {
-        this.exchangeData.from_currency = this.accounts[0].currency_code || this.accounts[0].code;
-        this.exchangeData.to_currency = this.accounts[1].currency_code || this.accounts[1].code;
+        this.exchangeData.from_currency = this.accounts[0].code;
+        this.exchangeData.to_currency = this.accounts[1].code;
       }
     }
 
     if(this.selectedAccount) {
-      this.transferData.currency = this.selectedAccount.currency_code || this.selectedAccount.code;
+      this.transferData.currency = this.selectedAccount.code;
     }else if (this.accounts.length > 0) {
-      this.transferData.currency = this.accounts[0].currency_code || this.accounts[0].code;
+      this.transferData.currency = this.accounts[0].code;
     }
   }
 

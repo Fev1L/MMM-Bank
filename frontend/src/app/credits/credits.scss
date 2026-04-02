@@ -86,13 +86,13 @@ $border-color: #e5e7eb;
         }
       }
       &.logout { color: #ff4757; i { color: #ff4757; } }
-      }
-
-
     }
-  }
 
-  .bottom-nav { margin-top: auto; }
+
+  }
+}
+
+.bottom-nav { margin-top: auto; }
 
 
 .main-content {
@@ -769,6 +769,66 @@ $border-color: #e5e7eb;
       }
     }
   }
+}
+
+.debt-text {
+  color: #ff4757 !important;
+}
+
+.credits-layout {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: 40px;
+  align-items: start;
+
+  @media (max-width: 1100px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.credit-card {
+  border-left: 4px solid #f59e0b !important;
+
+  .label {
+    font-size: 0.8rem;
+    color: $text-muted;
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  .loan-status-tag {
+    background: rgba($accent-blue, 0.1);
+    color: $accent-blue;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 700;
+  }
+}
+
+.inline-card {
+  max-width: 100% !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05) !important;
+  animation: none !important;
+  border: 1px solid $border-color;
+}
+
+.loan-preview {
+  background: rgba($accent-blue, 0.05);
+  padding: 15px;
+  border-radius: 12px;
+  margin: 20px 0;
+  text-align: center;
+
+  p { margin: 0; color: $text-muted; font-size: 0.9rem; }
+  strong { color: $accent-blue; font-size: 1.2rem; }
+}
+
+.w-100 { width: 100%; }
+
+.empty-state {
+  padding: 80px 0;
+  i { font-size: 3rem; color: #e2e8f0; margin-bottom: 15px; }
 }
 
 .fade-in {

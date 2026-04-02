@@ -19,7 +19,8 @@ INSTALLED_APPS = [
     'corsheaders',
 
     'config',
-    'main'
+    'main',
+    'credits'
 ]
 
 MIDDLEWARE = [

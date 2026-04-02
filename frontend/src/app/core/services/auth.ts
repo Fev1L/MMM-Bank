@@ -63,7 +63,7 @@ export class AuthService {
     return this.http.post(`${this.API_URL}/api/accounts/create/`, { currency }, { withCredentials: true });
   }
 
-  getProfile(): Observable<any> {
+  getUserData(): Observable<any> {
     return this.http.get(`${this.API_URL}/api/dashboard/`, { withCredentials: true });
   }
 
@@ -97,5 +97,13 @@ export class AuthService {
 
   deleteAccount(currencyCode: string): Observable<any> {
     return this.http.delete(`${this.API_URL}/api/accounts/${currencyCode}/delete/`, { withCredentials: true });
+  }
+
+  getCredits(): Observable<any> {
+    return this.http.get(`${this.API_URL}/api/credits/`, { withCredentials: true });
+  }
+
+  applyForCredit(data: any): Observable<any> {
+    return this.http.post(`${this.API_URL}/api/credits/`, data, { withCredentials: true });
   }
 }

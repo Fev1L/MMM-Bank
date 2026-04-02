@@ -1,0 +1,131 @@
+<div class="dashboard-wrapper">
+  <aside class="sidebar">
+    <div class="user-profile">
+      <div class="avatar">{{ user?.initials }}</div>
+      <div class="user-info">
+        <h3>{{ user?.firstName }} {{ user?.lastName }}</h3>
+        <p>{{ user?.plan }}</p>
+      </div>
+    </div>
+
+    <nav class="side-nav">
+      <a routerLink="/dashboard"><i class="fa-solid fa-wallet"></i> Accounts</a>
+      <a class="active" routerLink="/credits"><i class="fa-solid fa-hand-holding-dollar"></i> Loans</a>
+      <a><i class="fa-solid fa-piggy-bank"></i> Deposits</a>
+      <a><i class="fa-solid fa-ellipsis"></i> More</a>
+    </nav>
+
+    <div class="bottom-nav">
+      <a><i class="fa-solid fa-circle-question"></i> Help</a>
+      <a (click)="onLogout()" class="logout"><i class="fa-solid fa-right-from-bracket"></i> Log out</a>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <header class="balance-header">
+      <div class="balance-info">
+        <h1 class="debt-text">{{ getConvertedTotal() | currency:'$':'symbol':'1.2-2' }}</h1>
+        <p>Total active debt</p>
+        <div class="quick-actions">
+          <button (click)="openLoanModal()" class="btn-light">
+            <i class="fa-solid fa-plus"></i> Get a New Loan
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <div class="tabs">
+      <button [class.active]="activeTab === 'loans'" (click)="activeTab = 'loans'">Loans</button>
+      <button [class.active]="activeTab === 'history'" (click)="activeTab = 'history'">Loans History</button>
+    </div>
+
+    <div class="tab-content fade-in" *ngIf="activeTab === 'loans'">
+
+      <div class="empty-state" *ngIf="credits.length === 0">
+        <i class="fa-solid fa-shield-heart"></i>
+        <p>You don't have any active loans</p>
+      </div>
+
+      <div class="add-account-wrapper" *ngIf="credits.length === 0">
+        <button class="add-btn" (click)="openLoanModal()">
+          <i class="fa-solid fa-plus"></i>
+        </button>
+      </div>
+
+      <div class="accounts-grid">
+        <div class="account-card credit-card" *ngFor="let credit of credits">
+          <div class="card-top">
+            <div class="currency-info">
+              <h4>{{ credit.title }}</h4>
+              <span>Interest Rate: {{ credit.rate }}%</span>
+            </div>
+            <div class="loan-status-tag">Active</div>
+          </div>
+          <div class="card-bottom">
+            <span class="label">Remaining to pay:</span>
+            <h2>{{ credit.amount | number:'1.2-2' }} {{ credit.currency }}</h2>
+          </div>
+        </div>
+
+        <div class="add-account-wrapper" *ngIf="credits.length > 0">
+          <button class="add-btn" (click)="openLoanModal()">
+            <i class="fa-solid fa-plus"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-overlay" *ngIf="showLoanModal" (click)="closeLoanModal()">
+      <div class="modal-content" (click)="$event.stopPropagation()">
+        <h3>Apply for a Loan</h3>
+
+        <div class="form-group">
+          <label>Loan Purpose</label>
+          <input type="text" [(ngModel)]="loanData.loan_target" placeholder="e.g. Car, Renovation">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Amount</label>
+            <input type="number" [(ngModel)]="loanData.amount" placeholder="0.00">
+          </div>
+
+          <div class="form-group">
+            <label>Receive to</label>
+            <select [(ngModel)]="loanData.currency">
+              <option *ngFor="let acc of accounts" [value]="acc.code">
+                {{ acc.code }}
+              </option>
+            </select>
+          </div>
+        </div>
+
+
+        <div class="exchange-preview loan-preview">
+          <p>Estimated Monthly Payment:</p>
+          <strong>{{ estimatedMonthlyPayment | number:'1.2-2' }} {{ selectedCurrencyCode }} / mo.</strong>
+        </div>
+
+        <div class="modal-actions">
+          <button class="btn-secondary" (click)="closeLoanModal()">Cancel</button>
+          <button class="btn-confirm w-100" (click)="applyLoan()">Confirm Loan</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-overlay" *ngIf="showLogoutModal" (click)="closeLogoutModal()">
+      <div class="modal-content confirm-modal" (click)="$event.stopPropagation()">
+        <div class="modal-icon warning">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i>
+        </div>
+        <h3>Log out</h3>
+        <p>Are you sure you want to log out? You’ll have to enter your password again.</p>
+
+        <div class="modal-actions">
+          <button class="btn-secondary" (click)="closeLogoutModal()">Cancel</button>
+          <button class="btn-danger" (click)="confirmLogout()">Exit</button>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
