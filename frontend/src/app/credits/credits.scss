@@ -623,7 +623,7 @@ $border-color: #e5e7eb;
 
   .action-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 15px;
     margin-bottom: 30px;
 
@@ -667,8 +667,8 @@ $border-color: #e5e7eb;
     .btn-danger-outline {
       width: 100%;
       background: transparent;
-      border: 1px solid #ef4444;
-      color: #ef4444;
+      border: 1px solid #13a906;
+      color: #13a906;
       padding: 12px;
       border-radius: 8px;
       font-weight: 600;
@@ -676,7 +676,7 @@ $border-color: #e5e7eb;
       transition: 0.2s;
 
       &:hover {
-        background: #fef2f2;
+        background: #dbffdb;
       }
     }
   }

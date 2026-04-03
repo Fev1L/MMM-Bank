@@ -21,14 +21,23 @@ export class Credits implements OnInit {
   accounts: any[] = [];
   credits: any[] = [];
   rates: { [key: string]: number } = {};
+  selectedCredit: any = null;
 
   showLogoutModal: boolean = false;
   showLoanModal: boolean = false;
+  showCreditDetail: boolean = false;
+  activeCreditAction: 'pay_extra' | 'details' | 'close' | null = null;
+
+  repaymentData = {
+    currency: '',
+    amount: null as number | null
+  };
 
   loanData = {
     amount: null,
     loan_target: '',
     currency: '',
+    id: '',
   };
 
   constructor(
@@ -40,6 +49,14 @@ export class Credits implements OnInit {
 
   ngOnInit() {
     this.loadInitialData();
+  }
+
+  get activeCredits(): any[] {
+    return this.credits.filter(c => c.is_active);
+  }
+
+  get closedCredits(): any[] {
+    return this.credits.filter(c => !c.is_active);
   }
 
   loadInitialData() {
@@ -57,14 +74,14 @@ export class Credits implements OnInit {
     });
 
     this.authService.getCredits().subscribe(res => {
-      this.credits = res.credits;
+      this.credits = res.credits
       this.calculateTotal();
       this.cdr.detectChanges();
     });
   }
 
   calculateTotal() {
-    if (!this.credits.length || Object.keys(this.rates).length === 0) {
+    if (!this.activeCredits.length || Object.keys(this.rates).length === 0) {
       this.totalBalance = 0;
       return;
     }
@@ -111,6 +128,7 @@ export class Credits implements OnInit {
       next: (res) => {
         this.alertService.success(res.message);
         this.loadInitialData();
+        this.closeLoanModal()
       },
       error: (err) => this.alertService.error(err.error.message)
     });
@@ -137,6 +155,64 @@ export class Credits implements OnInit {
       error: (err) => {
         this.alertService.error('Something went wrong when I tried to log out');
       }
+    });
+  }
+
+  openCreditDetails(credit: any) {
+    this.selectedCredit = credit;
+    this.showCreditDetail = true;
+  }
+
+  closeCreditDetails() {
+    this.showCreditDetail = false;
+    this.selectedCredit = null;
+  }
+
+  openCreditAction(action: 'pay_extra' | 'details' | 'close') {
+    this.activeCreditAction = action;
+
+    if (this.accounts && this.accounts.length > 0) {
+      this.repaymentData.currency = this.accounts[0].code;
+    }
+
+    if (action === 'close') {
+      this.repaymentData.currency = this.selectedCredit.currency;
+      this.repaymentData.amount = this.selectedCredit.amount;
+    } else {
+      this.repaymentData.amount = null;
+    }
+  }
+
+  closeCreditAction() {
+    this.activeCreditAction = null;
+  }
+
+  processRepayment() {
+    if (!this.repaymentData.amount || this.repaymentData.amount <= 0) {
+      this.alertService.error('Please enter a valid amount');
+      return;
+    }
+
+    if (this.repaymentData.amount > this.selectedCredit.amount) {
+      this.alertService.error('You cannot pay more than your total debt for this loan!');
+      return;
+    }
+
+    const payload = {
+      credit_currency: this.selectedCredit.currency,
+      account_currency: this.repaymentData.currency,
+      amount: this.repaymentData.amount,
+      id: this.selectedCredit.id,
+    };
+
+    this.authService.repayCredit(payload).subscribe({
+      next: (res) => {
+        this.alertService.success(res.message);
+        this.closeCreditAction();
+        this.closeCreditDetails();
+        this.loadInitialData();
+      },
+      error: (err) => this.alertService.error(err.error.message)
     });
   }
 }

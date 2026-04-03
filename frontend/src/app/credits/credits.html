@@ -41,19 +41,19 @@
 
     <div class="tab-content fade-in" *ngIf="activeTab === 'loans'">
 
-      <div class="empty-state" *ngIf="credits.length === 0">
+      <div class="empty-state" *ngIf="activeCredits.length === 0">
         <i class="fa-solid fa-shield-heart"></i>
         <p>You don't have any active loans</p>
       </div>
 
-      <div class="add-account-wrapper" *ngIf="credits.length === 0">
+      <div class="add-account-wrapper" *ngIf="activeCredits.length === 0">
         <button class="add-btn" (click)="openLoanModal()">
           <i class="fa-solid fa-plus"></i>
         </button>
       </div>
 
       <div class="accounts-grid">
-        <div class="account-card credit-card" *ngFor="let credit of credits">
+        <div class="account-card credit-card" *ngFor="let credit of activeCredits" (click)="openCreditDetails(credit)">
           <div class="card-top">
             <div class="currency-info">
               <h4>{{ credit.title }}</h4>
@@ -67,12 +67,40 @@
           </div>
         </div>
 
-        <div class="add-account-wrapper" *ngIf="credits.length > 0">
+        <div class="add-account-wrapper" *ngIf="activeCredits.length > 0">
           <button class="add-btn" (click)="openLoanModal()">
             <i class="fa-solid fa-plus"></i>
           </button>
         </div>
       </div>
+    </div>
+
+    <div *ngIf="activeTab === 'history'" class="tab-content fade-in">
+
+      <div class="empty-state" *ngIf="closedCredits.length === 0">
+        <i class="fa-solid fa-file-invoice-dollar"></i>
+        <p>You don't have any closed credits yet</p>
+      </div>
+
+      <div class="transactions-list" *ngIf="closedCredits.length > 0">
+        <div class="transaction-item" *ngFor="let credit of closedCredits">
+
+          <div class="tx-icon deposit">
+            <i class="fa-solid fa-check"></i>
+          </div>
+
+          <div class="tx-info">
+            <h4>{{ credit.title }}</h4>
+            <span>Taken: {{ credit.created_at | date:'d MMMM, yyyy' }} &bull; Closed</span>
+          </div>
+
+          <div class="tx-amount deposit" style="font-weight: 600;">
+            Fully Paid
+          </div>
+
+        </div>
+      </div>
+
     </div>
 
     <div class="modal-overlay" *ngIf="showLoanModal" (click)="closeLoanModal()">
@@ -100,7 +128,6 @@
           </div>
         </div>
 
-
         <div class="exchange-preview loan-preview">
           <p>Estimated Monthly Payment:</p>
           <strong>{{ estimatedMonthlyPayment | number:'1.2-2' }} {{ selectedCurrencyCode }} / mo.</strong>
@@ -127,5 +154,99 @@
         </div>
       </div>
     </div>
+
+    <div class="modal-overlay fade-in" *ngIf="showCreditDetail" (click)="closeCreditDetails()">
+      <div class="modal-content" (click)="$event.stopPropagation()">
+
+        <div class="modal-header">
+          <h3>Credit details</h3>
+          <button class="close-icon" (click)="closeCreditDetails()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="account-details-body" *ngIf="selectedCredit">
+          <div class="balance-display">
+            <span class="currency-badge">{{ selectedCredit.currency }}</span>
+            <h2>{{ selectedCredit.symbol }}{{ selectedCredit.amount | number:'1.2-2' }}</h2>
+          </div>
+
+          <div class="action-grid">
+            <button class="action-btn" (click)="openCreditAction('pay_extra')">
+              <i class="fa-solid fa-credit-card"></i>
+              <span>Pay Extra</span>
+            </button>
+
+            <button class="action-btn" (click)="openCreditAction('details')">
+              <i class="fa-solid fa-qrcode"></i>
+              <span>Credit details</span>
+            </button>
+          </div>
+
+          <div class="danger-zone">
+            <button class="btn-danger-outline" (click)="openCreditAction('close')">
+              <i class="fa-regular fa-face-grin-beam"></i> Close credit
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-overlay fade-in" *ngIf="activeCreditAction" (click)="closeCreditAction()">
+      <div class="modal-content" (click)="$event.stopPropagation()">
+
+        <div class="modal-header">
+          <h3>
+            {{ activeCreditAction === 'pay_extra' ? 'Make a Payment' :
+            activeCreditAction === 'close' ? 'Close Credit' : 'Credit Information' }}
+          </h3>
+          <button class="close-icon" (click)="closeCreditAction()">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+
+        <div *ngIf="activeCreditAction === 'details'" class="details-list">
+          <div class="detail-item">
+            <span class="label">Loan Purpose</span>
+            <span class="value">{{ selectedCredit.title }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="label">Principal Amount</span>
+            <span class="value">{{ selectedCredit.amount | number:'1.2-2' }} {{ selectedCredit.currency }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="label">Interest Rate</span>
+            <span class="value" style="color: #ff4757;">+ 4%</span>
+          </div>
+        </div>
+
+        <div *ngIf="activeCreditAction === 'pay_extra' || activeCreditAction === 'close'">
+
+          <div class="form-group">
+            <label>Pay from Account</label>
+            <select [(ngModel)]="repaymentData.currency">
+              <option *ngFor="let acc of accounts" [value]="acc.code">
+                {{ acc.code }} (Balance: {{ acc.balance | number:'1.2-2' }})
+              </option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Amount to Pay</label>
+            <input type="number"
+                   [(ngModel)]="repaymentData.amount"
+                   placeholder="0.00"
+                   [readonly]="activeCreditAction === 'close'"
+                   [class.readonly-input]="activeCreditAction === 'close'">
+          </div>
+
+          <div class="modal-actions">
+            <button class="btn-secondary" (click)="closeCreditAction()">Cancel</button>
+            <button class="btn-confirm w-100" (click)="processRepayment()">
+              Confirm Payment
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
   </main>
 </div>

@@ -106,4 +106,8 @@ export class AuthService {
   applyForCredit(data: any): Observable<any> {
     return this.http.post(`${this.API_URL}/api/credits/`, data, { withCredentials: true });
   }
+
+  repayCredit(data: any): Observable<any> {
+    return this.http.post(`${this.API_URL}/api/repay-credit/`, data, { withCredentials: true });
+  }
 }
