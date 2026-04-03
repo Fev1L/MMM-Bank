@@ -2,7 +2,7 @@
 
 [![Angular](https://img.shields.io/badge/Frontend-Angular%2018-red?style=flat-square&logo=angular)](https://angular.dev/)
 [![Django](https://img.shields.io/badge/Backend-Django%205-green?style=flat-square&logo=django)](https://www.djangoproject.com/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://opensource.org/licenses/MIT)
+[![License: GPL](https://img.shields.io/badge/License-GPL-yellow.svg?style=flat-square)](https://www.gnu.org/licenses/gpl-3.0.html.en)
 
 > **MMM-Bank** is a sophisticated full-stack banking ecosystem designed to simulate modern financial operations. Built by students to master the integration of a powerful Django backend with a dynamic Angular SPA frontend.
 
@@ -74,7 +74,7 @@ ng serve
 
 [x] Transactions: flexible transaction creation.
 
-[ ] 🚧 Credits System: Apply for and manage bank loans.
+[x] Credits System: Apply for and manage bank loans.
 
 [ ] 🚧 Deposits: High-interest savings accounts.
 
