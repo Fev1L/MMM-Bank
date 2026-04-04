@@ -110,4 +110,20 @@ export class AuthService {
   repayCredit(data: any): Observable<any> {
     return this.http.post(`${this.API_URL}/api/repay-credit/`, data, { withCredentials: true });
   }
+
+  getPiggyBanks() : Observable<any>  {
+    return this.http.get(`${this.API_URL}/api/piggy-bank/`, { withCredentials: true });
+  }
+
+  managePiggyBank(data: any) : Observable<any> {
+    return this.http.post(`${this.API_URL}/api/piggy-bank/`, data , { withCredentials: true });
+  }
+
+  getDeposits() : Observable<any> {
+    return this.http.get(`${this.API_URL}/api/deposits/` , { withCredentials: true });
+  }
+
+  openDeposit(data: any) : Observable<any> {
+    return this.http.post(`${this.API_URL}/api/deposits/open/`, data , { withCredentials: true });
+  }
 }

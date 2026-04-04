@@ -6,6 +6,7 @@ import {Home} from './features/home/home';
 import {ClaimGift} from './components/claim-gift/claim-gift';
 import {PayRequest} from './components/pay-request/pay-request';
 import {Credits} from './credits/credits';
+import {Deposits} from './deposits/deposits';
 
 export const routes: Routes = [
   { path: '', component: Home , canActivate: [authGuard]},
@@ -18,5 +19,6 @@ export const routes: Routes = [
   { path: 'pay-request/:id', component: PayRequest },
   { path: 'dashboard', component: Dashboard,},
   { path: 'credits', component: Credits },
+  { path: 'deposits', component: Deposits },
   { path: '**', redirectTo: '' }
 ];

@@ -1,0 +1,163 @@
+<div class="dashboard-wrapper">
+
+  <aside class="sidebar">
+    <div class="user-profile">
+      <div class="avatar">{{ user?.initials }}</div>
+      <div class="user-info">
+        <h3>{{ user?.firstName }} {{ user?.lastName }}</h3>
+        <p>{{ user?.plan }}</p>
+      </div>
+    </div>
+
+    <nav class="side-nav">
+      <a routerLink="/dashboard"><i class="fa-solid fa-wallet"></i> Accounts</a>
+      <a routerLink="/credits"><i class="fa-solid fa-hand-holding-dollar"></i> Loans</a>
+      <a class="active"><i class="fa-solid fa-piggy-bank"></i> Deposits</a>
+      <a><i class="fa-solid fa-ellipsis"></i> More</a>
+    </nav>
+
+    <div class="bottom-nav">
+      <a><i class="fa-solid fa-circle-question"></i> Help</a>
+      <a  class="logout"><i class="fa-solid fa-right-from-bracket"></i> Log out</a>
+    </div>
+  </aside>
+
+  <main class="main-content">
+
+    <header class="balance-header">
+      <div class="balance-info">
+        <h1>{{ getConvertedTotal() | currency:'$':'symbol':'1.2-2' }}</h1>
+        <p>Total active deposits</p>
+        <div class="quick-actions">
+          <button class="btn-light"><i class="fa-solid fa-paper-plane"></i> Send</button>
+          <button class="btn-light"><i class="fa-solid fa-hand-holding-dollar"></i> Request</button>
+          <button class="btn-light"><i class="fa-solid fa-gift"></i> Send a Gift</button>
+        </div>
+      </div>
+    </header>
+
+    <div class="tabs">
+      <button [class.active]="activeTab === 'piggy'" (click)="activeTab = 'piggy'">Piggy Banks</button>
+      <button [class.active]="activeTab === 'deposits'" (click)="activeTab = 'deposits'">Deposits</button>
+    </div>
+
+    <div *ngIf="activeTab === 'piggy'" class="tab-content">
+
+      <div class="empty-state" *ngIf="piggies.length === 0">
+        <i class="fa-solid fa-piggy-bank"></i>
+        <p>You don't have any piggy banks yet</p>
+      </div>
+
+      <div class="add-account-wrapper" *ngIf="piggies.length === 0">
+        <button class="add-btn" (click)="showPiggyModal = true">
+          <i class="fa-solid fa-plus"></i>
+        </button>
+      </div>
+
+      <div class="cards-grid">
+        <div class="account-card" *ngFor="let piggy of piggies">
+          <div class="card-header">
+            <h3>{{ piggy.name }}</h3>
+            <span class="balance">{{ piggy.balance | number:'1.2-2' }}</span>
+          </div>
+
+          <div class="progress-container" *ngIf="piggy.goal > 0">
+            <div class="progress-bar">
+              <div class="fill" [style.width.%]="piggy.percent"></div>
+            </div>
+            <div class="progress-text">
+              <span>{{ piggy.percent }}%</span>
+              <span>Goal: {{ piggy.goal }}</span>
+            </div>
+          </div>
+
+          <div class="card-actions">
+            <button class="btn-outline" (click)="openManagePiggy(piggy, 'add')">Add</button>
+            <button class="btn-outline" (click)="openManagePiggy(piggy, 'withdraw')">Withdraw</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="activeTab === 'deposits'" class="tab-content">
+
+      <div class="empty-state" *ngIf="activeDeposits.length === 0">
+        <i class="fa-solid fa-vault"></i>
+        <p>You don't have any deposits yet</p>
+      </div>
+
+      <div class="add-account-wrapper" *ngIf="activeDeposits.length === 0">
+        <button class="add-btn" (click)="showDepositModal = true">
+          <i class="fa-solid fa-plus"></i>
+        </button>
+      </div>
+
+      <div class="cards-grid">
+        <div class="account-card" *ngFor="let dep of activeDeposits">
+          <div class="card-header">
+            <h3>Fixed Deposit</h3>
+            <span class="balance">{{ dep.amount | number:'1.2-2' }}</span>
+          </div>
+          <p>Rate: {{ dep.rate }}% &bull; Duration: {{ dep.duration }} months</p>
+          <p class="success-text">+{{ dep.profit | number:'1.2-2' }} expected profit</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-overlay" *ngIf="showPiggyModal">
+      <div class="modal">
+        <h3>Create Piggy Bank</h3>
+        <input type="text" [(ngModel)]="newPiggyData.name" placeholder="E.g., New Car">
+        <input type="number" [(ngModel)]="newPiggyData.goal" placeholder="Target Amount (Optional)">
+        <div class="modal-actions">
+          <button (click)="showPiggyModal = false">Cancel</button>
+          <button class="btn-primary" (click)="createPiggy()">Create</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-overlay" *ngIf="showManagePiggyModal">
+      <div class="modal">
+        <h3>{{ piggyAction === 'add' ? 'Add Funds to' : 'Withdraw from' }} {{ selectedPiggy?.name }}</h3>
+
+        <select [(ngModel)]="managePiggyData.currency">
+          <option *ngFor="let acc of accounts" [value]="acc.code">{{ acc.code }} (Balance: {{ acc.balance }})</option>
+        </select>
+
+        <input type="number" [(ngModel)]="managePiggyData.amount" placeholder="Amount">
+
+        <div class="modal-actions">
+          <button (click)="showManagePiggyModal = false">Cancel</button>
+          <button class="btn-primary" (click)="submitManagePiggy()">Confirm</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-overlay" *ngIf="showDepositModal">
+      <div class="modal">
+        <h3>Open Deposit</h3>
+
+        <select [(ngModel)]="newDepositData.currency">
+          <option *ngFor="let acc of accounts" [value]="acc.code">{{ acc.code }} (Balance: {{ acc.balance }})</option>
+        </select>
+
+        <input type="number" [(ngModel)]="newDepositData.amount" placeholder="Deposit Amount">
+
+        <select [(ngModel)]="newDepositData.duration">
+          <option [value]="3">3 Months (3%)</option>
+          <option [value]="6">6 Months (5%)</option>
+          <option [value]="12">12 Months (7%)</option>
+          <option [value]="24">24 Months (9%)</option>
+        </select>
+
+        <p *ngIf="newDepositData.amount">Expected Profit: +{{ expectedProfit | number:'1.2-2' }}</p>
+
+        <div class="modal-actions">
+          <button (click)="showDepositModal = false">Cancel</button>
+          <button class="btn-primary" (click)="openDeposit()">Open</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+</div>

@@ -7,6 +7,7 @@ from main.views import (api_login, api_register, send_verification_code,
                         api_request_money, api_claim_gift, api_confirm_payment_request,
                         api_exchange_money, api_delete_account)
 from credits.views import api_credits, repay_credit
+from deposits.views import api_piggy_bank, api_deposits_list, api_open_deposit
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -33,5 +34,9 @@ urlpatterns = [
     path('api/accounts/<str:currency_code>/delete/', api_delete_account, name='api_delete_account'),
 
     path('api/credits/', api_credits, name='api_credits'),
-    path('api/repay-credit/', repay_credit, name='repay_credit')
+    path('api/repay-credit/', repay_credit, name='repay_credit'),
+
+    path('api/piggy-bank/', api_piggy_bank, name='api_piggy_bank'),
+    path('api/deposits/', api_deposits_list, name='api_deposits_list'),
+    path('api/deposits/open/', api_open_deposit, name='api_open_deposit')
 ]

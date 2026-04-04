@@ -20,7 +20,8 @@ INSTALLED_APPS = [
 
     'config',
     'main',
-    'credits'
+    'credits',
+    'deposits'
 ]
 
 MIDDLEWARE = [
