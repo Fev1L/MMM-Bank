@@ -115,6 +115,10 @@ export class AuthService {
     return this.http.get(`${this.API_URL}/api/piggy-bank/`, { withCredentials: true });
   }
 
+  closePiggyBank(data: any , piggy_id: string) : Observable<any>  {
+    return this.http.post(`${this.API_URL}/api/piggy-bank/${piggy_id}/close/`, data, { withCredentials: true });
+  }
+
   managePiggyBank(data: any) : Observable<any> {
     return this.http.post(`${this.API_URL}/api/piggy-bank/`, data , { withCredentials: true });
   }

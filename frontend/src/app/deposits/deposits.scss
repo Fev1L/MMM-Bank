@@ -393,6 +393,13 @@ $border-color: #e5e7eb;
         transform: translateY(0);
       }
     }
+
+    .btn-danger {
+      background: #ff4757;
+      border: none;
+      color: white;
+      &:hover { background: #ff6b81; box-shadow: 0 4px 12px rgba(255, 71, 87, 0.3); }
+    }
   }
 }
 
@@ -788,6 +795,27 @@ $border-color: #e5e7eb;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+
+  .close-piggy-btn {
+    top: 15px;
+    right: 15px;
+    background: transparent;
+    border: none;
+    color: #ccc;
+    font-size: 1.2rem;
+    cursor: pointer;
+    opacity: 0;
+    transition: all 0.2s;
+
+    &:hover {
+      color: #ff6b6b;
+      transform: scale(1.1);
+    }
+  }
+
+  &:hover .close-piggy-btn {
+    opacity: 1;
+  }
 
   &:hover {
     transform: translateY(-3px);

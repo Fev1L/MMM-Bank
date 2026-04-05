@@ -36,6 +36,8 @@ export class Deposits implements OnInit {
   managePiggyData = { piggy_id: null, amount: null, currency: '', action: '' };
   newDepositData = { amount: null, duration: 3, currency: '' };
 
+  showClosePiggyModal = false;
+  returnCurrency = '';
 
   constructor(
     private authService: AuthService,
@@ -166,6 +168,26 @@ export class Deposits implements OnInit {
       error: (err) => {
         this.alertService.error('Something went wrong when I tried to log out');
       }
+    });
+  }
+
+  openCloseModal(piggy: any) {
+    this.selectedPiggy = piggy;
+    if (this.accounts.length > 0) this.returnCurrency = this.accounts[0].code;
+    this.showClosePiggyModal = true;
+  }
+
+  confirmClosePiggy() {
+    const payload = { currency: this.returnCurrency };
+
+    this.authService.closePiggyBank( payload, this.selectedPiggy.id).subscribe({
+      next: (res: any) => {
+        this.alertService.success(res.message);
+        this.showClosePiggyModal = false;
+        this.loadSavingsData();
+        this.loadUserData();
+      },
+      error: (err) => this.alertService.error('Failed to close piggy bank')
     });
   }
 }

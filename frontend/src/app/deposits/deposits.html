@@ -29,9 +29,8 @@
         <h1>{{ getConvertedTotal() | currency:'$':'symbol':'1.2-2' }}</h1>
         <p>Total active deposits</p>
         <div class="quick-actions">
-          <button class="btn-light"><i class="fa-solid fa-paper-plane"></i> Send</button>
-          <button class="btn-light"><i class="fa-solid fa-hand-holding-dollar"></i> Request</button>
-          <button class="btn-light"><i class="fa-solid fa-gift"></i> Send a Gift</button>
+          <button (click)="showPiggyModal = true" class="btn-light"><i class="fa-solid fa-piggy-bank"></i> Open Piggy Bank</button>
+          <button (click)="showDepositModal = true" class="btn-light"><i class="fa-solid fa-vault"></i> Make Deposit</button>
         </div>
       </div>
     </header>
@@ -59,6 +58,9 @@
           <div class="card-header">
             <h3>{{ piggy.name }}</h3>
             <span class="balance">{{ piggy.balance | number:'1.2-2' }}{{ piggy.currency }}</span>
+            <button class="close-piggy-btn" (click)="openCloseModal(piggy)">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
           </div>
 
           <div class="progress-container" *ngIf="piggy.goal > 0">
@@ -107,6 +109,12 @@
           <p>Rate: {{ dep.rate }}% &bull; Duration: {{ dep.duration }} months</p>
           <p class="success-text">+{{ dep.profit | number:'1.2-2' }} expected profit</p>
         </div>
+
+        <div class="add-account-wrapper" *ngIf="activeDeposits.length > 0">
+          <button class="add-btn" (click)="showDepositModal = true">
+            <i class="fa-solid fa-plus"></i>
+          </button>
+        </div>
       </div>
     </div>
 
@@ -140,7 +148,7 @@
         </div>
 
         <div class="form-group">
-          <label>Pay from Account</label>
+          <label>Currency</label>
           <select [(ngModel)]="newPiggyData.currency">
             <option *ngFor="let acc of accounts" [value]="acc.code">
               {{ acc.code }} (Balance: {{ acc.balance | number:'1.2-2' }})
@@ -159,11 +167,19 @@
       <div class="modal-content" (click)="$event.stopPropagation()">
         <h3>{{ piggyAction === 'add' ? 'Add Funds to' : 'Withdraw from' }} {{ selectedPiggy?.name }}</h3>
 
-        <select [(ngModel)]="managePiggyData.currency">
-          <option *ngFor="let acc of accounts" [value]="acc.code">{{ acc.code }} (Balance: {{ acc.balance }})</option>
-        </select>
+        <div class="form-group">
+          <label>Pay from Account</label>
+          <select [(ngModel)]="managePiggyData.currency">
+            <option *ngFor="let acc of accounts" [value]="acc.code">
+              {{ acc.code }} (Balance: {{ acc.balance }})
+            </option>
+          </select>
+        </div>
 
-        <input type="number" [(ngModel)]="managePiggyData.amount" placeholder="Amount">
+        <div class="form-group">
+          <label>Amount</label>
+          <input type="number" [(ngModel)]="managePiggyData.amount" placeholder="Amount">
+        </div>
 
         <div class="modal-actions">
           <button (click)="showManagePiggyModal = false">Cancel</button>
@@ -176,24 +192,56 @@
       <div class="modal-content" (click)="$event.stopPropagation()">
         <h3>Open Deposit</h3>
 
-        <select [(ngModel)]="newDepositData.currency">
-          <option *ngFor="let acc of accounts" [value]="acc.code">{{ acc.code }} (Balance: {{ acc.balance }})</option>
-        </select>
+        <div class="form-group">
+          <label>Currency</label>
+          <select [(ngModel)]="newDepositData.currency">
+            <option *ngFor="let acc of accounts" [value]="acc.code">
+              {{ acc.code }} (Balance: {{ acc.balance }})
+            </option>
+          </select>
+        </div>
 
-        <input type="number" [(ngModel)]="newDepositData.amount" placeholder="Deposit Amount">
+        <div class="form-group">
+          <label>Amount</label>
+          <input type="number" [(ngModel)]="newDepositData.amount" placeholder="Deposit Amount">
+        </div>
 
-        <select [(ngModel)]="newDepositData.duration">
-          <option [value]="3">3 Months (3%)</option>
-          <option [value]="6">6 Months (5%)</option>
-          <option [value]="12">12 Months (7%)</option>
-          <option [value]="24">24 Months (9%)</option>
-        </select>
+        <div class="form-group">
+          <label>Currency</label>
+          <select [(ngModel)]="newDepositData.duration">
+            <option [value]="3">3 Months (3%)</option>
+            <option [value]="6">6 Months (5%)</option>
+            <option [value]="12">12 Months (7%)</option>
+            <option [value]="24">24 Months (9%)</option>
+          </select>
+        </div>
 
         <p *ngIf="newDepositData.amount">Expected Profit: +{{ expectedProfit | number:'1.2-2' }}</p>
 
         <div class="modal-actions">
           <button (click)="showDepositModal = false">Cancel</button>
           <button class="btn-confirm" (click)="openDeposit()">Open</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-overlay" *ngIf="showClosePiggyModal" (click)="showClosePiggyModal = false">
+      <div class="modal-content" (click)="$event.stopPropagation()">
+        <h3>Close "{{ selectedPiggy?.name }}"?</h3>
+        <p>Remaining funds (<b>{{ selectedPiggy?.balance }}</b>) will be transferred back to your account.</p>
+
+        <div class="form-group">
+          <label>Return to account:</label>
+          <select [(ngModel)]="returnCurrency">
+            <option *ngFor="let acc of accounts" [value]="acc.code">
+              {{ acc.code }} (Balance: {{ acc.balance }})
+            </option>
+          </select>
+        </div>
+
+        <div class="modal-actions">
+          <button class="btn-secondary" (click)="showClosePiggyModal = false">Cancel</button>
+          <button class="btn-danger" (click)="confirmClosePiggy()">Close Bank</button>
         </div>
       </div>
     </div>

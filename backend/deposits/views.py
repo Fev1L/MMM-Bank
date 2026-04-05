@@ -155,3 +155,34 @@ def api_open_deposit(request):
 
     except Account.DoesNotExist:
         return JsonResponse({"message": "Account not found."}, status=404)
+
+@csrf_exempt
+def api_close_piggy(request, piggy_id):
+    try:
+        data = json.loads(request.body)
+        piggy = PiggyBank.objects.get(id=piggy_id, user=request.user)
+        account_currency = data.get("currency")
+
+        account = Account.objects.get(user=request.user, currency_type__code=account_currency)
+
+        with transaction.atomic():
+            remaining_balance = piggy.balance
+
+            if remaining_balance > 0:
+                cat_return, _ = Category.objects.get_or_create(name="Piggy Bank Closure", type=Category.DEPOSIT)
+                Transaction.objects.create(
+                    account=account,
+                    amount=remaining_balance,
+                    category=cat_return,
+                    transaction_type=Category.DEPOSIT,
+                    title=f"Returned funds from closed piggy: {piggy.name}"
+                )
+
+            piggy.delete()
+
+        return JsonResponse({"message": f"Piggy bank closed. {remaining_balance} returned to your {account_currency} account."})
+
+    except PiggyBank.DoesNotExist:
+        return JsonResponse({"message": "Piggy Bank not found."}, status=404)
+    except Account.DoesNotExist:
+        return JsonResponse({"message": "Please select a valid account to return funds."}, status=400)
