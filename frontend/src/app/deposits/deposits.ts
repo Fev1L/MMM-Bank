@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../core/services/auth';
 import { AlertService } from '../core/services/alert';
-import {RouterLink} from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-deposits',
@@ -24,7 +24,7 @@ export class Deposits implements OnInit {
   viewCurrency: string = 'USD';
   totalBalance: number = 0;
 
-  // Модалки
+  showLogoutModal: boolean = false;
   showPiggyModal = false;
   showDepositModal = false;
   showManagePiggyModal = false;
@@ -32,15 +32,16 @@ export class Deposits implements OnInit {
   piggyAction: 'add' | 'withdraw' = 'add';
   selectedPiggy: any = null;
 
-  // Форми
-  newPiggyData = { name: '', goal: null };
+  newPiggyData = { name: '', goal: null, currency: '' };
   managePiggyData = { piggy_id: null, amount: null, currency: '', action: '' };
   newDepositData = { amount: null, duration: 3, currency: '' };
+
 
   constructor(
     private authService: AuthService,
     private alertService: AlertService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private router: Router,
   ) {}
 
   ngOnInit() {
@@ -53,6 +54,17 @@ export class Deposits implements OnInit {
       next: (data) => {
         this.user = data.user;
         this.accounts = data.accounts;
+
+        if (this.accounts && this.accounts.length > 0 && !this.newPiggyData.currency) {
+          this.newPiggyData.currency = this.accounts[0].code;
+        }
+        if (this.accounts && this.accounts.length > 0 && !this.managePiggyData.currency) {
+          this.managePiggyData.currency = this.accounts[0].code;
+        }
+        if (this.accounts && this.accounts.length > 0 && !this.newDepositData.currency) {
+          this.newDepositData.currency = this.accounts[0].code;
+        }
+
         this.rates = data.rates;
         this.cdr.detectChanges();
       },
@@ -80,14 +92,13 @@ export class Deposits implements OnInit {
     });
   }
 
-  // --- СКАРБНИЧКА ---
   createPiggy() {
     const payload = { action: 'create', ...this.newPiggyData };
     this.authService.managePiggyBank(payload).subscribe({
       next: (res) => {
         this.alertService.success(res.message);
         this.showPiggyModal = false;
-        this.newPiggyData = { name: '', goal: null };
+        this.newPiggyData = { name: '', goal: null , currency: '' };
         this.loadSavingsData();
       },
       error: (err) => this.alertService.error(err.error.message)
@@ -109,13 +120,12 @@ export class Deposits implements OnInit {
         this.alertService.success(res.message);
         this.showManagePiggyModal = false;
         this.loadSavingsData();
-        this.loadUserData(); // Оновлюємо баланси рахунків
+        this.loadUserData();
       },
       error: (err) => this.alertService.error(err.error.message)
     });
   }
 
-  // --- ДЕПОЗИТИ ---
   get expectedProfit() {
     const amount = this.newDepositData.amount || 0;
     const rates: any = { 3: 3, 6: 5, 12: 7, 24: 9 };
@@ -132,6 +142,30 @@ export class Deposits implements OnInit {
         this.loadUserData();
       },
       error: (err) => this.alertService.error(err.error.message)
+    });
+  }
+
+  onLogout() {
+    this.showLogoutModal = true;
+  }
+
+  closeLogoutModal() {
+    this.showLogoutModal = false;
+  }
+
+  confirmLogout() {
+    this.showLogoutModal = false;
+
+    this.authService.logout().subscribe({
+      next: () => {
+        this.alertService.success('You have successfully logged out');
+        setTimeout(() => {
+          this.router.navigate(['']);
+        }, 1500);
+      },
+      error: (err) => {
+        this.alertService.error('Something went wrong when I tried to log out');
+      }
     });
   }
 }

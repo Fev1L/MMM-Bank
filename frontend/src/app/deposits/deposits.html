@@ -18,7 +18,7 @@
 
     <div class="bottom-nav">
       <a><i class="fa-solid fa-circle-question"></i> Help</a>
-      <a  class="logout"><i class="fa-solid fa-right-from-bracket"></i> Log out</a>
+      <a (click)="onLogout()" class="logout"><i class="fa-solid fa-right-from-bracket"></i> Log out</a>
     </div>
   </aside>
 
@@ -41,7 +41,7 @@
       <button [class.active]="activeTab === 'deposits'" (click)="activeTab = 'deposits'">Deposits</button>
     </div>
 
-    <div *ngIf="activeTab === 'piggy'" class="tab-content">
+    <div *ngIf="activeTab === 'piggy'" class="tab-content fade-in">
 
       <div class="empty-state" *ngIf="piggies.length === 0">
         <i class="fa-solid fa-piggy-bank"></i>
@@ -58,7 +58,7 @@
         <div class="account-card" *ngFor="let piggy of piggies">
           <div class="card-header">
             <h3>{{ piggy.name }}</h3>
-            <span class="balance">{{ piggy.balance | number:'1.2-2' }}</span>
+            <span class="balance">{{ piggy.balance | number:'1.2-2' }}{{ piggy.currency }}</span>
           </div>
 
           <div class="progress-container" *ngIf="piggy.goal > 0">
@@ -76,10 +76,16 @@
             <button class="btn-outline" (click)="openManagePiggy(piggy, 'withdraw')">Withdraw</button>
           </div>
         </div>
+
+        <div class="add-account-wrapper" *ngIf="piggies.length > 0">
+          <button class="add-btn" (click)="showPiggyModal = true">
+            <i class="fa-solid fa-plus"></i>
+          </button>
+        </div>
       </div>
     </div>
 
-    <div *ngIf="activeTab === 'deposits'" class="tab-content">
+    <div *ngIf="activeTab === 'deposits'" class="tab-content fade-in">
 
       <div class="empty-state" *ngIf="activeDeposits.length === 0">
         <i class="fa-solid fa-vault"></i>
@@ -104,20 +110,53 @@
       </div>
     </div>
 
-    <div class="modal-overlay" *ngIf="showPiggyModal">
-      <div class="modal">
-        <h3>Create Piggy Bank</h3>
-        <input type="text" [(ngModel)]="newPiggyData.name" placeholder="E.g., New Car">
-        <input type="number" [(ngModel)]="newPiggyData.goal" placeholder="Target Amount (Optional)">
+    <div class="modal-overlay" *ngIf="showLogoutModal" (click)="closeLogoutModal()">
+      <div class="modal-content confirm-modal" (click)="$event.stopPropagation()">
+        <div class="modal-icon warning">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i>
+        </div>
+        <h3>Log out</h3>
+        <p>Are you sure you want to log out? You’ll have to enter your password again.</p>
+
         <div class="modal-actions">
-          <button (click)="showPiggyModal = false">Cancel</button>
-          <button class="btn-primary" (click)="createPiggy()">Create</button>
+          <button class="btn-secondary" (click)="closeLogoutModal()">Cancel</button>
+          <button class="btn-danger" (click)="confirmLogout()">Exit</button>
         </div>
       </div>
     </div>
 
-    <div class="modal-overlay" *ngIf="showManagePiggyModal">
-      <div class="modal">
+    <div class="modal-overlay" *ngIf="showPiggyModal" (click)="showPiggyModal = false">
+      <div class="modal-content" (click)="$event.stopPropagation()">
+        <h3>Create Piggy Bank</h3>
+
+        <div class="form-group">
+          <label>Name</label>
+          <input type="text" [(ngModel)]="newPiggyData.name" placeholder="E.g., New Car">
+        </div>
+
+        <div class="form-group">
+          <label>Goal</label>
+          <input type="number" [(ngModel)]="newPiggyData.goal" placeholder="Target Amount (Optional)">
+        </div>
+
+        <div class="form-group">
+          <label>Pay from Account</label>
+          <select [(ngModel)]="newPiggyData.currency">
+            <option *ngFor="let acc of accounts" [value]="acc.code">
+              {{ acc.code }} (Balance: {{ acc.balance | number:'1.2-2' }})
+            </option>
+          </select>
+        </div>
+
+        <div class="modal-actions">
+          <button (click)="showPiggyModal = false">Cancel</button>
+          <button class="btn-confirm" (click)="createPiggy()">Create</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-overlay" *ngIf="showManagePiggyModal" (click)="showManagePiggyModal = false">
+      <div class="modal-content" (click)="$event.stopPropagation()">
         <h3>{{ piggyAction === 'add' ? 'Add Funds to' : 'Withdraw from' }} {{ selectedPiggy?.name }}</h3>
 
         <select [(ngModel)]="managePiggyData.currency">
@@ -128,13 +167,13 @@
 
         <div class="modal-actions">
           <button (click)="showManagePiggyModal = false">Cancel</button>
-          <button class="btn-primary" (click)="submitManagePiggy()">Confirm</button>
+          <button class="btn-confirm" (click)="submitManagePiggy()">Confirm</button>
         </div>
       </div>
     </div>
 
-    <div class="modal-overlay" *ngIf="showDepositModal">
-      <div class="modal">
+    <div class="modal-overlay" *ngIf="showDepositModal" (click)="showDepositModal = false">
+      <div class="modal-content" (click)="$event.stopPropagation()">
         <h3>Open Deposit</h3>
 
         <select [(ngModel)]="newDepositData.currency">
@@ -154,7 +193,7 @@
 
         <div class="modal-actions">
           <button (click)="showDepositModal = false">Cancel</button>
-          <button class="btn-primary" (click)="openDeposit()">Open</button>
+          <button class="btn-confirm" (click)="openDeposit()">Open</button>
         </div>
       </div>
     </div>

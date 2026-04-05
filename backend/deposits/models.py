@@ -13,7 +13,7 @@ class PiggyBank(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True)
 
     def __str__(self):
-        return f"{self.name} - ${self.balance} ({self.user.name})"
+        return f"{self.name} - {self.balance} ({self.user.first_name} {self.user.last_name})"
 
 class Deposit(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

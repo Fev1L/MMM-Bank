@@ -771,6 +771,112 @@ $border-color: #e5e7eb;
   }
 }
 
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+  padding: 10px 0;
+}
+
+.account-card {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  border: 1px solid #f0f0f0;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+  }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+
+    h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #333;
+      margin: 0;
+    }
+
+    .balance {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #2c3e50;
+
+      &::after {
+        font-size: 0.9rem;
+        color: #999;
+      }
+    }
+  }
+}
+
+.progress-container {
+  margin: 15px 0;
+
+  .progress-bar {
+    height: 8px;
+    background: #f0f2f5;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 8px;
+
+    .fill {
+      height: 100%;
+      background: linear-gradient(90deg, #5b00ff 0%, #b288fc 100%);
+      border-radius: 10px;
+      transition: width 0.6s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+    }
+  }
+
+  .progress-text {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    color: #7f8c8d;
+    font-weight: 500;
+  }
+}
+
+.card-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 20px;
+
+  .btn-outline {
+    padding: 10px;
+    border: 1.5px solid #e0e0e0;
+    background: transparent;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #555;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:hover {
+      background: #f8f9fa;
+      border-color: #6315E5FF;
+      color: #8133ff;
+    }
+
+    &:last-child:hover {
+      border-color: #ff6b6b;
+      color: #ff6b6b;
+    }
+  }
+}
+
 .fade-in {
   animation: fadeIn 0.4s ease-in-out;
 }

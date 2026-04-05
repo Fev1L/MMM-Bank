@@ -106,7 +106,6 @@ def repay_credit(request):
                 pay_amount = (amount / rate_sender) * rate_receiver
                 pay_amount = pay_amount.quantize(Decimal('0.01'))
 
-
             credit_cat, _ = Category.objects.get_or_create(name="Loan payment", type=Category.WITHDRAW)
 
             with transaction.atomic():
