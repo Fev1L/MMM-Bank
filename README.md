@@ -76,7 +76,7 @@ ng serve
 
 [x] Credits System: Apply for and manage bank loans.
 
-[ ] 🚧 Deposits: High-interest savings accounts.
+[x] Deposits: High-interest savings accounts.
 
 [ ] 🚧 More: There’s plenty of interesting stuff to enhance the ecosystem.
 
