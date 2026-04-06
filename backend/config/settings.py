@@ -1,12 +1,15 @@
+import os
+import dj_database_url
+
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-jnscosjmvqy4^59lzts0s_yct#b8@9_ex)%08%6v_%ek#hm3ry'
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-jnscosjmvqy4^59lzts0s_yct#b8@9_ex)%08%6v_%ek#hm3ry')
 
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "fev1l.pythonanywhere.com", ".vercel.app"]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -14,6 +17,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
@@ -25,8 +29,9 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -62,10 +67,10 @@ TEMPLATES = [
 WSGI_APPLICATION = 'config.wsgi.application'
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': dj_database_url.config(
+        default=f'sqlite:///{BASE_DIR / "db.sqlite3"}',
+        conn_max_age=600
+    )
 }
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -104,6 +109,12 @@ LOGIN_URL = '/api/login/'
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:4200",
+    "https://mmm-bank.vercel.app"
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://mmm-bank.vercel.app",
+    "https://fev1l.pythonanywhere.com"
 ]
 
 CORS_ALLOW_CREDENTIALS = True
