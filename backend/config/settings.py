@@ -122,6 +122,10 @@ CSRF_TRUSTED_ORIGINS = [
     "https://fev1l.pythonanywhere.com"
 ]
 
+SIMPLE_JWT = {
+    'AUTH_HEADER_TYPES': ('Bearer',),
+}
+
 CORS_ALLOW_CREDENTIALS = True
 
 SESSION_COOKIE_SAMESITE = 'None'
