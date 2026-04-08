@@ -17,23 +17,29 @@ export class AuthService {
   ) {}
 
   private hasToken(): boolean {
-    return !!localStorage.getItem('user_session');
+    return !!localStorage.getItem('access_token');
   }
 
   login(credentials: any): Observable<any> {
-    return this.http.post(`${this.API_URL}/api/login/`, credentials, { withCredentials: true }).pipe(
-      tap(() => {
-        localStorage.setItem('user_session', 'active');
-        this.loggedIn.next(true);
+    return this.http.post(`${this.API_URL}/api/login/`, credentials).pipe(
+      tap((response: any) => {
+        if (response && response.access) {
+          localStorage.setItem('access_token', response.access);
+          localStorage.setItem('refresh_token', response.refresh);
+          this.loggedIn.next(true);
+        }
       })
     );
   }
 
   register(userData: any): Observable<any> {
-    return this.http.post(`${this.API_URL}/api/register/`, userData, { withCredentials: true }).pipe(
-      tap(() => {
-        localStorage.setItem('user_session', 'active');
-        this.loggedIn.next(true);
+    return this.http.post(`${this.API_URL}/api/register/`, userData).pipe(
+      tap((response: any) => {
+        if (response && response.access) {
+          localStorage.setItem('access_token', response.access);
+          localStorage.setItem('refresh_token', response.refresh);
+          this.loggedIn.next(true);
+        }
       })
     );
   }
@@ -41,7 +47,8 @@ export class AuthService {
   logout(): Observable<any> {
     return this.http.post(`${this.API_URL}/api/logout/`, {}, { withCredentials: true }).pipe(
       tap(() => {
-        localStorage.removeItem('user_session');
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('refresh_token');
         this.loggedIn.next(false);
         this.router.navigate(['']);
       })
