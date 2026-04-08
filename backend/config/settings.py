@@ -97,12 +97,14 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = '/static/'
-
-STATICFILES_DIRS = [
-    BASE_DIR / 'main/static',
-    ]
-
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+STATICFILES_DIRS = []
+_static_dir = BASE_DIR / 'main' / 'static'
+if _static_dir.exists():
+    STATICFILES_DIRS.append(_static_dir)
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = '/api/login/'
