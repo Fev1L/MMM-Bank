@@ -15,7 +15,7 @@ import json
 import random
 
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from .models import EmailVerification, Account, Currency, Transaction, Category, PaymentRequest
 from django.conf import settings
@@ -23,6 +23,7 @@ from django.conf import settings
 
 @never_cache
 @api_view(['POST'])
+@permission_classes([AllowAny])
 def api_login(request):
     if request.method == 'POST':
         data = json.loads(request.body)
@@ -40,6 +41,7 @@ def api_login(request):
     return JsonResponse({'status': 'error', 'message': 'Only POST'}, status=405)
 
 @api_view(['POST'])
+@permission_classes([AllowAny])
 def api_register(request):
     if request.method == 'POST':
         try:
