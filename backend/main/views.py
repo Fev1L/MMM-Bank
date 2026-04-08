@@ -89,7 +89,7 @@ def api_logout(request):
     return JsonResponse({'status': 'success', 'message': 'Logged out'})
 
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
+@permission_classes([AllowAny])
 def send_verification_code(request):
     if request.method == 'POST':
         data = json.loads(request.body)
@@ -115,7 +115,7 @@ def send_verification_code(request):
         return JsonResponse({'status': 'ok', 'message': 'Code sent!'})
 
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
+@permission_classes([AllowAny])
 def verify_code(request):
     if request.method == 'POST':
         data = json.loads(request.body)
@@ -130,7 +130,7 @@ def verify_code(request):
         return JsonResponse({'status': 'error', 'message': 'Incorrect or expired code'}, status=400)
 
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
+@permission_classes([AllowAny])
 def check_username(request):
     if request.method == 'POST':
         try:
@@ -149,7 +149,7 @@ def check_username(request):
             return JsonResponse({'error': 'Invalid data'}, status=400)
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
+@permission_classes([AllowAny])
 def get_user_profile(request):
     if not request.user.is_authenticated:
         return JsonResponse({'error': 'Not authenticated'}, status=401)
