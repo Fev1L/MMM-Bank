@@ -13,7 +13,7 @@ from rest_framework.permissions import IsAuthenticated
 MAX_LOAN_LIMIT = Decimal('200000.00')
 DEFAULT_LOAN_INTEREST = 4.0
 
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticated])
 def api_credits(request):
     if not request.user.is_authenticated:
