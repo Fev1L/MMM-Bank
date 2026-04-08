@@ -85,7 +85,7 @@ def api_register(request):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def api_logout():
+def api_logout(request):
     return JsonResponse({'status': 'success', 'message': 'Logged out'})
 
 @api_view(['POST'])
