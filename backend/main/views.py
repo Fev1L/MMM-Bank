@@ -16,12 +16,12 @@ import random
 
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework_simplejwt.tokens import RefreshToken
 
 from .models import EmailVerification, Account, Currency, Transaction, Category, PaymentRequest
 from django.conf import settings
 
 
-@never_cache
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def api_login(request):
@@ -33,8 +33,13 @@ def api_login(request):
         user = authenticate(username=username, password=password)
 
         if user is not None:
-            login(request, user)
-            return JsonResponse({'status': 'ok', 'message': 'You are logged in!'}, status=200)
+            refresh = RefreshToken.for_user(user)
+            return JsonResponse({
+                'status': 'ok',
+                'access': str(refresh.access_token),
+                'refresh': str(refresh),
+                'message': 'You are logged in!'
+            }, status=200)
         else:
             return JsonResponse({'status': 'error', 'message': 'Incorrect username or password'}, status=401)
 
@@ -65,10 +70,11 @@ def api_register(request):
             profile.address_building = data.get('building', '')
             profile.save()
 
-            login(request, user)
-
+            refresh = RefreshToken.for_user(user)
             return JsonResponse({
                 'status': 'ok',
+                'access': str(refresh.access_token),
+                'refresh': str(refresh),
                 'message': 'The user has been successfully created!'
             }, status=201)
 
@@ -79,8 +85,7 @@ def api_register(request):
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
-def api_logout(request):
-    logout(request)
+def api_logout():
     return JsonResponse({'status': 'success', 'message': 'Logged out'})
 
 @api_view(['POST'])
