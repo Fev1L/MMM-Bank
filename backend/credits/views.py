@@ -7,11 +7,14 @@ from django.db import transaction
 from credits.models import Credit, Account , Category, Transaction
 
 from main.views import get_real_rates
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 
 MAX_LOAN_LIMIT = Decimal('200000.00')
 DEFAULT_LOAN_INTEREST = 4.0
 
-@csrf_exempt
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def api_credits(request):
     if not request.user.is_authenticated:
         return JsonResponse({'message': 'Unauthorized'}, status=401)
@@ -69,7 +72,8 @@ def api_credits(request):
         except Account.DoesNotExist:
             return JsonResponse({'message': 'Account not found'}, status=404)
 
-@csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def repay_credit(request):
     if not request.user.is_authenticated:
         return JsonResponse({'status': 'error', 'message': 'Unauthorized'}, status=401)

@@ -3,12 +3,15 @@ from decimal import Decimal
 from django.db import transaction
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework.decorators import permission_classes, api_view
+from rest_framework.permissions import IsAuthenticated
 
 from .models import PiggyBank, Deposit
 from main.models import Transaction, Category, Account
 from main.views import get_real_rates
 
-@csrf_exempt
+@api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
 def api_piggy_bank(request):
     if request.method == 'GET':
         piggies = PiggyBank.objects.filter(user=request.user).order_by('-created_at')
@@ -103,7 +106,8 @@ def api_piggy_bank(request):
             except Exception as e:
                 return JsonResponse({"message": str(e)}, status=500)
 
-@csrf_exempt
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def api_deposits_list(request):
     deposits = Deposit.objects.filter(user=request.user, is_active=True)
     history = Deposit.objects.filter(user=request.user, is_active=False)
@@ -120,7 +124,8 @@ def api_deposits_list(request):
         "history": serialize(history)
     })
 
-@csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def api_open_deposit(request):
     data = json.loads(request.body)
     amount = Decimal(str(data.get("amount", 0)))
@@ -156,7 +161,8 @@ def api_open_deposit(request):
     except Account.DoesNotExist:
         return JsonResponse({"message": "Account not found."}, status=404)
 
-@csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def api_close_piggy(request, piggy_id):
     try:
         data = json.loads(request.body)

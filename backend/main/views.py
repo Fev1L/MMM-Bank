@@ -14,12 +14,16 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 import random
 
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+
 from .models import EmailVerification, Account, Currency, Transaction, Category, PaymentRequest
 from django.conf import settings
 
 
 @never_cache
-@csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def api_login(request):
     if request.method == 'POST':
         data = json.loads(request.body)
@@ -36,7 +40,8 @@ def api_login(request):
 
     return JsonResponse({'status': 'error', 'message': 'Only POST'}, status=405)
 
-@csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def api_register(request):
     if request.method == 'POST':
         try:
@@ -72,12 +77,14 @@ def api_register(request):
 
     return JsonResponse({'status': 'error', 'message': 'POST requests only'}, status=405)
 
-@csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def api_logout(request):
     logout(request)
     return JsonResponse({'status': 'success', 'message': 'Logged out'})
 
-@csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def send_verification_code(request):
     if request.method == 'POST':
         data = json.loads(request.body)
@@ -102,7 +109,8 @@ def send_verification_code(request):
         )
         return JsonResponse({'status': 'ok', 'message': 'Code sent!'})
 
-@csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def verify_code(request):
     if request.method == 'POST':
         data = json.loads(request.body)
@@ -116,7 +124,8 @@ def verify_code(request):
             return JsonResponse({'status': 'ok', 'message': 'Email confirmed!'})
         return JsonResponse({'status': 'error', 'message': 'Incorrect or expired code'}, status=400)
 
-@csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def check_username(request):
     if request.method == 'POST':
         try:
@@ -134,6 +143,8 @@ def check_username(request):
         except Exception:
             return JsonResponse({'error': 'Invalid data'}, status=400)
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def get_user_profile(request):
     if not request.user.is_authenticated:
         return JsonResponse({'error': 'Not authenticated'}, status=401)
@@ -159,6 +170,8 @@ def get_user_profile(request):
         ]
     })
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def api_dashboard_data(request):
     if not request.user.is_authenticated:
         return JsonResponse({'error': 'Unauthorized'}, status=401)
@@ -199,7 +212,8 @@ def api_dashboard_data(request):
         'availableCurrencies' : currencies_list
     })
 
-@csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def create_account(request):
     if request.method == 'POST':
         try:
@@ -230,6 +244,8 @@ def create_account(request):
         except Exception as e:
             return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def get_transactions(request):
     if not request.user.is_authenticated:
         return JsonResponse({'status': 'error', 'message': 'Not authorized'}, status=401)
@@ -269,7 +285,8 @@ def get_real_rates():
 
     return rates
 
-@csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def api_send_money(request):
     if not request.user.is_authenticated:
         return JsonResponse({'status': 'error', 'message': 'Unauthorized'}, status=401)
@@ -358,7 +375,8 @@ def api_send_money(request):
 
         return JsonResponse({'status': 'success', 'message': 'The transfer has been successfully completed'})
 
-@csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def api_request_money(request):
     if not request.user.is_authenticated:
         return JsonResponse({'status': 'error', 'message': 'Unauthorized'}, status=401)
@@ -398,7 +416,8 @@ def api_request_money(request):
 
         return JsonResponse({'status': 'success', 'message': 'Request sent successfully'})
 
-@csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def api_confirm_payment_request(request, request_id):
     if not request.user.is_authenticated:
         return JsonResponse({'status': 'error', 'message': 'Unauthorized'}, status=401)
@@ -452,7 +471,8 @@ def api_confirm_payment_request(request, request_id):
 
     return JsonResponse({'status': 'success', 'message': 'Payment successful!'})
 
-@csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def api_send_gift(request):
     if not request.user.is_authenticated:
         return JsonResponse({'status': 'error', 'message': 'Unauthorized'}, status=401)
@@ -501,7 +521,8 @@ def api_send_gift(request):
 
         return JsonResponse({'status': 'success', 'message': 'The gift has been successfully sent'})
 
-@csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def api_claim_gift(request, request_id):
     if not request.user.is_authenticated:
         return JsonResponse({'status': 'error', 'message': 'Unauthorized'}, status=401)
@@ -529,7 +550,8 @@ def api_claim_gift(request, request_id):
 
     return JsonResponse({'status': 'success', 'message': f'A gift of {gift_req.amount} {gift_req.currency_code} credited!'})
 
-@csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def api_exchange_money(request):
     if not request.user.is_authenticated:
         return JsonResponse({'status': 'error', 'message': 'Unauthorized'}, status=401)
@@ -585,7 +607,8 @@ def api_exchange_money(request):
             'message': f'{amount} {from_currency} has been successfully exchanged for {converted_amount} {to_currency}'
         })
 
-@csrf_exempt
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
 def api_delete_account(request, currency_code):
     if not request.user.is_authenticated:
         return JsonResponse({'status': 'error', 'message': 'Unauthorized'}, status=401)

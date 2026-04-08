@@ -45,7 +45,7 @@ export class AuthService {
   }
 
   logout(): Observable<any> {
-    return this.http.post(`${this.API_URL}/api/logout/`, {}, { withCredentials: true }).pipe(
+    return this.http.post(`${this.API_URL}/api/logout/`, {}).pipe(
       tap(() => {
         localStorage.removeItem('access_token');
         localStorage.removeItem('refresh_token');
@@ -68,74 +68,74 @@ export class AuthService {
   }
 
   createAccount(currency: string): Observable<any> {
-    return this.http.post(`${this.API_URL}/api/accounts/create/`, { currency }, { withCredentials: true });
+    return this.http.post(`${this.API_URL}/api/accounts/create/`, { currency });
   }
 
   getUserData(): Observable<any> {
-    return this.http.get(`${this.API_URL}/api/dashboard/`, { withCredentials: true });
+    return this.http.get(`${this.API_URL}/api/dashboard/`);
   }
 
   getTransactions(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.API_URL}/api/transactions/`, { withCredentials: true });
+    return this.http.get<any[]>(`${this.API_URL}/api/transactions/`);
   }
 
   sendMoney(data: any): Observable<any> {
-    return this.http.post(`${this.API_URL}/api/send-money/`, data, { withCredentials: true });
+    return this.http.post(`${this.API_URL}/api/send-money/`, data);
   }
 
   requestMoney(data: any): Observable<any> {
-    return this.http.post(`${this.API_URL}/api/request-money/`, data, { withCredentials: true });
+    return this.http.post(`${this.API_URL}/api/request-money/`, data);
   }
 
   sendGift(data: any): Observable<any> {
-    return this.http.post(`${this.API_URL}/api/send-gift/`, data, { withCredentials: true });
+    return this.http.post(`${this.API_URL}/api/send-gift/`, data);
   }
 
   claimGift(requestId: string): Observable<any> {
-    return this.http.post(`${this.API_URL}/api/claim-gift/${requestId}/`, {}, { withCredentials: true });
+    return this.http.post(`${this.API_URL}/api/claim-gift/${requestId}/`, {});
   }
 
   payRequest(requestId: string): Observable<any> {
-    return this.http.post(`${this.API_URL}/api/api-confirm-payment-request/${requestId}/`, {}, { withCredentials: true });
+    return this.http.post(`${this.API_URL}/api/api-confirm-payment-request/${requestId}/`, {});
   }
 
   exchangeMoney(data: any): Observable<any> {
-    return this.http.post(`${this.API_URL}/api/exchange/`, data, { withCredentials: true });
+    return this.http.post(`${this.API_URL}/api/exchange/`, data);
   }
 
   deleteAccount(currencyCode: string): Observable<any> {
-    return this.http.delete(`${this.API_URL}/api/accounts/${currencyCode}/delete/`, { withCredentials: true });
+    return this.http.delete(`${this.API_URL}/api/accounts/${currencyCode}/delete/`);
   }
 
   getCredits(): Observable<any> {
-    return this.http.get(`${this.API_URL}/api/credits/`, { withCredentials: true });
+    return this.http.get(`${this.API_URL}/api/credits/`);
   }
 
   applyForCredit(data: any): Observable<any> {
-    return this.http.post(`${this.API_URL}/api/credits/`, data, { withCredentials: true });
+    return this.http.post(`${this.API_URL}/api/credits/`, data);
   }
 
   repayCredit(data: any): Observable<any> {
-    return this.http.post(`${this.API_URL}/api/repay-credit/`, data, { withCredentials: true });
+    return this.http.post(`${this.API_URL}/api/repay-credit/`, data);
   }
 
   getPiggyBanks() : Observable<any>  {
-    return this.http.get(`${this.API_URL}/api/piggy-bank/`, { withCredentials: true });
+    return this.http.get(`${this.API_URL}/api/piggy-bank/`);
   }
 
   closePiggyBank(data: any , piggy_id: string) : Observable<any>  {
-    return this.http.post(`${this.API_URL}/api/piggy-bank/${piggy_id}/close/`, data, { withCredentials: true });
+    return this.http.post(`${this.API_URL}/api/piggy-bank/${piggy_id}/close/`, data);
   }
 
   managePiggyBank(data: any) : Observable<any> {
-    return this.http.post(`${this.API_URL}/api/piggy-bank/`, data , { withCredentials: true });
+    return this.http.post(`${this.API_URL}/api/piggy-bank/`, data);
   }
 
   getDeposits() : Observable<any> {
-    return this.http.get(`${this.API_URL}/api/deposits/` , { withCredentials: true });
+    return this.http.get(`${this.API_URL}/api/deposits/`);
   }
 
   openDeposit(data: any) : Observable<any> {
-    return this.http.post(`${this.API_URL}/api/deposits/open/`, data , { withCredentials: true });
+    return this.http.post(`${this.API_URL}/api/deposits/open/`, data);
   }
 }
