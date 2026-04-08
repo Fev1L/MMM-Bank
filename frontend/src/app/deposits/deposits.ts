@@ -19,7 +19,6 @@ export class Deposits implements OnInit {
   accounts: any[] = [];
   piggies: any[] = [];
   activeDeposits: any[] = [];
-  depositHistory: any[] = [];
   rates: { [key: string]: number } = {};
   viewCurrency: string = 'USD';
   totalBalance: number = 0;
@@ -76,6 +75,33 @@ export class Deposits implements OnInit {
     });
   }
 
+  calculateTotal() {
+    if (!this.rates || Object.keys(this.rates).length === 0) {
+      this.totalBalance = 0;
+      return;
+    }
+
+    let total = 0;
+
+    if (this.piggies && this.piggies.length > 0) {
+      total += this.piggies.reduce((sum, acc) => {
+        const rate = this.rates[acc.currency];
+        const amount = acc.balance || 0;
+        return rate ? sum + (amount / rate) : sum;
+      }, 0);
+    }
+
+    if (this.activeDeposits && this.activeDeposits.length > 0) {
+      total += this.activeDeposits.reduce((sum, acc) => {
+        const rate = this.rates[acc.currency];
+        const amount = acc.amount || 0;
+        return rate ? sum + (amount / rate) : sum;
+      }, 0);
+    }
+
+    this.totalBalance = total;
+  }
+
   getConvertedTotal(): number {
     const targetRate = this.rates[this.viewCurrency] || 1;
     return this.totalBalance * targetRate;
@@ -84,12 +110,13 @@ export class Deposits implements OnInit {
   loadSavingsData() {
     this.authService.getPiggyBanks().subscribe(res => {
       this.piggies = res.piggies;
+      this.calculateTotal();
       this.cdr.detectChanges();
     });
 
     this.authService.getDeposits().subscribe(res => {
       this.activeDeposits = res.active_deposits;
-      this.depositHistory = res.history;
+      this.calculateTotal();
       this.cdr.detectChanges();
     });
   }

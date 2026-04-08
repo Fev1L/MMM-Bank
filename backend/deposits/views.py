@@ -109,20 +109,21 @@ def api_piggy_bank(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def api_deposits_list(request):
-    deposits = Deposit.objects.filter(user=request.user, is_active=True)
-    history = Deposit.objects.filter(user=request.user, is_active=False)
+    deposits = Deposit.objects.filter(user=request.user)
 
-    def serialize(deps):
-        return [{
-            "id": d.id, "amount": d.amount, "rate": d.rate,
-            "duration": d.duration, "profit": d.profit(),
-            "created_at": d.created_at
-        } for d in deps]
-
-    return JsonResponse({
-        "active_deposits": serialize(deposits),
-        "history": serialize(history)
-    })
+    data = []
+    for d in deposits:
+        currency = d.account.currency_type_id
+        data.append({
+            "id": d.id,
+            "amount": d.amount,
+            "rate": d.rate,
+            "duration": d.duration,
+            "profit": d.profit(),
+            "created_at": d.created_at,
+            "currency": currency
+        })
+    return JsonResponse({"active_deposits": data})
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -145,16 +146,13 @@ def api_open_deposit(request):
             return JsonResponse({"message": "Not enough funds."}, status=400)
 
         with transaction.atomic():
-            account.balance -= amount
-            account.save()
-
             transfer_category, _ = Category.objects.get_or_create(name="Open Deposit", type=Category.WITHDRAW)
             Transaction.objects.create(
                 account=account, amount=amount, category=transfer_category,
                 transaction_type=Category.WITHDRAW, title="Deposit opened"
             )
 
-            Deposit.objects.create(user=request.user, amount=amount, duration=duration, rate=rate)
+            Deposit.objects.create(user=request.user, account=account , amount=amount, duration=duration, rate=rate)
 
         return JsonResponse({"message": "Deposit opened successfully!"})
 
