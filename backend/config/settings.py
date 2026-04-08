@@ -3,9 +3,12 @@ import dj_database_url
 
 from pathlib import Path
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+from dotenv import load_dotenv
 
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-jnscosjmvqy4^59lzts0s_yct#b8@9_ex)%08%6v_%ek#hm3ry')
+BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv(os.path.join(BASE_DIR, '.env'))
+
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 DEBUG = False
 
@@ -71,8 +74,9 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 DATABASES = {
     'default': dj_database_url.config(
-        default=f'sqlite:///{BASE_DIR / "db.sqlite3"}',
-        conn_max_age=600
+        default=os.getenv('DATABASE_URL'),
+        conn_max_age=600,
+        ssl_require=True
     )
 }
 
