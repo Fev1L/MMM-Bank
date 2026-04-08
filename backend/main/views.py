@@ -23,7 +23,6 @@ from django.conf import settings
 
 @never_cache
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
 def api_login(request):
     if request.method == 'POST':
         data = json.loads(request.body)
@@ -41,7 +40,6 @@ def api_login(request):
     return JsonResponse({'status': 'error', 'message': 'Only POST'}, status=405)
 
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
 def api_register(request):
     if request.method == 'POST':
         try:
