@@ -14,7 +14,7 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 import random
 
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework_simplejwt.tokens import RefreshToken
 
@@ -89,6 +89,7 @@ def api_logout(request):
     return JsonResponse({'status': 'success', 'message': 'Logged out'})
 
 @api_view(['POST'])
+@authentication_classes([])
 @permission_classes([AllowAny])
 def send_verification_code(request):
     if request.method == 'POST':
@@ -115,6 +116,7 @@ def send_verification_code(request):
         return JsonResponse({'status': 'ok', 'message': 'Code sent!'})
 
 @api_view(['POST'])
+@authentication_classes([])
 @permission_classes([AllowAny])
 def verify_code(request):
     if request.method == 'POST':
@@ -130,6 +132,7 @@ def verify_code(request):
         return JsonResponse({'status': 'error', 'message': 'Incorrect or expired code'}, status=400)
 
 @api_view(['POST'])
+@authentication_classes([])
 @permission_classes([AllowAny])
 def check_username(request):
     if request.method == 'POST':
@@ -149,6 +152,7 @@ def check_username(request):
             return JsonResponse({'error': 'Invalid data'}, status=400)
 
 @api_view(['GET'])
+@authentication_classes([])
 @permission_classes([AllowAny])
 def get_user_profile(request):
     if not request.user.is_authenticated:
