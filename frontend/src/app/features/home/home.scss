@@ -124,17 +124,43 @@ $max-width: 1140px;
 
     .phone-mockup {
       width: clamp(260px, 28vw, 340px);
-      aspect-ratio: 9 / 18.5;
-      background: linear-gradient(135deg, $primary-purple 0%, #8b44ff 100%);
+      aspect-ratio: 9 / 16;
+      background: #111;
       border: 12px solid #111;
       border-radius: 48px;
       box-shadow: 0 50px 100px -20px rgba(99, 21, 229, 0.3);
       position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-weight: bold;
+      overflow: hidden;
+      display: block;
+
+      .screen-content {
+        width: 100%;
+        height: 100%;
+        border-radius: 36px;
+        overflow: hidden;
+        position: relative;
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          object-position: top;
+          display: block;
+        }
+      }
+
+      &::after {
+        content: '';
+        position: absolute;
+        top: 15px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80px;
+        height: 25px;
+        background: #111;
+        border-radius: 20px;
+        z-index: 10;
+      }
     }
   }
 }
