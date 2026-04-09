@@ -8,14 +8,16 @@
 
 ---
 
+## 🌐 [Visit our Website live!](https://mmm-bank.vercel.app/)
+
 ## ✨ Key Features
 
-- 💳 **Multi-Currency Accounts:** Open and manage accounts in USD, EUR, and UAH instantly.
-- 💱 **Smart Exchange:** Real-time internal currency conversion using live exchange rates.
-- 📜 **Categorized History:** Clean transaction logs grouped by date (Today, Yesterday, etc.).
-- 📑 **Banking Details:** Automatic **IBAN** generation for every account with a "click-to-copy" system.
-- 🛡️ **Financial Precision:** All calculations performed using the `Decimal` type to ensure 100% accuracy in balances.
-- 🎨 **Modern UX/UI:** Fluid animated backgrounds, glassmorphism components, and a fully responsive layout.
+- 🏦 Instant Banking: Open a digital account in seconds and manage your finances from anywhere in the world.
+- 💰 Smart Savings: Create personalized "Piggy Banks" with progress tracking to reach your financial goals faster.
+- 📈 Fixed Deposits: Grow your wealth with high-yield deposit plans and real-time profit calculation.
+- 💸 Global Transfers: Send and receive funds across multiple currencies (USD, EUR, UAH) with competitive exchange rates.
+- 📱 Seamless Experience: A fully responsive, modern interface designed for both desktop and mobile users.
+- 🔒 Enterprise-Grade Security: Advanced data protection and precise financial calculations for total peace of mind.
 
 ---
 
@@ -97,9 +99,8 @@ ng serve
 ---
 
 ## 📸 Screenshots
-
-![photo_2026-04-01 20 53 26](https://github.com/user-attachments/assets/83beb29d-e418-4dd8-88be-a27db8cd9e47)
-![photo_2026-04-01 20 53 31](https://github.com/user-attachments/assets/45544fb4-8204-467a-bdc7-b508d85ebbd0)
+![photo](https://github.com/user-attachments/assets/8046abf9-e2da-4494-ba48-eb33654e9993)
+![photo](https://github.com/user-attachments/assets/114cdc69-829c-438c-a52d-a9e94eda32bb)
 
 ---
 
