@@ -76,6 +76,7 @@ export class Credits implements OnInit {
       }
 
       this.calculateTotal();
+      this.isLoading = false;
       this.cdr.detectChanges();
     });
 
@@ -84,6 +85,7 @@ export class Credits implements OnInit {
     }).subscribe(res => {
       this.credits = res.creditDate.credits
       this.calculateTotal();
+      this.isLoading = false;
       this.cdr.detectChanges();
     });
   }
