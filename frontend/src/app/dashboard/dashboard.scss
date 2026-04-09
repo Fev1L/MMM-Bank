@@ -479,6 +479,7 @@ $border-color: #e5e7eb;
   gap: 12px;
   max-width: 800px;
   margin: 0 auto;
+  overflow-x: hidden;
 }
 
 .transaction-item {
@@ -814,4 +815,176 @@ $border-color: #e5e7eb;
   height: 40px;
   width: 60%;
   margin-bottom: 20px;
+}
+
+/* =========================================
+              MOBILE ADAPTATION
+   ========================================= */
+@media (max-width: 768px) {
+  .dashboard-wrapper {
+    display: flex;
+    flex-direction: column;
+    padding-top: 80px;
+    padding-bottom: 90px;
+    min-height: 100vh;
+
+    &::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 70px;
+      background: $bg-color;
+      z-index: 999;
+      border-bottom: 1px solid $border-color;
+    }
+  }
+
+  .sidebar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 75px;
+    flex-direction: row;
+    background: $surface-color;
+    box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.05);
+    border-right: none;
+    border-top: 1px solid $border-color;
+    z-index: 1000;
+    padding: 0;
+
+    .user-profile {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: auto;
+      height: 70px;
+      padding: 11px 20px;
+      margin: 0;
+      z-index: 1000;
+      background: transparent;
+
+      .user-info { display: none; }
+    }
+
+    .bottom-nav {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: auto;
+      height: 70px;
+      flex-direction: row;
+      justify-content: flex-end;
+      align-items: center;
+      padding: 0 15px;
+      z-index: 1000;
+      background: transparent;
+
+      a {
+        font-size: 0;
+        padding: 10px;
+        i { font-size: 22px; margin: 0; }
+      }
+    }
+
+    .side-nav {
+      flex-direction: row;
+      width: 100%;
+      justify-content: space-around;
+      align-items: center;
+      padding: 0;
+
+      a {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 15px 0;
+        font-size: 0;
+        border-radius: 0;
+
+        i {
+          font-size: 24px;
+          color: $text-muted;
+          margin: 0;
+          transition: transform 0.2s;
+        }
+
+        &.active {
+          background: transparent;
+
+          i {
+            color: $accent-blue;
+            transform: scale(1.15);
+          }
+
+          &::before { display: none; }
+
+          &::after {
+            content: '';
+            position: absolute;
+            bottom: 8px;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: $accent-blue;
+          }
+        }
+      }
+    }
+  }
+
+  .main-content {
+    padding: 15px;
+    margin-left: 0;
+
+    .balance-header {
+      h1 { font-size: 2.2rem; }
+
+      .quick-actions {
+        flex-direction: column;
+        width: 100%;
+
+        .btn-light {
+          width: 100%;
+          justify-content: center;
+          padding: 14px;
+        }
+      }
+    }
+
+    .tabs {
+      gap: 15px;
+      justify-content: space-around;
+      button { flex: 1; }
+    }
+
+    .accounts-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .transactions-list {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .modal-content {
+    padding: 24px 20px;
+    max-width: 90vw;
+
+    .form-row {
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    .modal-actions {
+      flex-direction: column;
+      button { width: 100%; }
+      .btn-cancel { order: 2; }
+      .btn-confirm { order: 1; }
+    }
+  }
 }
