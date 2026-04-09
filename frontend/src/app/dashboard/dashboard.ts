@@ -3,7 +3,7 @@ import { AuthService } from '../core/services/auth';
 import {CommonModule} from '@angular/common';
 import {AlertService} from '../core/services/alert';
 import {Router , RouterLink} from '@angular/router';
-import {Observable} from 'rxjs';
+import {Observable, forkJoin} from 'rxjs';
 import {FormsModule} from '@angular/forms';
 
 interface GroupedTransactions {
@@ -20,6 +20,7 @@ interface GroupedTransactions {
 })
 
 export class Dashboard implements OnInit {
+  isLoading = true;
   activeTab = 'accounts';
 
   availableCurrencies: any[] = [];
@@ -87,13 +88,18 @@ export class Dashboard implements OnInit {
   }
 
   loadUserData() {
-    this.authService.getUserData().subscribe({
-      next: (data) => {
-        this.user = data.user;
-        this.accounts = data.accounts;
-        this.rates = data.rates;
-        this.availableCurrencies = data.availableCurrencies;
+    this.isLoading = true;
+
+    forkJoin({
+      userData: this.authService.getUserData()
+    }).subscribe({
+      next: (res: any) => {
+        this.user = res.userData.user;
+        this.accounts = res.userData.accounts;
+        this.rates = res.userData.rates;
+        this.availableCurrencies = res.userData.availableCurrencies;
         this.calculateTotal();
+        this.isLoading = false;
         this.cdr.detectChanges();
       },
       error: (err) => {

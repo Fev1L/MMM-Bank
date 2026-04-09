@@ -1,6 +1,13 @@
 <div class="dashboard-wrapper">
   <aside class="sidebar">
-    <div class="user-profile">
+    <div class="user-profile" *ngIf="isLoading">
+      <div class="skeleton" style="height: 40px; width: 40px;"></div>
+      <div class="user-info">
+        <div class="skeleton" style="height: 20px; width: 100px;"></div>
+      </div>
+    </div>
+
+    <div class="user-profile" *ngIf="!isLoading">
       <div class="avatar">{{ user?.initials }}</div>
       <div class="user-info">
         <h3>{{ user?.firstName }} {{ user?.lastName }}</h3>
@@ -22,7 +29,12 @@
   </aside>
 
   <main class="main-content">
-    <header class="balance-header">
+    <header class="balance-header" *ngIf="isLoading">
+      <div class="skeleton skeleton-header"></div>
+      <div class="skeleton" style="height: 20px; width: 100px;"></div>
+    </header>
+
+    <header class="balance-header" *ngIf="!isLoading">
       <div class="balance-info">
         <h1 class="debt-text">{{ getConvertedTotal() | currency:'$':'symbol':'1.2-2' }}</h1>
         <p>Total active debt</p>
@@ -40,19 +52,22 @@
     </div>
 
     <div class="tab-content fade-in" *ngIf="activeTab === 'loans'">
+      <div class="accounts-grid" *ngIf="isLoading">
+        <div class="skeleton skeleton-card" *ngFor="let i of [1,2,3]"></div>
+      </div>
 
-      <div class="empty-state" *ngIf="activeCredits.length === 0">
+      <div class="empty-state" *ngIf="activeCredits.length === 0 && !isLoading">
         <i class="fa-solid fa-shield-heart"></i>
         <p>You don't have any active loans</p>
       </div>
 
-      <div class="add-account-wrapper" *ngIf="activeCredits.length === 0">
+      <div class="add-account-wrapper" *ngIf="activeCredits.length === 0 && !isLoading">
         <button class="add-btn" (click)="openLoanModal()">
           <i class="fa-solid fa-plus"></i>
         </button>
       </div>
 
-      <div class="accounts-grid">
+      <div class="accounts-grid" *ngIf="!isLoading">
         <div class="account-card credit-card" *ngFor="let credit of activeCredits" (click)="openCreditDetails(credit)">
           <div class="card-top">
             <div class="currency-info">
@@ -76,13 +91,16 @@
     </div>
 
     <div *ngIf="activeTab === 'history'" class="tab-content fade-in">
+      <div class="date-group" *ngIf="isLoading">
+        <div class="skeleton skeleton-card" style="height: 50px" *ngFor="let i of [1,2,3]"></div>
+      </div>
 
-      <div class="empty-state" *ngIf="closedCredits.length === 0">
+      <div class="empty-state" *ngIf="closedCredits.length === 0 && !isLoading">
         <i class="fa-solid fa-file-invoice-dollar"></i>
         <p>You don't have any closed credits yet</p>
       </div>
 
-      <div class="transactions-list" *ngIf="closedCredits.length > 0">
+      <div class="transactions-list" *ngIf="closedCredits.length > 0 && !isLoading">
         <div class="transaction-item" *ngFor="let credit of closedCredits">
 
           <div class="tx-icon deposit">

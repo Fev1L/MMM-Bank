@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { AuthService } from '../core/services/auth';
 import { AlertService } from '../core/services/alert';
 import {Router, RouterLink} from '@angular/router';
+import {forkJoin} from 'rxjs';
 
 @Component({
   selector: 'app-deposits',
@@ -13,6 +14,7 @@ import {Router, RouterLink} from '@angular/router';
   styleUrl: './deposits.scss',
 })
 export class Deposits implements OnInit {
+  isLoading = true;
   activeTab: 'piggy' | 'deposits' = 'piggy';
 
   user: any = null;
@@ -51,10 +53,14 @@ export class Deposits implements OnInit {
   }
 
   loadUserData() {
-    this.authService.getUserData().subscribe({
-      next: (data) => {
-        this.user = data.user;
-        this.accounts = data.accounts;
+    this.isLoading = true;
+
+    forkJoin({
+      userData: this.authService.getUserData()
+    }).subscribe({
+      next: (res : any) => {
+        this.user = res.userData.user;
+        this.accounts = res.userData.accounts;
 
         if (this.accounts && this.accounts.length > 0 && !this.newPiggyData.currency) {
           this.newPiggyData.currency = this.accounts[0].code;
@@ -66,7 +72,7 @@ export class Deposits implements OnInit {
           this.newDepositData.currency = this.accounts[0].code;
         }
 
-        this.rates = data.rates;
+        this.rates = res.userData.rates;
         this.cdr.detectChanges();
       },
       error: (err) => {

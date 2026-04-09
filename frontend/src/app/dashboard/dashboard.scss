@@ -790,3 +790,28 @@ $border-color: #e5e7eb;
     transform: translateY(0) scale(1);
   }
 }
+
+.skeleton {
+  background: #e0e0e0;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite ease-in-out;
+  border-radius: 8px;
+}
+
+@keyframes skeleton-loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.skeleton-card {
+  height: 160px;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.skeleton-header {
+  height: 40px;
+  width: 60%;
+  margin-bottom: 20px;
+}

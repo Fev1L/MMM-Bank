@@ -1,7 +1,14 @@
 <div class="dashboard-wrapper">
 
   <aside class="sidebar">
-    <div class="user-profile">
+    <div class="user-profile" *ngIf="isLoading">
+      <div class="skeleton" style="height: 40px; width: 40px;"></div>
+      <div class="user-info">
+        <div class="skeleton" style="height: 20px; width: 100px;"></div>
+      </div>
+    </div>
+
+    <div class="user-profile" *ngIf="!isLoading">
       <div class="avatar">{{ user?.initials }}</div>
       <div class="user-info">
         <h3>{{ user?.firstName }} {{ user?.lastName }}</h3>
@@ -24,7 +31,12 @@
 
   <main class="main-content">
 
-    <header class="balance-header">
+    <header class="balance-header" *ngIf="isLoading">
+      <div class="skeleton skeleton-header"></div>
+      <div class="skeleton" style="height: 20px; width: 100px;"></div>
+    </header>
+
+    <header class="balance-header" *ngIf="!isLoading">
       <div class="balance-info">
         <h1>{{ getConvertedTotal() | currency:'$':'symbol':'1.2-2' }}</h1>
         <p>Total balance across all accounts</p>
@@ -43,18 +55,22 @@
 
     <div class="tab-content fade-in" *ngIf="activeTab === 'accounts'">
 
-      <div class="empty-state" *ngIf="accounts.length === 0">
+      <div class="accounts-grid" *ngIf="isLoading">
+        <div class="skeleton skeleton-card" *ngFor="let i of [1,2,3]"></div>
+      </div>
+
+      <div class="empty-state" *ngIf="accounts.length === 0 && !isLoading">
         <i class="fa-solid fa-circle-user"></i>
         <p>You don't have any accounts yet</p>
       </div>
 
-      <div class="add-account-wrapper" *ngIf="filteredCurrencies.length > 0 && accounts.length === 0">
+      <div class="add-account-wrapper" *ngIf="filteredCurrencies.length > 0 && accounts.length === 0 && !isLoading">
         <button class="add-btn" (click)="openAddAccountModal()">
           <i class="fa-solid fa-plus"></i>
         </button>
       </div>
 
-      <div class="accounts-grid">
+      <div class="accounts-grid"  *ngIf="!isLoading">
         <div class="account-card" *ngFor="let acc of accounts" (click)="openAccountDetails(acc)">
           <div class="card-top">
             <div class="currency-info">
@@ -78,7 +94,11 @@
 
     <div *ngIf="activeTab === 'transactions'" class="tab-content fade-in">
 
-      <div class="empty-state" *ngIf="groupedTransactions.length === 0">
+      <div class="date-group" *ngIf="isLoading">
+        <div class="skeleton skeleton-card" style="height: 50px" *ngFor="let i of [1,2,3]"></div>
+      </div>
+
+      <div class="empty-state" *ngIf="groupedTransactions.length === 0 && !isLoading">
         <i class="fa-solid fa-receipt"></i>
         <p>You don't have any transactions yet</p>
       </div>
@@ -88,7 +108,7 @@
           <span>{{ group.date }}</span>
         </div>
 
-        <div class="transactions-list" *ngIf="groupedTransactions.length > 0">
+        <div class="transactions-list" *ngIf="groupedTransactions.length > 0 && !isLoading">
           <div class="transaction-item" *ngFor="let tx of group.items">
 
             <div class="tx-icon" [ngClass]="tx.type">

@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import {Router, RouterLink} from '@angular/router';
 import { AuthService } from '../core/services/auth';
 import { AlertService } from '../core/services/alert';
+import {forkJoin} from 'rxjs';
 
 @Component({
   selector: 'app-credits',
@@ -13,6 +14,7 @@ import { AlertService } from '../core/services/alert';
   styleUrls: ['./credits.scss']
 })
 export class Credits implements OnInit {
+  isLoading = true;
   activeTab = 'loans';
   totalBalance: number = 0;
   viewCurrency: string = 'USD';
@@ -60,10 +62,14 @@ export class Credits implements OnInit {
   }
 
   loadInitialData() {
-    this.authService.getUserData().subscribe(res => {
-      this.user = res.user;
-      this.accounts = res.accounts;
-      this.rates = res.rates;
+    this.isLoading = true;
+
+    forkJoin({
+      userData: this.authService.getUserData()
+    }).subscribe(res => {
+      this.user = res.userData.user;
+      this.accounts = res.userData.accounts;
+      this.rates = res.userData.rates;
 
       if (this.accounts && this.accounts.length > 0 && !this.loanData.currency) {
         this.loanData.currency = this.accounts[0].code;
@@ -73,8 +79,10 @@ export class Credits implements OnInit {
       this.cdr.detectChanges();
     });
 
-    this.authService.getCredits().subscribe(res => {
-      this.credits = res.credits
+    forkJoin({
+      creditDate: this.authService.getCredits()
+    }).subscribe(res => {
+      this.credits = res.creditDate.credits
       this.calculateTotal();
       this.cdr.detectChanges();
     });

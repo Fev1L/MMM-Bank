@@ -1,7 +1,14 @@
 <div class="dashboard-wrapper">
 
   <aside class="sidebar">
-    <div class="user-profile">
+    <div class="user-profile" *ngIf="isLoading">
+      <div class="skeleton" style="height: 40px; width: 40px;"></div>
+      <div class="user-info">
+        <div class="skeleton" style="height: 20px; width: 100px;"></div>
+      </div>
+    </div>
+
+    <div class="user-profile" *ngIf="!isLoading">
       <div class="avatar">{{ user?.initials }}</div>
       <div class="user-info">
         <h3>{{ user?.firstName }} {{ user?.lastName }}</h3>
@@ -23,8 +30,12 @@
   </aside>
 
   <main class="main-content">
+    <header class="balance-header" *ngIf="isLoading">
+      <div class="skeleton skeleton-header"></div>
+      <div class="skeleton" style="height: 20px; width: 100px;"></div>
+    </header>
 
-    <header class="balance-header">
+    <header class="balance-header" *ngIf="!isLoading">
       <div class="balance-info">
         <h1>{{ getConvertedTotal() | currency:'$':'symbol':'1.2-2' }}</h1>
         <p>Total active deposits</p>
@@ -42,18 +53,22 @@
 
     <div *ngIf="activeTab === 'piggy'" class="tab-content fade-in">
 
-      <div class="empty-state" *ngIf="piggies.length === 0">
+      <div class="accounts-grid" *ngIf="isLoading">
+        <div class="skeleton skeleton-card" *ngFor="let i of [1,2,3]"></div>
+      </div>
+
+      <div class="empty-state" *ngIf="piggies.length === 0 && !isLoading">
         <i class="fa-solid fa-piggy-bank"></i>
         <p>You don't have any piggy banks yet</p>
       </div>
 
-      <div class="add-account-wrapper" *ngIf="piggies.length === 0">
+      <div class="add-account-wrapper" *ngIf="piggies.length === 0 && !isLoading">
         <button class="add-btn" (click)="showPiggyModal = true">
           <i class="fa-solid fa-plus"></i>
         </button>
       </div>
 
-      <div class="cards-grid">
+      <div class="cards-grid" *ngIf="!isLoading">
         <div class="account-card" *ngFor="let piggy of piggies">
           <div class="card-header">
             <h3>{{ piggy.name }}</h3>
@@ -89,18 +104,22 @@
 
     <div *ngIf="activeTab === 'deposits'" class="tab-content fade-in">
 
-      <div class="empty-state" *ngIf="activeDeposits.length === 0">
+      <div class="accounts-grid" *ngIf="isLoading">
+        <div class="skeleton skeleton-card" *ngFor="let i of [1,2,3]"></div>
+      </div>
+
+      <div class="empty-state" *ngIf="activeDeposits.length === 0 && !isLoading">
         <i class="fa-solid fa-vault"></i>
         <p>You don't have any deposits yet</p>
       </div>
 
-      <div class="add-account-wrapper" *ngIf="activeDeposits.length === 0">
+      <div class="add-account-wrapper" *ngIf="activeDeposits.length === 0 && !isLoading">
         <button class="add-btn" (click)="showDepositModal = true">
           <i class="fa-solid fa-plus"></i>
         </button>
       </div>
 
-      <div class="cards-grid">
+      <div class="cards-grid" *ngIf="!isLoading">
         <div class="account-card" *ngFor="let dep of activeDeposits">
           <div class="card-header">
             <h3>Fixed Deposit</h3>
