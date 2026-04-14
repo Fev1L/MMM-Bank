@@ -2,11 +2,13 @@
   <header class="header-sticky">
     <nav class="navbar">
       <div class="logo">MMM Bank</div>
-      <ul class="nav-links">
-        <li><a href="#">Personal</a></li>
-        <li><a href="#">Business</a></li>
-        <li><a href="#">Company</a></li>
+
+      <ul class="nav-links mono-tabs">
+        <li><a (click)="setActiveTab('personal')" [class.active]="activeTab === 'personal'">Personal</a></li>
+        <li><a (click)="setActiveTab('business')" [class.active]="activeTab === 'business'">Business</a></li>
+        <li><a (click)="setActiveTab('about')" [class.active]="activeTab === 'about'">About Us</a></li>
       </ul>
+
       <div class="auth-buttons">
         <button class="btn-login" routerLink="/auth" [queryParams]="{ mode: 'login' }">Log in</button>
         <button class="btn-signup" routerLink="/auth" [queryParams]="{ mode: 'signup' }">Sign up</button>
@@ -15,64 +17,507 @@
   </header>
 
   <main class="content-wrapper">
-    <section class="hero">
-      <div class="hero-content">
-        <h1>One app for all your finances</h1>
-        <p>From daily expenses to investments. Manage your money easily, securely and profitably. Join millions of users.</p>
-        <div class="hero-actions">
-          <button class="btn-primary" routerLink="/auth" [queryParams]="{ mode: 'signup' }">Open a free account</button>
+    <ng-container *ngIf="activeTab === 'personal'">
+      <section class="hero personal-hero">
+        <div class="hero-bg-blobs">
+          <div class="blob blob-1"></div>
+          <div class="blob blob-2"></div>
         </div>
+
+        <div class="content-container">
+          <div class="section-container">
+            <div class="hero-content reveal">
+              <div class="badge lifestyle-badge">✨ Banking Evolution</div>
+              <h1>One app for all your <br><span class="text-gradient-purple">finances</span></h1>
+              <p>From daily expenses to long-term investments. Manage your money with ease, precision, and a touch of magic.</p>
+
+              <div class="hero-actions">
+                <button class="btn-primary" routerLink="/auth" [queryParams]="{ mode: 'signup' }">
+                  Open a free account
+                </button>
+              </div>
+            </div>
+
+            <div class="hero-image reveal delay-1">
+              <div class="phone-scene">
+                <div class="phone-mockup white-edition">
+                  <div class="screen-content">
+                    <img src="MobileAppScreen.jpg" alt="App Screen">
+                  </div>
+                </div>
+
+                <div class="floating-notif n1">
+                  <div class="icon">🍎</div>
+                  <div class="details"><span>Apple Store</span><strong>-$9.99</strong></div>
+                </div>
+
+                <div class="floating-notif n2">
+                  <div class="icon">💰</div>
+                  <div class="details"><span>Cashback</span><strong>+$12.50</strong></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-deposits alternate-bg">
+        <div class="content-container"> <div class="section-container">
+          <div class="text-block reveal">
+            <span class="section-label">Savings & Jars</span>
+            <h2>Your money should<br>work for you</h2>
+            <p>Whether it's a high-yield deposit or our iconic <strong>Jars</strong>, saving has never been this effortless.</p>
+            <div class="savings-grid">
+              <div class="save-card">
+                <span class="sc-icon">📈</span>
+                <div class="sc-info"><strong>15% APY</strong><span>Top market rates</span></div>
+              </div>
+              <div class="save-card">
+                <span class="sc-icon">🔓</span>
+                <div class="sc-info"><strong>No Locks</strong><span>Withdraw anytime</span></div>
+              </div>
+            </div>
+            <button class="btn-primary" style="margin-top: 32px;">Start Saving</button>
+          </div>
+          <div class="visual-block reveal delay-1">
+            <div class="digital-jar-container">
+              <div class="jar-glow"></div>
+              <div class="mono-jar">
+                <div class="jar-lid"></div>
+                <div class="jar-glass">
+                  <div class="jar-liquid"><div class="wave"></div></div>
+                  <div class="jar-content">
+                    <span class="jar-amount">12,450 $</span>
+                    <span class="jar-goal">Goal: 20,000 $</span>
+                  </div>
+                </div>
+              </div>
+              <div class="coin c1">🪙</div><div class="coin c2">🪙</div><div class="coin c3">🪙</div>
+            </div>
+          </div>
+        </div>
+        </div>
+      </section>
+
+      <section class="section-credits dark-section">
+        <div class="content-container"> <div class="section-container reversed">
+          <div class="text-block reveal">
+            <span class="section-label">Credit Line</span>
+            <h2>Transparent credits,<br>no hidden traps</h2>
+            <p>Need a financial boost? Get an instant credit line directly to your card.</p>
+            <div class="limit-calculator">
+              <div class="calc-header"><span>Potential Limit</span><span class="limit-amount">Up to 100,000 ₴</span></div>
+              <div class="progress-track"><div class="progress-bar"></div></div>
+              <div class="calc-footer">
+                <div class="promo-badge">0% for 30 days</div>
+                <span class="approval-tag">⚡ Approval in 2 mins</span>
+              </div>
+            </div>
+            <button class="btn-primary" style="margin-top: 32px;">Calculate my limit</button>
+          </div>
+          <div class="visual-block reveal delay-1">
+            <div class="credit-3d-scene">
+              <div class="glass-card">
+                <div class="card-chip-gold"></div>
+                <div class="card-logo">MMM</div>
+                <div class="card-number">•••• •••• •••• 4421</div>
+                <div class="card-holder">PREMIUM USER</div>
+              </div>
+              <div class="floating-stat s1"><span class="label">Daily rate</span><span class="val">0.00%</span></div>
+              <div class="floating-stat s2"><span class="label">Hidden fees</span><span class="val">NONE</span></div>
+              <div class="floating-glow"></div>
+            </div>
+          </div>
+        </div>
+        </div>
+      </section>
+
+      <section class="section-transfers dark-section">
+        <div class="content-container"> <div class="section-container">
+          <div class="text-block reveal">
+            <span class="section-label">Payments</span>
+            <h2>Global reach,<br>local speed</h2>
+            <p>Our IBAN system makes international transfers as easy as sending a text message.</p>
+            <div class="iban-card">
+              <div class="iban-header">
+                <span class="currency-tag">EUR / IBAN</span>
+                <div class="dots"><span></span><span></span><span></span></div>
+              </div>
+              <div class="iban-body">
+                <code>UA 44 322001 000002600...</code>
+                <button class="btn-copy">Copy</button>
+              </div>
+            </div>
+          </div>
+          <div class="visual-block reveal delay-1">
+            <div class="global-network-viz">
+              <div class="globe-sphere">
+                <span class="emoji-big">🌍</span>
+                <div class="node n1"></div><div class="node n2"></div><div class="node n3"></div><div class="node n4"></div>
+                <div class="connection-line"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+      </section>
+
+      <section class="section-support light-purple-bg">
+        <div class="content-container"> <div class="section-container vertical">
+          <div class="text-center-block reveal">
+            <div class="live-badge"><span class="pulse-dot"></span>We are online now</div>
+            <h2>Real people, not bots</h2>
+            <p>Tired of talking to "Smart Assistants"? Our team is 100% human.</p>
+          </div>
+          <div class="support-visual reveal delay-1">
+            <div class="avatars-cluster">
+              <div class="main-avatar">👩‍💼</div>
+              <div class="sub-avatar a1">👨‍💻</div><div class="sub-avatar a2">🧑‍💻</div>
+            </div>
+            <div class="chat-cloud">
+              <div class="chat-bubble b1">"Hi! How can I help?"</div>
+              <div class="chat-bubble b2">"Your card is on its way! 🚀"</div>
+            </div>
+          </div>
+          <div class="support-action reveal delay-2">
+            <button class="btn-primary">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+              Start a conversation
+            </button>
+            <span class="reply-time">Average reply time: <span class="highlight">45 seconds</span></span>
+          </div>
+        </div>
+        </div>
+      </section>
+    </ng-container>
+
+    <ng-container *ngIf="activeTab === 'business'">
+      <section class="hero business-hero">
+        <div class="content-container">
+          <div class="section-container">
+            <div class="hero-content reveal">
+              <div class="badge business-badge">Enterprise Solution</div>
+              <h1>Business banking,<br><span class="gradient-text">zero bullshit</span></h1>
+              <p>Focus on growing your company, while we handle the financial gravity. A powerhouse tool for modern entrepreneurs.</p>
+
+              <div class="hero-actions">
+                <button class="btn-primary business-btn" routerLink="/auth" [queryParams]="{ mode: 'signup' }">
+                  Open Business Account
+                </button>
+                <div class="business-stats">
+                  <div class="b-stat"><strong>0%</strong> <span>FX fees</span></div>
+                  <div class="b-stat"><strong>24h</strong> <span>Approval</span></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="hero-image reveal delay-1">
+              <div class="mockup-wrapper">
+                <div class="phone-mockup black-edition">
+                  <div class="screen-content">
+                    <img src="MobileAppScreen.jpg" alt="Business App">
+                  </div>
+                </div>
+
+                <div class="glass-element card-payouts">
+                  <span class="g-icon">💸</span>
+                  <div class="g-text">Bulk Payouts</div>
+                </div>
+
+                <div class="glass-element card-limits">
+                  <span class="g-icon">🛡️</span>
+                  <div class="g-text">Smart Limits</div>
+                </div>
+
+                <div class="business-glow"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-currency dark-section">
+        <div class="content-container"> <div class="section-container">
+          <div class="text-block reveal">
+            <span class="section-label">Global Markets</span>
+            <h2>Multi-Currency<br><span class="text-purple">Freedom</span> 🌍</h2>
+            <p>Do business in any corner of the world. Open corporate accounts and issue cards in <strong>30+ currencies</strong> with real-time exchange rates.</p>
+
+            <div class="currency-pills">
+              <span class="pill">USD</span>
+              <span class="pill">EUR</span>
+              <span class="pill">GBP</span>
+              <span class="pill">PLN</span>
+              <span class="pill">CHF</span>
+            </div>
+
+            <div class="fx-rate-preview">
+              <div class="rate-item">
+                <span class="pair">EUR/USD</span>
+                <span class="value">1.0942</span>
+                <span class="trend up">▲ 0.2%</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="visual-block reveal delay-1">
+            <div class="currency-viz-container">
+              <div class="core-globe">
+                <div class="core-inner">💎</div>
+                <div class="core-pulse"></div>
+              </div>
+
+              <div class="orbit-ring ring-1">
+                <div class="floating-currency c-usd">$</div>
+              </div>
+              <div class="orbit-ring ring-2">
+                <div class="floating-currency c-eur">€</div>
+              </div>
+              <div class="orbit-ring ring-3">
+                <div class="floating-currency c-gbp">£</div>
+              </div>
+
+              <div class="data-particle p1"></div>
+              <div class="data-particle p2"></div>
+            </div>
+          </div>
+        </div>
+        </div>
+      </section>
+
+      <section class="section-automation alternate-bg">
+        <div class="content-container">
+          <div class="section-container reversed">
+            <div class="text-block reveal">
+              <span class="section-label">Efficiency</span>
+              <h2>Supreme<br><span class="text-highlight">Automation</span></h2>
+              <p>Managing company finances has never been this fluid. Focus on your product, while we handle the heavy lifting of accounting.</p>
+
+              <ul class="feature-list-check">
+                <li>
+                  <div class="check-icon">⚡</div>
+                  <span><strong>One-click mass payments</strong> to all employees</span>
+                </li>
+                <li>
+                  <div class="check-icon">📊</div>
+                  <span><strong>Automated tax reports</strong> generated monthly</span>
+                </li>
+                <li>
+                  <div class="check-icon">🔗</div>
+                  <span><strong>Full API integration</strong> with your CRM</span>
+                </li>
+              </ul>
+            </div>
+
+            <div class="visual-block reveal delay-1">
+              <div class="automation-display">
+                <div class="invoice-card main-invoice">
+                  <div class="invoice-header">
+                    <div class="client-info">
+                      <div class="avatar-sq"></div>
+                      <div class="lines"><div class="l-1"></div><div class="l-2"></div></div>
+                    </div>
+                    <div class="total-badge animated">Paid</div>
+                  </div>
+                  <div class="invoice-rows">
+                    <div class="row"></div><div class="row"></div><div class="row short"></div>
+                  </div>
+                  <div class="invoice-footer">
+                    <div class="amount">$4,200.00</div>
+                  </div>
+                </div>
+
+                <div class="floating-widget chart-widget">
+                  <div class="chart-bars">
+                    <div class="bar" style="height: 40%"></div>
+                    <div class="bar" style="height: 70%"></div>
+                    <div class="bar" style="height: 55%"></div>
+                    <div class="bar highlight" style="height: 90%"></div>
+                  </div>
+                  <span class="w-label">Revenue peak</span>
+                </div>
+
+                <div class="floating-widget status-widget">
+                  <div class="status-dot"></div>
+                  <span>API Connected</span>
+                </div>
+
+                <div class="automation-glow"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-team">
+        <div class="content-container">
+          <div class="section-container">
+            <div class="text-block reveal">
+              <span class="section-label">Team Management</span>
+              <h2>Total control over<br><span class="text-purple">team spending</span></h2>
+              <p>Issue virtual and physical cards for your team in seconds. Set individual limits, track expenses, and freeze cards with one tap.</p>
+
+              <div class="limit-dashboard-preview">
+                <div class="member-row">
+                  <div class="member-info">
+                    <span class="m-name">Alex Rivera</span>
+                    <span class="m-role">Marketing Director</span>
+                  </div>
+                  <div class="m-limit">
+                    <div class="limit-bar"><div class="fill" style="width: 75%;"></div></div>
+                    <div class="limit-labels">
+                      <span>$7,500 used</span>
+                      <span>$10,000 limit</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="visual-block reveal delay-1">
+              <div class="cards-fan-container">
+                <div class="mini-card card-black">
+                  <div class="card-inner">
+                    <div class="c-chip"></div>
+                    <div class="c-brand">MMM</div>
+                    <div class="c-holder">CEO ACCOUNT</div>
+                  </div>
+                </div>
+
+                <div class="mini-card card-purple">
+                  <div class="card-inner">
+                    <div class="c-chip"></div>
+                    <div class="c-brand">MMM</div>
+                    <div class="c-holder">MARKETING</div>
+                  </div>
+                </div>
+
+                <div class="mini-card card-gray">
+                  <div class="card-inner">
+                    <div class="c-chip"></div>
+                    <div class="c-brand">MMM</div>
+                    <div class="c-holder">DEVELOPMENT</div>
+                  </div>
+                </div>
+
+                <div class="freeze-overlay">
+                  <span class="lock-icon">🔒</span>
+                  <span>Freeze instant</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </ng-container>
+
+    <ng-container *ngIf="activeTab === 'about'">
+      <section class="hero about-hero">
+        <div class="content-container">
+          <div class="section-container">
+            <div class="hero-content reveal">
+              <div class="badge story-badge">The Legend</div>
+              <h1>From cafeteria to<br><span class="text-gradient">FinTech revolution</span></h1>
+
+              <div class="story-text">
+                <p>It started in a noisy university cafeteria. Three first-year students, one ambitious programming task, and a lot of coffee.</p>
+                <p class="highlight-quote">"Why MMM? For us, it's about <strong>Modern Money Management</strong>."</p>
+                <p>We took the risk, ignored the easy paths, and dived into the complex world of FinTech to prove that banking can be human.</p>
+              </div>
+
+              <div class="founders-note">
+                <div class="avatars-group">
+                  <span class="avatar">👨‍💻</span>
+                  <span class="avatar">👨‍💻</span>
+                  <span class="avatar">👨‍💻</span>
+                </div>
+                <span>Built by students, for the world.</span>
+              </div>
+            </div>
+
+            <div class="hero-image reveal delay-1">
+              <div class="story-visual-stack">
+                <div class="main-visual-box">
+                  <span class="icon-rocket">🚀</span>
+                  <div class="sparkles"></div>
+                </div>
+
+                <div class="story-card card-coffee">
+                  <span class="emoji">☕</span>
+                  <div class="info"><span>1,200+ cups</span><strong>of coffee</strong></div>
+                </div>
+
+                <div class="story-card card-code">
+                  <span class="emoji">💻</span>
+                  <div class="info"><span>First commit</span><strong>March 2026</strong></div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="timeline-mono reveal">
+        <div class="timeline-header">
+          <h2>Our Journey</h2>
+          <p>Click on any stage to see details</p>
+        </div>
+
+        <div class="mono-viewport" #scrollContainer>
+          <div class="mono-timeline-container">
+            <div class="main-horizontal-line">
+              <div class="progress-fill" [style.width]="getProgressWidth()"></div>
+            </div>
+
+            <div class="mono-timeline-track">
+              <div class="mono-step"
+                   *ngFor="let rep of reports; let i = index"
+                   [class.completed]="activeReport > i"
+                   [class.active]="activeReport === i"
+                   [class.future]="activeReport < i"
+                   (click)="selectReport(i)">
+
+                <div class="mono-img-box"><span class="emoji">{{ rep.icon }}</span></div>
+                <div class="dot-wrapper"><div class="dot"></div></div>
+                <div class="mono-content">
+                  <span class="report-label">Report {{ i + 1 }}</span>
+                  <h4>{{ rep.title }}</h4>
+                  <ul class="key-items"><li *ngFor="let item of rep.items">{{ item }}</li></ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </ng-container>
+
+    <section class="final-cta">
+      <div class="cta-glow-container">
+        <div class="glow-orb orb-1"></div>
+        <div class="glow-orb orb-2"></div>
       </div>
 
-      <div class="hero-image">
-        <div class="phone-mockup">
-          <div class="screen-content">
-            <img src="MobileAppScreen.jpg" alt="App Screen">
+      <div class="section-container vertical reveal">
+        <div class="cta-content">
+          <span class="cta-badge">No credit card required</span>
+          <h2>Ready to join the <span class="highlight-purple">financial revolution?</span></h2>
+          <p>Join over 5 million people who have already changed the way they bank. Open your account in just 5 minutes.</p>
+
+          <div class="cta-actions">
+            <button class="btn-mega" routerLink="/auth" [queryParams]="{ mode: 'signup' }">
+              Get started for free
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            </button>
+          </div>
+
+          <div class="cta-features-minimal">
+            <span>✓ Free card delivery</span>
+            <span>✓ 24/7 support</span>
+            <span>✓ Apple & Google Pay</span>
           </div>
         </div>
       </div>
-    </section>
-
-    <section class="stats-bar">
-      <div class="stat-item">
-        <span class="stat-value">35M+</span>
-        <span class="stat-label">Users</span>
-      </div>
-      <div class="stat-item">
-        <span class="stat-value">150+</span>
-        <span class="stat-label">Countrys</span>
-      </div>
-      <div class="stat-item">
-        <span class="stat-value">500k+</span>
-        <span class="stat-label">Reviews 5⭐</span>
-      </div>
-    </section>
-
-    <section class="features">
-      <h2>Make the most of your money</h2>
-      <div class="feature-grid">
-
-        <div class="feature-card dark">
-          <h3>International money transfers</h3>
-          <p>Send money to over 100 countries worldwide at a competitive exchange rate with no hidden fees.</p>
-        </div>
-
-        <div class="feature-card light">
-          <h3>Cards</h3>
-          <p>Create virtual cards for secure shopping or order a stylish physical card.</p>
-        </div>
-
-        <div class="feature-card light">
-          <h3>Investments</h3>
-          <p>Buy shares, metals and cryptocurrencies in just a few clicks, straight from your phone.</p>
-        </div>
-
-      </div>
-    </section>
-
-    <section class="final-cta">
-      <h2>Ready to switch your bank?</h2>
-      <button class="btn-primary" routerLink="/auth" [queryParams]="{ mode: 'signup' }">Get started now</button>
     </section>
   </main>
 </div>
