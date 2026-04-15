@@ -1904,7 +1904,7 @@ section[class^="section-"],
   .header-sticky .navbar {
     .auth-buttons {
       gap: 5px;
-      .btn-login { display: none; }
+      .btn-login { padding: 8px 14px; font-size: 12px; }
       .btn-signup { padding: 8px 14px; font-size: 12px; }
     }
     .logo { font-size: 18px; }
