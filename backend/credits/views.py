@@ -3,7 +3,7 @@ from decimal import Decimal
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.db import transaction
-
+from django.core.mail import send_mail
 from credits.models import Credit, Account , Category, Transaction
 
 from main.views import get_real_rates
@@ -67,6 +67,48 @@ def api_credits(request):
                     title=f"Loan approved: {credit.user.first_name} {credit.user.last_name}",
                 )
 
+            send_mail(
+                "✅ Loan Application Approved",
+                f"""
+            Dear Customer,
+
+            We are pleased to inform you that your loan application has been successfully approved 🎉
+
+            Loan Details:
+            - 💰 Approved Amount: {amount}
+
+            The approved funds will be processed according to the terms and conditions of your agreement. If any additional steps are required, our team will contact you shortly.
+
+            If you have any questions or require further assistance, please do not hesitate to reach out to our support team 📩
+
+            Thank you for choosing our services.
+
+            Sincerely,  
+            MMMBank Team
+            """,
+                "no-reply@mmmbank.com",
+                [request.user.email],
+                html_message=f"""
+                    <h2>✅ Loan Application Approved</h2>
+
+                    <p>Dear Customer,</p>
+
+                    <p>We are pleased to inform you that your loan application has been successfully approved 🎉</p>
+
+                    <h3>📊 Loan Details:</h3>
+                    <ul>
+                        <li><strong>💰 Approved Amount:</strong> {amount}</li>
+                    </ul>
+
+                    <p>The approved funds will be processed according to the terms and conditions of your agreement. If any additional steps are required, our team will contact you shortly.</p>
+
+                    <p>If you have any questions or require further assistance, please do not hesitate to contact our support team 📩</p>
+
+                    <p>Thank you for choosing our services 🙏</p>
+
+                    <p>Sincerely,<br>MMMBank Team</p>
+                """
+            )
             return JsonResponse({'message': f'The loan for {amount} has been approved!'})
 
         except Account.DoesNotExist:
