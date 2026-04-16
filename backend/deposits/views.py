@@ -1,11 +1,13 @@
 import json
 from decimal import Decimal
+
+from django.conf import settings
 from django.db import transaction
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import permission_classes, api_view
 from rest_framework.permissions import IsAuthenticated
-
+from django.core.mail import send_mail
 from .models import PiggyBank, Deposit
 from main.models import Transaction, Category, Account
 from main.views import get_real_rates
@@ -151,8 +153,75 @@ def api_open_deposit(request):
                 account=account, amount=amount, category=transfer_category,
                 transaction_type=Category.WITHDRAW, title="Deposit opened"
             )
+            Transaction.objects.create(
+                account=account, amount=amount, category=transfer_category,
+                transaction_type=Category.WITHDRAW, title="Deposit opened"
+            )
+            send_mail(
+                subject="New Deposit Opened - MMMBank",
+                message=f"Your deposit for {amount}  has been opened.",
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[request.user.email],
+                fail_silently=True,
+                html_message=f"""
+                            <div style="font-family: Arial, sans-serif; background-color:#f4f6f8; padding:20px;">
+                                <div style="max-width:600px; margin:0 auto; background:white; border-radius:12px; overflow:hidden; box-shadow:0 6px 16px rgba(0,0,0,0.1);">
+
+                                    <div style="background: linear-gradient(135deg, #7b2cbf, #5a189a); color:white; padding:30px 20px; text-align:center;">
+                                        <h2 style="margin:0; font-size: 24px; letter-spacing: 1px;">MMMBank</h2>
+                                        <p style="margin:5px 0 0; opacity: 0.9; font-size: 14px;">Trusted Financial Services</p>
+                                    </div>
+
+                                    <div style="padding:40px 30px;">
+                                        <h3 style="color:#333; font-size: 20px; margin-top: 0;">Deposit Opened 📈</h3>
+
+                                        <p style="color:#555; line-height: 1.5;">
+                                            Dear {request.user.username},
+                                        </p>
+
+                                        <p style="color:#555; line-height: 1.5;">
+                                            We are pleased to confirm that your new deposit has been successfully opened and is now active.
+                                        </p>
+
+                                        <div style="background:#f3e8ff; padding:20px; border-radius:12px; margin:25px 0; border-left:5px solid #7b2cbf;">
+                                            <p style="margin: 0 0 10px 0; color: #333;">
+                                                <span style="font-size: 18px;">💰</span> <strong>Amount:</strong> {amount}
+                                            </p>
+                                            <p style="margin: 0 0 10px 0; color: #333;">
+                                                
+                                            </p>
+                                            <p style="margin: 0 0 10px 0; color: #333;">
+                                                <strong>Interest Rate:</strong> {rate}% APR
+                                            </p>
+                                            <p style="margin: 0; color: #333;">
+                                                <strong>Status:</strong> Active
+                                            </p>
+                                        </div>
+
+                                        <p style="color:#555; line-height: 1.5;">
+                                            Your interest will be calculated based on the terms of your agreement. You can track your profit in your personal account.
+                                        </p>
+
+                                        <p style="margin-top:40px; color: #333;">
+                                            Sincerely,<br>
+                                            <strong style="font-size: 16px;">MMMBank Team</strong>
+                                        </p>
+                                    </div>
+
+                                    <div style="background:#f9f9f9; padding:20px; text-align:center; font-size:12px; color:#999; border-top: 1px solid #eee;">
+                                        © 2026 MMMBank. All rights reserved.<br>
+                                        This is an automated message, please do not reply.
+                                    </div>
+
+                                </div>
+                            </div>
+                            """
+            )
 
             Deposit.objects.create(user=request.user, account=account , amount=amount, duration=duration, rate=rate)
+
+
+
 
         return JsonResponse({"message": "Deposit opened successfully!"})
 
