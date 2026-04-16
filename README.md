@@ -8,6 +8,8 @@
 
 ---
 
+## 📽️ [Advertisement MMM Bank](https://www.youtube.com/watch?v=a0B_9BZt2e4)
+
 ## 🌐 [Visit our Website live!](https://mmm-bank.vercel.app/)
 
 ## ✨ Key Features
@@ -80,7 +82,7 @@ ng serve
 
 [x] Deposits: High-interest savings accounts.
 
-[ ] 🚧 More: There’s plenty of interesting stuff to enhance the ecosystem.
+[X] More: There’s plenty of interesting stuff to enhance the ecosystem.
 
 [ ] 🚧 Profile: Advanced profile settings.
 
