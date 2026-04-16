@@ -11,30 +11,22 @@ import { routes } from './app.routes';
 import {provideHttpClient, withFetch, withInterceptors} from '@angular/common/http';
 import {authInterceptor} from './core/services/auth.interceptor';
 
-import {provideFirebaseApp, initializeApp, getApps} from '@angular/fire/app';
+import {FirebaseApp, provideFirebaseApp} from '@angular/fire/app';
+import { initializeApp } from 'firebase/app';
 import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 import { environment } from '../environments/environment';
-import {isPlatformBrowser} from '@angular/common';
+
+initializeApp(environment.firebase);
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
 
     provideFirebaseApp(() => {
-      const platformId = inject(PLATFORM_ID);
-      if (isPlatformBrowser(platformId)) {
-        return initializeApp(environment.firebase);
-      }
-      return {} as any; 
+      console.log('🔥 Firebase init', environment.firebase);
+      return initializeApp(environment.firebase);
     }),
-
-    provideFirestore(() => {
-      const platformId = inject(PLATFORM_ID);
-      if (isPlatformBrowser(platformId)) {
-        return getFirestore();
-      }
-      return {} as any;
-    }),
+    provideFirestore(() => getFirestore()),
 
     provideBrowserGlobalErrorListeners(),
     provideHttpClient(

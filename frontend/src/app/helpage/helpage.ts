@@ -20,10 +20,9 @@ import {
   addDoc,
   query,
   orderBy,
-  onSnapshot,
   Timestamp,
   setDoc,
-  doc
+  doc, collectionData
 } from '@angular/fire/firestore';
 
 @Component({
@@ -48,7 +47,6 @@ export class Helpage implements OnInit {
   @ViewChild('searchContainer') searchContainer!: ElementRef;
 
   isChatOpen: boolean = false;
-  private firestore = inject(Firestore);
   chatMessages: any[] = [];
   newMessage: string = '';
   chatId: string = '';
@@ -62,7 +60,8 @@ export class Helpage implements OnInit {
     private alertService: AlertService,
     private cdr: ChangeDetectorRef,
     private eRef: ElementRef,
-    private http: HttpClient
+    private http: HttpClient,
+    private firestore: Firestore
   ) {}
 
   ngOnInit() {
@@ -188,8 +187,8 @@ export class Helpage implements OnInit {
     const msgCollection = collection(this.firestore, `chats/${this.chatId}/messages`);
     const q = query(msgCollection, orderBy('time', 'asc'));
 
-    onSnapshot(q, (snapshot) => {
-      this.chatMessages = snapshot.docs.map(doc => {
+    collectionData(q, { idField: 'id' }).subscribe((messages: any[]) => {
+      this.chatMessages = messages.map(doc => {
         const data = doc.data();
         return {
           id: doc.id,
