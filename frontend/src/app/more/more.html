@@ -1,1 +1,143 @@
-<p>more works!</p>
+<div class="dashboard-wrapper">
+
+  <aside class="sidebar">
+    <div class="user-profile" *ngIf="isLoading">
+      <div class="skeleton" style="height: 40px; width: 40px;"></div>
+      <div class="user-info">
+        <div class="skeleton" style="height: 20px; width: 100px;"></div>
+      </div>
+    </div>
+
+    <div class="user-profile" *ngIf="!isLoading">
+      <div class="avatar">{{ user?.initials }}</div>
+      <div class="user-info">
+        <h3>{{ user?.firstName }} {{ user?.lastName }}</h3>
+        <p>{{ user?.plan }}</p>
+      </div>
+    </div>
+
+    <nav class="side-nav">
+      <a routerLink="/dashboard"><i class="fa-solid fa-wallet"></i> Accounts</a>
+      <a routerLink="/credits"><i class="fa-solid fa-hand-holding-dollar"></i> Loans</a>
+      <a routerLink="/deposits"><i class="fa-solid fa-piggy-bank"></i> Deposits</a>
+      <a class="active"><i class="fa-solid fa-ellipsis"></i> More</a>
+    </nav>
+
+    <div class="bottom-nav">
+      <a routerLink="/helpage"><i class="fa-solid fa-circle-question"></i> Help</a>
+      <a (click)="onLogout()" class="logout"><i class="fa-solid fa-right-from-bracket"></i> Log out</a>
+    </div>
+  </aside>
+
+  <main class="main-content fade-in">
+    <header class="more-header">
+      <h1>More Services</h1>
+      <p>Manage your account and explore additional features</p>
+    </header>
+
+    <div class="more-grid">
+      <div class="more-card active" (click)="openProfileModal()">
+        <div class="card-icon"><i class="fa-solid fa-user-gear"></i></div>
+        <div class="card-info">
+          <h3>Profile Settings</h3>
+          <p>Update your personal info, avatar, and security</p>
+        </div>
+        <span class="arrow"><i class="fa-solid fa-chevron-right"></i></span>
+      </div>
+
+      <div class="more-card disabled">
+        <div class="card-icon"><i class="fa-solid fa-shield-halved"></i></div>
+        <div class="card-info">
+          <h3>Security & Privacy</h3>
+          <p>Manage 2FA and active sessions</p>
+        </div>
+        <small class="badge">Soon</small>
+      </div>
+
+      <div class="more-card disabled">
+        <div class="card-icon"><i class="fa-solid fa-dice"></i></div>
+        <div class="card-info">
+          <h3>MMM Casino</h3>
+          <p>Try your luck at a fair casino</p>
+        </div>
+        <small class="badge">Soon</small>
+      </div>
+
+      <div class="more-card disabled">
+        <div class="card-icon"><i class="fa-solid fa-bitcoin-sign"></i></div>
+        <div class="card-info">
+          <h3>MMM Binance</h3>
+          <p>Trade cryptocurrencies legally</p>
+        </div>
+        <small class="badge">Soon</small>
+      </div>
+
+      <div class="more-card disabled">
+        <div class="card-icon"><i class="fa-solid fa-shop"></i></div>
+        <div class="card-info">
+          <h3>MMM Shop</h3>
+          <p>Buy second-hand goods from reputable sellers</p>
+        </div>
+        <small class="badge">Soon</small>
+      </div>
+
+    </div>
+  </main>
+
+  <div class="modal-overlay" *ngIf="showLogoutModal" (click)="closeLogoutModal()">
+    <div class="modal-content confirm-modal" (click)="$event.stopPropagation()">
+      <div class="modal-icon warning">
+        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+      </div>
+      <h3>Log out</h3>
+      <p>Are you sure you want to log out? You’ll have to enter your password again.</p>
+
+      <div class="modal-actions">
+        <button class="btn-secondary" (click)="closeLogoutModal()">Cancel</button>
+        <button class="btn-danger" (click)="confirmLogout()">Exit</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" *ngIf="showProfileModal" (click)="closeProfileModal()">
+    <div class="modal-content profile-modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>Edit Profile</h3>
+        <button class="close-icon" (click)="closeProfileModal()">&times;</button>
+      </div>
+
+      <div class="profile-upload-section">
+        <div class="avatar-preview">
+          <img *ngIf="imagePreview || user?.avatarUrl"
+               [src]="imagePreview || user?.avatarUrl"
+               alt="Avatar">
+
+          <div *ngIf="!imagePreview && !user?.avatarUrl" class="initials-placeholder">
+            {{ user?.initials }}
+          </div>
+
+          <label for="fileInput" class="upload-badge">
+            <i class="fa-solid fa-camera"></i>
+          </label>
+        </div>
+        <input type="file" id="fileInput" (change)="onFileSelected($event)" hidden accept="image/*">
+        <p class="upload-hint">Click the camera icon to change photo</p>
+      </div>
+
+      <div class="form-group">
+        <label>First Name</label>
+        <input type="text" [(ngModel)]="user.firstName" placeholder="Enter first name">
+      </div>
+
+      <div class="form-group">
+        <label>Last Name</label>
+        <input type="text" [(ngModel)]="user.lastName" placeholder="Enter last name">
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn-cancel" (click)="closeProfileModal()">Cancel</button>
+        <button class="btn-confirm" (click)="saveProfile()">Save Changes</button>
+      </div>
+    </div>
+  </div>
+</div>
