@@ -1,7 +1,17 @@
-import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
+import {Component, OnInit, inject, ChangeDetectorRef, ElementRef} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Firestore, collection, query, onSnapshot, orderBy, addDoc, Timestamp, collectionGroup } from '@angular/fire/firestore';
+import {
+  Firestore,
+  collection,
+  query,
+  onSnapshot,
+  orderBy,
+  addDoc,
+  Timestamp,
+  collectionGroup,
+  collectionData
+} from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-admin-support',
@@ -11,7 +21,6 @@ import { Firestore, collection, query, onSnapshot, orderBy, addDoc, Timestamp, c
   styleUrls: ['./admin-support.scss']
 })
 export class AdminSupport implements OnInit {
-  private firestore = inject(Firestore);
   private cdr = inject(ChangeDetectorRef);
 
   chats: any[] = [];
@@ -19,17 +28,18 @@ export class AdminSupport implements OnInit {
   messages: any[] = [];
   replyText: string = '';
 
+  constructor(
+    private firestore: Firestore
+  ) {}
+
   ngOnInit() {
     this.loadAllChats();
   }
 
   loadAllChats() {
     const chatsRef = collection(this.firestore, 'chats');
-    onSnapshot(chatsRef, (snapshot) => {
-      this.chats = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
+    collectionData(chatsRef, { idField: 'id' }).subscribe((data: any[]) => {
+      this.chats = data;
       this.cdr.detectChanges();
     });
   }
@@ -39,11 +49,10 @@ export class AdminSupport implements OnInit {
     const msgRef = collection(this.firestore, `chats/${chatId}/messages`);
     const q = query(msgRef, orderBy('time', 'asc'));
 
-    onSnapshot(q, (snapshot) => {
-      this.messages = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data(),
-        time: (doc.data() as any).time?.toDate()
+    collectionData(q, { idField: 'id' }).subscribe((messages: any[]) => {
+      this.messages = messages.map(msg => ({
+        ...msg,
+        time: msg.time?.toDate?.()
       }));
       this.cdr.detectChanges();
     });

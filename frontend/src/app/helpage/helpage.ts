@@ -188,16 +188,10 @@ export class Helpage implements OnInit {
     const q = query(msgCollection, orderBy('time', 'asc'));
 
     collectionData(q, { idField: 'id' }).subscribe((messages: any[]) => {
-      this.chatMessages = messages.map(doc => {
-        const data = doc.data();
-        return {
-          id: doc.id,
-          ...data,
-          time: data['time']?.toDate()
-        };
-      });
-      this.cdr.detectChanges();
-      this.scrollToBottom();
+      this.chatMessages = messages.map(msg => ({
+        ...msg,
+        time: msg.time?.toDate?.()
+      }));
     });
   }
 
