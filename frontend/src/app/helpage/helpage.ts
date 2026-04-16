@@ -1,6 +1,15 @@
-import {Component, OnInit, ChangeDetectorRef, ElementRef, HostListener, ViewChild, inject} from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ChangeDetectorRef,
+  ElementRef,
+  HostListener,
+  ViewChild,
+  inject,
+  PLATFORM_ID
+} from '@angular/core';
 import { Router } from '@angular/router';
-import { CommonModule } from '@angular/common';
+import {CommonModule, isPlatformBrowser} from '@angular/common';
 import { AuthService } from '../core/services/auth';
 import { AlertService } from '../core/services/alert';
 import { HttpClient } from '@angular/common/http';
@@ -45,6 +54,7 @@ export class Helpage implements OnInit {
   chatId: string = '';
   @ViewChild('scrollMe') private myScrollContainer!: ElementRef;
   @ViewChild('searchInput') searchInput!: ElementRef;
+  private platformId = inject(PLATFORM_ID);
 
   constructor(
     private router: Router,
@@ -56,21 +66,16 @@ export class Helpage implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.isUserLoggedIn = !!localStorage.getItem('token');
     this.loadFaqData();
 
-    if (this.isUserLoggedIn) {
-      this.loadUserData();
-    } else {
-      let guestId = localStorage.getItem('guest_chat_id');
+    if (isPlatformBrowser(this.platformId)) {
+      this.isUserLoggedIn = !!localStorage.getItem('token');
 
-      if (!guestId) {
-        guestId = 'guest_' + Math.random().toString(36).substring(2, 11);
-        localStorage.setItem('guest_chat_id', guestId);
+      if (this.isUserLoggedIn) {
+        this.loadUserData();
+      } else {
+        this.initGuestChat();
       }
-
-      this.chatId = guestId;
-      this.listenToMessages();
     }
   }
 
@@ -238,11 +243,28 @@ export class Helpage implements OnInit {
       next: (res: any) => {
         this.user = res.user;
         this.isUserLoggedIn = true;
+        this.chatId = `user_${this.user?.id}`;
+        this.listenToMessages();
         this.cdr.detectChanges();
       },
-      error: (err) => {
+      error: () => {
         this.isUserLoggedIn = false;
+        this.initGuestChat();
       }
     });
+  }
+
+  private initGuestChat() {
+    if (!isPlatformBrowser(this.platformId)) return;
+
+    let guestId = localStorage.getItem('guest_chat_id');
+
+    if (!guestId) {
+      guestId = 'guest_' + Math.random().toString(36).substring(2, 11);
+      localStorage.setItem('guest_chat_id', guestId);
+    }
+
+    this.chatId = guestId;
+    this.listenToMessages();
   }
 }
