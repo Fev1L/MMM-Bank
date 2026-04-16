@@ -48,7 +48,7 @@ export class Helpage implements OnInit {
   @ViewChild('searchContainer') searchContainer!: ElementRef;
 
   isChatOpen: boolean = false;
-  private readonly firestore = inject(Firestore);
+  private firestore = inject(Firestore);
   chatMessages: any[] = [];
   newMessage: string = '';
   chatId: string = '';
