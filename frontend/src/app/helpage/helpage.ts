@@ -69,13 +69,7 @@ export class Helpage implements OnInit {
     this.loadFaqData();
 
     if (isPlatformBrowser(this.platformId)) {
-      this.isUserLoggedIn = !!localStorage.getItem('token');
-
-      if (this.isUserLoggedIn) {
-        this.loadUserData();
-      } else {
-        this.initGuestChat();
-      }
+      this.initAuthAndChat();
     }
   }
 
@@ -252,6 +246,17 @@ export class Helpage implements OnInit {
         this.initGuestChat();
       }
     });
+  }
+
+  private initAuthAndChat() {
+    const token = localStorage.getItem('token');
+    this.isUserLoggedIn = !!token;
+
+    if (this.isUserLoggedIn) {
+      this.loadUserData();
+    } else {
+      this.initGuestChat();
+    }
   }
 
   private initGuestChat() {
