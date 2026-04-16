@@ -68,45 +68,60 @@ def api_credits(request):
                 )
 
             send_mail(
-                "✅ Loan Application Approved",
-                f"""
-            Dear Customer,
-
-            We are pleased to inform you that your loan application has been successfully approved 🎉
-
-            Loan Details:
-            - 💰 Approved Amount: {amount}
-
-            The approved funds will be processed according to the terms and conditions of your agreement. If any additional steps are required, our team will contact you shortly.
-
-            If you have any questions or require further assistance, please do not hesitate to reach out to our support team 📩
-
-            Thank you for choosing our services.
-
-            Sincerely,  
-            MMMBank Team
-            """,
+                "Loan Approval Confirmation",
+                f"Your loan for {amount} has been approved.",
                 "no-reply@mmmbank.com",
                 [request.user.email],
                 html_message=f"""
-                    <h2>✅ Loan Application Approved</h2>
+                <div style="font-family: Arial, sans-serif; background-color:#f4f6f8; padding:20px;">
+                    <div style="max-width:600px; margin:0 auto; background:white; border-radius:12px; overflow:hidden; box-shadow:0 6px 16px rgba(0,0,0,0.1);">
 
-                    <p>Dear Customer,</p>
+                        <!-- HEADER -->
+                        <div style="background:linear-gradient(135deg, #6a0dad, #8e44ad); color:white; padding:25px; text-align:center;">
+                            <h2 style="margin:0;">MMMBank</h2>
+                            <p style="margin:5px 0 0;">Trusted Financial Services</p>
+                        </div>
 
-                    <p>We are pleased to inform you that your loan application has been successfully approved 🎉</p>
+                        <!-- BODY -->
+                        <div style="padding:30px;">
+                            <h3 style="color:#333;">Loan Approved 🎉</h3>
 
-                    <h3>📊 Loan Details:</h3>
-                    <ul>
-                        <li><strong>💰 Approved Amount:</strong> {amount}</li>
-                    </ul>
+                            <p style="color:#555;">
+                                Dear {request.user.first_name or "Customer"},
+                            </p>
 
-                    <p>The approved funds will be processed according to the terms and conditions of your agreement. If any additional steps are required, our team will contact you shortly.</p>
+                            <p style="color:#555;">
+                                We are pleased to inform you that your loan application has been successfully approved.
+                            </p>
 
-                    <p>If you have any questions or require further assistance, please do not hesitate to contact our support team 📩</p>
+                            <!-- DETAILS BOX -->
+                            <div style="background:#f3e8ff; padding:15px; border-radius:10px; margin:20px 0; border-left:4px solid #6a0dad;">
+                                <p><strong>💰 Approved Amount:</strong> {amount}</p>
+                                <p><strong>Status:</strong> Approved</p>
+                            </div>
 
-                    <p>Thank you for choosing our services 🙏</p>
+                            <p style="color:#555;">
+                                The funds will be credited to your account shortly in accordance with your agreement.
+                            </p>
 
-                    <p>Sincerely,<br>MMMBank Team</p>
+                            <p style="color:#555;">
+                                If you have any questions, feel free to contact our support team.
+                            </p>
+
+                            <p style="margin-top:30px;">
+                                Sincerely,<br>
+                                <strong>MMMBank Team</strong>
+                            </p>
+                        </div>
+
+                        <!-- FOOTER -->
+                        <div style="background:#f1f1f1; padding:15px; text-align:center; font-size:12px; color:#777;">
+                            © 2026 MMMBank. All rights reserved.<br>
+                            This is an automated message, please do not reply.
+                        </div>
+
+                    </div>
+                </div>
                 """
             )
             return JsonResponse({'message': f'The loan for {amount} has been approved!'})
@@ -169,12 +184,71 @@ def repay_credit(request):
                     credit.amount = 0
                     credit.is_active = False
                     message = "Credit fully repaid and closed!"
-                else:
-                    message = "Payment successful!"
 
-                credit.save()
+                    credit.save()
 
-            return JsonResponse({'message': message})
+                    send_mail(
+                        "Credit Closed Confirmation",
+                        f"Your credit '{credit.title}' has been fully repaid.",
+                        "no-reply@mmmbank.com",
+                        [request.user.email],
+                        html_message=f"""
+                        <div style="font-family: Arial, sans-serif; background-color:#f4f6f8; padding:20px;">
+                            <div style="max-width:600px; margin:0 auto; background:white; border-radius:10px; overflow:hidden; box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+
+                                <!-- HEADER -->
+            <div style="background:linear-gradient(135deg, #6a0dad, #8e44ad); color:white; padding:25px; text-align:center;">
+                <h2 style="margin:0;">MMMBank</h2>
+                <p style="margin:5px 0 0;">Trusted Financial Services</p>
+            </div>
+
+                                <!-- BODY -->
+                                <div style="padding:30px;">
+                                    <h3 style="color:#333;">Credit Closed Successfully</h3>
+
+                                    <p style="color:#555;">
+                                        Dear {request.user.first_name or "Customer"},
+                                    </p>
+
+                                    <p style="color:#555;">
+                                        We would like to inform you that your credit account has been fully repaid and is now officially closed.
+                                    </p>
+
+                                    <!-- DETAILS BOX -->
+                                    <div style="background:#f8f9fa; padding:15px; border-radius:8px; margin:20px 0;">
+                                        <p><strong>Credit Name:</strong> {credit.title}</p>
+                                        <p><strong>Status:</strong> Closed</p>
+                                        <p><strong>Closure Date:</strong> {credit.updated_at if hasattr(credit, 'updated_at') else ''}</p>
+                                    </div>
+
+                                    <p style="color:#555;">
+                                        Thank you for your trust and for using MMMBank services.  
+                                        We look forward to serving you again.
+                                    </p>
+
+                                    <p style="color:#555;">
+                                        If you have any questions, feel free to contact our support team.
+                                    </p>
+
+                                    <p style="margin-top:30px;">
+                                        Sincerely,<br>
+                                        <strong>MMMBank Team</strong>
+                                    </p>
+                                </div>
+
+                                <!-- FOOTER -->
+                                <div style="background:#f1f1f1; padding:15px; text-align:center; font-size:12px; color:#777;">
+                                    © 2026 MMMBank. All rights reserved.<br>
+                                    This is an automated message, please do not reply.
+                                </div>
+
+                            </div>
+                        </div>
+                        """
+                    )
+
+                    return JsonResponse({'message': message})
+
 
         except Account.DoesNotExist:
             return JsonResponse({'message': f"Account {pay_from_currency} not found."}, status=404)
