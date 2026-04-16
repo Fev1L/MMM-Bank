@@ -57,6 +57,12 @@ cd backend
 python manage.py migrate
 python manage.py runserver
 ```
+### 1.1 Create Superuser (Admin Access)
+To access the Django Administration panel and manage users/accounts manually:
+```console
+# Ensure you are in the backend directory with active venv
+python manage.py createsuperuser
+```
 ### 2. Frontend (Angular)
 ```console
 # Navigate to frontend directory
@@ -87,6 +93,32 @@ ng serve
 [ ] 🚧 Profile: Advanced profile settings.
 
 [ ] 🚧 Dark Mode: System-wide dark UI support.
+
+---
+
+## 📂 Project Structure
+
+```text
+MMM-Bank/
+├── backend/                # Django REST Framework Project
+│   ├── config/               # Project settings & WSGI/ASGI
+│   ├── main/                # Main API application
+│   │   ├── models/         # Database models (User, Account, Transaction)
+│   │   └── views/          # API logic & endpoints
+│   ├── credits/              # Credits API
+│   ├── deposits/              # Deposits API
+│   └──  manage.py           # Django CLI
+├── frontend/               # Angular SPA
+│   ├── src/
+│   │   ├── app/
+│   │   │   ├── components/ # Reusable UI elements
+│   │   │   ├── services/   # API communication & State management
+│   │   │   └── auth/       # Firebase authentication logic
+│   │   └── environments/   # Configuration (Firebase keys)
+│   └── package.json        # Node.js dependencies & scripts
+├── .gitignore              # Global git ignore rules
+└── requirements.txt    # Python dependencies
+```
 
 ---
 
