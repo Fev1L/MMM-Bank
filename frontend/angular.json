@@ -21,6 +21,8 @@
         "build": {
           "builder": "@angular/build:application",
           "options": {
+            "ssr": false,
+            "prerender": false,
             "polyfills": ["zone.js"],
             "browser": "src/main.ts",
             "tsConfig": "tsconfig.app.json",
