@@ -23,10 +23,9 @@ export const appConfig: ApplicationConfig = {
     provideFirebaseApp(() => {
       const platformId = inject(PLATFORM_ID);
       if (isPlatformBrowser(platformId)) {
-        const apps = getApps();
-        return apps.length ? apps[0] : initializeApp(environment.firebase);
+        return initializeApp(environment.firebase);
       }
-      return {} as any;
+      return {} as any; 
     }),
 
     provideFirestore(() => {
