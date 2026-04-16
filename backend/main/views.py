@@ -432,11 +432,57 @@ def api_send_money(request):
                 msg += f'\nThe funds have been successfully credited to your account.'
 
             send_mail(
-                subject='You have received a money transfer! 💸',
+                subject="Incoming Transfer Received",
                 message=msg,
                 from_email=settings.DEFAULT_FROM_EMAIL,
                 recipient_list=[recipient.email],
                 fail_silently=True,
+                html_message=f"""
+                <div style="font-family: Arial, sans-serif; background-color:#f4f6f8; padding:20px;">
+                    <div style="max-width:600px; margin:0 auto; background:white; border-radius:12px; overflow:hidden; box-shadow:0 6px 16px rgba(0,0,0,0.1);">
+
+                        <!-- HEADER -->
+                        <div style="background:linear-gradient(135deg, #6a0dad, #8e44ad); color:white; padding:25px; text-align:center;">
+                            <h2 style="margin:0;">MMMBank</h2>
+                            <p style="margin:5px 0 0;">Transaction Notification</p>
+                        </div>
+
+                        <!-- BODY -->
+                        <div style="padding:30px;">
+                            <h3 style="color:#333;">💸 Incoming Transfer</h3>
+
+                            <p style="color:#555;">
+                                Dear {recipient.first_name or "Customer"},
+                            </p>
+
+                            <p style="color:#555;">
+                                You have received a new money transfer to your account.
+                            </p>
+
+                            <!-- DETAILS BOX -->
+                            <div style="background:#f3e8ff; padding:15px; border-radius:10px; margin:20px 0; border-left:4px solid #6a0dad;">
+                                <p><strong>Amount:</strong> {amount}</p>
+                            </div>
+
+                            <p style="color:#555;">
+                                The funds are now available in your account.
+                            </p>
+
+                            <p style="margin-top:30px;">
+                                Sincerely,<br>
+                                <strong>MMMBank Team</strong>
+                            </p>
+                        </div>
+
+                        <!-- FOOTER -->
+                        <div style="background:#f1f1f1; padding:15px; text-align:center; font-size:12px; color:#777;">
+                            © 2026 MMMBank. All rights reserved.<br>
+                            This is an automated message, please do not reply.
+                        </div>
+
+                    </div>
+                </div>
+                """
             )
 
         return JsonResponse({'status': 'success', 'message': 'The transfer has been successfully completed'})
