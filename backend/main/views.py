@@ -108,10 +108,67 @@ def send_verification_code(request):
         )
 
         send_mail(
-            'Your MMM Bank verification code',
-            f'Your code: {code}',
-            'from@mmmbank.com',
+            "MMMBank Verification Code",
+            f"Your verification code is: {code}",
+            "no-reply@mmmbank.com",
             [email],
+            html_message=f"""
+            <div style="font-family: Arial, sans-serif; background-color:#f4f6f8; padding:20px;">
+                <div style="max-width:600px; margin:0 auto; background:white; border-radius:12px; overflow:hidden; box-shadow:0 6px 16px rgba(0,0,0,0.1);">
+
+                    <!-- HEADER -->
+                    <div style="background:linear-gradient(135deg, #6a0dad, #8e44ad); color:white; padding:25px; text-align:center;">
+                        <h2 style="margin:0;">MMMBank</h2>
+                        <p style="margin:5px 0 0;">Secure Verification</p>
+                    </div>
+
+                    <!-- BODY -->
+                    <div style="padding:30px; text-align:center;">
+                        <h3 style="color:#333;">Verification Required 🔐</h3>
+
+                        <p style="color:#555;">
+                            Use the code below to complete your verification process:
+                        </p>
+
+                        <!-- CODE BOX -->
+                        <div style="margin:25px 0;">
+                            <span style="
+                                display:inline-block;
+                                font-size:28px;
+                                letter-spacing:6px;
+                                padding:15px 25px;
+                                background:#f3e8ff;
+                                border-radius:10px;
+                                border:2px dashed #6a0dad;
+                                color:#6a0dad;
+                                font-weight:bold;
+                            ">
+                                {code}
+                            </span>
+                        </div>
+
+                        <p style="color:#777; font-size:14px;">
+                            This code is valid for a limited time. Do not share it with anyone.
+                        </p>
+
+                        <p style="margin-top:25px;">
+                            If you did not request this code, please ignore this email or contact support.
+                        </p>
+
+                        <p style="margin-top:30px;">
+                            <strong>MMMBank Security Team</strong>
+                        </p>
+                    </div>
+
+                    <!-- FOOTER -->
+                    <div style="background:#f1f1f1; padding:15px; text-align:center; font-size:12px; color:#777;">
+                        © 2026 MMMBank. All rights reserved.<br>
+                        This is an automated message, please do not reply.
+                    </div>
+
+                </div>
+            </div>
+            """
         )
         return JsonResponse({'status': 'ok', 'message': 'Code sent!'})
 
