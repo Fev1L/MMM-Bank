@@ -60,7 +60,6 @@ export class Dashboard implements OnInit {
 
   ngOnInit() {
     this.loadUserData();
-    this.loadTransactions();
   }
 
   onLogout() {
@@ -99,6 +98,7 @@ export class Dashboard implements OnInit {
         this.rates = res.userData.rates;
         this.availableCurrencies = res.userData.availableCurrencies;
         this.calculateTotal();
+        this.loadTransactions();
         this.isLoading = false;
         this.cdr.detectChanges();
       },

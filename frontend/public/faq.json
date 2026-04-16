@@ -1,0 +1,808 @@
+[
+  {
+    "id": 1,
+    "category": "Cards",
+    "title": "How to block my physical card?",
+    "tags": "lost, stolen, card, freeze, security",
+    "content": "If you've lost your card, open the 'Cards' tab, select the card, and tap 'Freeze'. This will instantly disable all transactions. If you find it later, you can unfreeze it. If it's permanently lost, select 'Replace Card'.",
+    "popularity": 100
+  },
+  {
+    "id": 2,
+    "category": "Cards",
+    "title": "How to order a new card?",
+    "tags": "card, order, new",
+    "content": "Go to the 'Cards' section, tap 'Order Card', choose type, confirm address, and complete the request.",
+    "popularity": 80
+  },
+  {
+    "id": 3,
+    "category": "Cards",
+    "title": "What is a virtual card?",
+    "tags": "virtual, card",
+    "content": "A virtual card is a digital card for online payments with its own number, expiry, and CVV.",
+    "popularity": 85
+  },
+  {
+    "id": 4,
+    "category": "Cards",
+    "title": "How to change my card PIN?",
+    "tags": "pin, card",
+    "content": "Open card settings, tap 'Change PIN', and confirm with 2FA.",
+    "popularity": 75
+  },
+  {
+    "id": 5,
+    "category": "Cards",
+    "title": "Why was my card declined?",
+    "tags": "declined, card",
+    "content": "It may be due to insufficient funds, incorrect PIN, or disabled settings. Check notifications.",
+    "popularity": 90
+  },
+  {
+    "id": 6,
+    "category": "Cards",
+    "title": "Can I use my card abroad?",
+    "tags": "travel, card",
+    "content": "Yes, enable international payments in card settings before traveling.",
+    "popularity": 78
+  },
+  {
+    "id": 7,
+    "category": "Cards",
+    "title": "How to enable contactless payments?",
+    "tags": "contactless, card",
+    "content": "Go to card settings and toggle 'Contactless payments' on.",
+    "popularity": 70
+  },
+  {
+    "id": 8,
+    "category": "Cards",
+    "title": "How to view card details?",
+    "tags": "card, details",
+    "content": "Open the card and tap 'Show details'. Authentication is required.",
+    "popularity": 72
+  },
+  {
+    "id": 9,
+    "category": "Cards",
+    "title": "How to set spending limits?",
+    "tags": "limits, card",
+    "content": "In card settings, adjust daily or monthly limits.",
+    "popularity": 74
+  },
+  {
+    "id": 10,
+    "category": "Cards",
+    "title": "Can I have multiple cards?",
+    "tags": "multiple, cards",
+    "content": "Yes, you can order multiple physical and virtual cards.",
+    "popularity": 68
+  },
+
+  {
+    "id": 11,
+    "category": "Security",
+    "title": "I suspect fraudulent activity",
+    "tags": "fraud, security",
+    "content": "Freeze cards immediately and contact support.",
+    "popularity": 95
+  },
+  {
+    "id": 12,
+    "category": "Security",
+    "title": "How to enable 2FA?",
+    "tags": "2fa",
+    "content": "Go to Settings → Security → Enable 2FA.",
+    "popularity": 88
+  },
+  {
+    "id": 13,
+    "category": "Security",
+    "title": "What if I lose my phone?",
+    "tags": "phone, lost",
+    "content": "Log in elsewhere and log out all sessions.",
+    "popularity": 85
+  },
+  {
+    "id": 14,
+    "category": "Security",
+    "title": "How to reset password?",
+    "tags": "password",
+    "content": "Use 'Forgot Password' on login.",
+    "popularity": 92
+  },
+  {
+    "id": 15,
+    "category": "Security",
+    "title": "Is my data secure?",
+    "tags": "data",
+    "content": "Yes, we use encryption and security standards.",
+    "popularity": 70
+  },
+  {
+    "id": 16,
+    "category": "Security",
+    "title": "How to log out from all devices?",
+    "tags": "logout",
+    "content": "Go to Security settings and tap 'Log out everywhere'.",
+    "popularity": 76
+  },
+  {
+    "id": 17,
+    "category": "Security",
+    "title": "How to report phishing?",
+    "tags": "phishing",
+    "content": "Forward suspicious emails to support.",
+    "popularity": 73
+  },
+  {
+    "id": 18,
+    "category": "Security",
+    "title": "What is biometric login?",
+    "tags": "biometric",
+    "content": "Login using fingerprint or face recognition.",
+    "popularity": 77
+  },
+  {
+    "id": 19,
+    "category": "Security",
+    "title": "Can I disable biometrics?",
+    "tags": "biometric",
+    "content": "Yes, in security settings.",
+    "popularity": 65
+  },
+  {
+    "id": 20,
+    "category": "Security",
+    "title": "How to secure my account?",
+    "tags": "security",
+    "content": "Use strong passwords and enable 2FA.",
+    "popularity": 90
+  },
+
+  {
+    "id": 21,
+    "category": "Payments",
+    "title": "How to send money?",
+    "tags": "send",
+    "content": "Go to Payments and follow instructions.",
+    "popularity": 95
+  },
+  {
+    "id": 22,
+    "category": "Payments",
+    "title": "SWIFT transfer duration",
+    "tags": "swift",
+    "content": "3–5 business days.",
+    "popularity": 85
+  },
+  {
+    "id": 23,
+    "category": "Payments",
+    "title": "Can I cancel a transfer?",
+    "tags": "cancel",
+    "content": "Only if pending.",
+    "popularity": 78
+  },
+  {
+    "id": 24,
+    "category": "Payments",
+    "title": "Transfer fees",
+    "tags": "fees",
+    "content": "Depends on type.",
+    "popularity": 80
+  },
+  {
+    "id": 25,
+    "category": "Payments",
+    "title": "What is SEPA?",
+    "tags": "sepa",
+    "content": "European payment system.",
+    "popularity": 75
+  },
+  {
+    "id": 26,
+    "category": "Payments",
+    "title": "Instant transfers?",
+    "tags": "instant",
+    "content": "Available for supported banks.",
+    "popularity": 82
+  },
+  {
+    "id": 27,
+    "category": "Payments",
+    "title": "Payment limits?",
+    "tags": "limits",
+    "content": "Based on account level.",
+    "popularity": 77
+  },
+  {
+    "id": 28,
+    "category": "Payments",
+    "title": "Recurring payments?",
+    "tags": "recurring",
+    "content": "Set them in Payments.",
+    "popularity": 74
+  },
+  {
+    "id": 29,
+    "category": "Payments",
+    "title": "Split bills?",
+    "tags": "split",
+    "content": "Use split feature.",
+    "popularity": 79
+  },
+  {
+    "id": 30,
+    "category": "Payments",
+    "title": "Request money?",
+    "tags": "request",
+    "content": "Send payment request link.",
+    "popularity": 81
+  },
+
+  {
+    "id": 31,
+    "category": "Business",
+    "title": "Open business account",
+    "tags": "business",
+    "content": "Submit company documents.",
+    "popularity": 82
+  },
+  {
+    "id": 32,
+    "category": "Business",
+    "title": "Add team members",
+    "tags": "team",
+    "content": "Invite via settings.",
+    "popularity": 77
+  },
+  {
+    "id": 33,
+    "category": "Business",
+    "title": "Business limits",
+    "tags": "limits",
+    "content": "Depend on verification.",
+    "popularity": 65
+  },
+  {
+    "id": 34,
+    "category": "Business",
+    "title": "Create invoices",
+    "tags": "invoice",
+    "content": "Use invoice tab.",
+    "popularity": 70
+  },
+  {
+    "id": 35,
+    "category": "Business",
+    "title": "API access",
+    "tags": "api",
+    "content": "Available for integration.",
+    "popularity": 68
+  },
+  {
+    "id": 36,
+    "category": "Business",
+    "title": "Bulk payments",
+    "tags": "bulk",
+    "content": "Upload CSV for bulk transfers.",
+    "popularity": 72
+  },
+  {
+    "id": 37,
+    "category": "Business",
+    "title": "Expense tracking",
+    "tags": "expense",
+    "content": "Track expenses in dashboard.",
+    "popularity": 75
+  },
+  {
+    "id": 38,
+    "category": "Business",
+    "title": "Tax reports",
+    "tags": "tax",
+    "content": "Download reports in reports section.",
+    "popularity": 69
+  },
+  {
+    "id": 39,
+    "category": "Business",
+    "title": "Multi-currency accounts",
+    "tags": "currency",
+    "content": "Supported for global operations.",
+    "popularity": 78
+  },
+  {
+    "id": 40,
+    "category": "Business",
+    "title": "Role permissions",
+    "tags": "roles",
+    "content": "Assign roles to team members.",
+    "popularity": 71
+  },
+
+  {
+    "id": 41,
+    "category": "Crypto",
+    "title": "Buy crypto",
+    "tags": "buy",
+    "content": "Select asset and confirm.",
+    "popularity": 90
+  },
+  {
+    "id": 42,
+    "category": "Crypto",
+    "title": "Crypto risks",
+    "tags": "risk",
+    "content": "Crypto is volatile.",
+    "popularity": 85
+  },
+  {
+    "id": 43,
+    "category": "Crypto",
+    "title": "Withdraw crypto",
+    "tags": "withdraw",
+    "content": "Send to external wallet.",
+    "popularity": 80
+  },
+  {
+    "id": 44,
+    "category": "Crypto",
+    "title": "Crypto fees",
+    "tags": "fees",
+    "content": "Depends on network.",
+    "popularity": 70
+  },
+  {
+    "id": 45,
+    "category": "Crypto",
+    "title": "Staking",
+    "tags": "staking",
+    "content": "Earn rewards on assets.",
+    "popularity": 75
+  },
+  {
+    "id": 46,
+    "category": "Crypto",
+    "title": "Supported coins",
+    "tags": "coins",
+    "content": "Check crypto section.",
+    "popularity": 78
+  },
+  {
+    "id": 47,
+    "category": "Crypto",
+    "title": "Crypto security",
+    "tags": "security",
+    "content": "Assets are securely stored.",
+    "popularity": 82
+  },
+  {
+    "id": 48,
+    "category": "Crypto",
+    "title": "Convert crypto",
+    "tags": "convert",
+    "content": "Swap between assets.",
+    "popularity": 77
+  },
+  {
+    "id": 49,
+    "category": "Crypto",
+    "title": "Crypto limits",
+    "tags": "limits",
+    "content": "Based on verification.",
+    "popularity": 73
+  },
+  {
+    "id": 50,
+    "category": "Crypto",
+    "title": "Crypto taxes",
+    "tags": "tax",
+    "content": "Check local regulations.",
+    "popularity": 74
+  },
+
+  {
+    "id": 51,
+    "category": "Savings",
+    "title": "Create savings account",
+    "tags": "savings",
+    "content": "Tap 'Create Account'.",
+    "popularity": 88
+  },
+  {
+    "id": 52,
+    "category": "Savings",
+    "title": "Interest rates",
+    "tags": "interest",
+    "content": "Varies by plan.",
+    "popularity": 82
+  },
+  {
+    "id": 53,
+    "category": "Savings",
+    "title": "Withdraw anytime?",
+    "tags": "withdraw",
+    "content": "Depends on plan.",
+    "popularity": 79
+  },
+  {
+    "id": 54,
+    "category": "Savings",
+    "title": "Money insured?",
+    "tags": "insurance",
+    "content": "Yes, protected.",
+    "popularity": 90
+  },
+  {
+    "id": 55,
+    "category": "Savings",
+    "title": "Interest calculation",
+    "tags": "interest",
+    "content": "Calculated daily.",
+    "popularity": 74
+  },
+  {
+    "id": 56,
+    "category": "Savings",
+    "title": "Auto-save",
+    "tags": "auto",
+    "content": "Enable round-ups.",
+    "popularity": 80
+  },
+  {
+    "id": 57,
+    "category": "Savings",
+    "title": "Savings goals",
+    "tags": "goals",
+    "content": "Set goals in app.",
+    "popularity": 78
+  },
+  {
+    "id": 58,
+    "category": "Savings",
+    "title": "Fixed deposits",
+    "tags": "fixed",
+    "content": "Lock funds for higher rates.",
+    "popularity": 76
+  },
+  {
+    "id": 59,
+    "category": "Savings",
+    "title": "Early withdrawal penalty",
+    "tags": "penalty",
+    "content": "May apply for fixed plans.",
+    "popularity": 72
+  },
+  {
+    "id": 60,
+    "category": "Savings",
+    "title": "Minimum deposit",
+    "tags": "deposit",
+    "content": "Depends on plan.",
+    "popularity": 70
+  },
+
+  {
+    "id": 61,
+    "category": "Cards",
+    "title": "Card delivery time",
+    "tags": "delivery",
+    "content": "Usually 5–10 days.",
+    "popularity": 78
+  },
+  {
+    "id": 62,
+    "category": "Security",
+    "title": "Session timeout",
+    "tags": "session",
+    "content": "Auto logout after inactivity.",
+    "popularity": 66
+  },
+  {
+    "id": 63,
+    "category": "Payments",
+    "title": "Currency conversion",
+    "tags": "fx",
+    "content": "Real-time rates apply.",
+    "popularity": 84
+  },
+  {
+    "id": 64,
+    "category": "Business",
+    "title": "Export transactions",
+    "tags": "export",
+    "content": "Download CSV or PDF.",
+    "popularity": 73
+  },
+  {
+    "id": 65,
+    "category": "Crypto",
+    "title": "Price alerts",
+    "tags": "alerts",
+    "content": "Set alerts in crypto tab.",
+    "popularity": 79
+  },
+  {
+    "id": 66,
+    "category": "Savings",
+    "title": "Compound interest",
+    "tags": "compound",
+    "content": "Interest earns interest.",
+    "popularity": 77
+  },
+  {
+    "id": 67,
+    "category": "Cards",
+    "title": "Card expiration",
+    "tags": "expiry",
+    "content": "Renew automatically.",
+    "popularity": 71
+  },
+  {
+    "id": 68,
+    "category": "Security",
+    "title": "Login alerts",
+    "tags": "alerts",
+    "content": "Get notified on login.",
+    "popularity": 83
+  },
+  {
+    "id": 69,
+    "category": "Payments",
+    "title": "Pending transactions",
+    "tags": "pending",
+    "content": "May take few days.",
+    "popularity": 80
+  },
+  {
+    "id": 70,
+    "category": "Business",
+    "title": "Merchant payments",
+    "tags": "merchant",
+    "content": "Accept payments easily.",
+    "popularity": 74
+  },
+  {
+    "id": 71,
+    "category": "Crypto",
+    "title": "Wallet address",
+    "tags": "wallet",
+    "content": "Each asset has unique address.",
+    "popularity": 82
+  },
+  {
+    "id": 72,
+    "category": "Savings",
+    "title": "Savings dashboard",
+    "tags": "dashboard",
+    "content": "Track savings visually.",
+    "popularity": 75
+  },
+  {
+    "id": 73,
+    "category": "Cards",
+    "title": "ATM withdrawals",
+    "tags": "atm",
+    "content": "Free up to limit.",
+    "popularity": 88
+  },
+  {
+    "id": 74,
+    "category": "Security",
+    "title": "Device management",
+    "tags": "device",
+    "content": "Manage trusted devices.",
+    "popularity": 76
+  },
+  {
+    "id": 75,
+    "category": "Payments",
+    "title": "QR payments",
+    "tags": "qr",
+    "content": "Scan QR to pay.",
+    "popularity": 83
+  },
+  {
+    "id": 76,
+    "category": "Business",
+    "title": "Payroll payments",
+    "tags": "payroll",
+    "content": "Automate salaries.",
+    "popularity": 81
+  },
+  {
+    "id": 77,
+    "category": "Crypto",
+    "title": "Crypto portfolio",
+    "tags": "portfolio",
+    "content": "Track all assets.",
+    "popularity": 87
+  },
+  {
+    "id": 78,
+    "category": "Savings",
+    "title": "Savings tips",
+    "tags": "tips",
+    "content": "Set automatic goals.",
+    "popularity": 72
+  },
+  {
+    "id": 79,
+    "category": "Cards",
+    "title": "Card customization",
+    "tags": "design",
+    "content": "Choose card design.",
+    "popularity": 69
+  },
+  {
+    "id": 80,
+    "category": "Security",
+    "title": "PIN attempts",
+    "tags": "pin",
+    "content": "Card blocks after 3 attempts.",
+    "popularity": 85
+  },
+  {
+    "id": 81,
+    "category": "Payments",
+    "title": "Payment notifications",
+    "tags": "notifications",
+    "content": "Instant alerts for payments.",
+    "popularity": 90
+  },
+  {
+    "id": 82,
+    "category": "Business",
+    "title": "Accounting integration",
+    "tags": "accounting",
+    "content": "Integrate with tools.",
+    "popularity": 78
+  },
+  {
+    "id": 83,
+    "category": "Crypto",
+    "title": "Crypto history",
+    "tags": "history",
+    "content": "View transaction history.",
+    "popularity": 80
+  },
+  {
+    "id": 84,
+    "category": "Savings",
+    "title": "Savings withdrawal speed",
+    "tags": "withdraw",
+    "content": "Instant for flexible plans.",
+    "popularity": 79
+  },
+  {
+    "id": 85,
+    "category": "Cards",
+    "title": "Online payments toggle",
+    "tags": "online",
+    "content": "Enable/disable in settings.",
+    "popularity": 77
+  },
+  {
+    "id": 86,
+    "category": "Security",
+    "title": "Security tips",
+    "tags": "tips",
+    "content": "Never share codes.",
+    "popularity": 91
+  },
+  {
+    "id": 87,
+    "category": "Payments",
+    "title": "Payment confirmation",
+    "tags": "confirm",
+    "content": "Requires 2FA.",
+    "popularity": 88
+  },
+  {
+    "id": 88,
+    "category": "Business",
+    "title": "Business verification",
+    "tags": "kyc",
+    "content": "Upload required documents.",
+    "popularity": 82
+  },
+  {
+    "id": 89,
+    "category": "Crypto",
+    "title": "Crypto liquidity",
+    "tags": "liquidity",
+    "content": "Depends on market.",
+    "popularity": 74
+  },
+  {
+    "id": 90,
+    "category": "Savings",
+    "title": "Savings security",
+    "tags": "security",
+    "content": "Protected accounts.",
+    "popularity": 86
+  },
+  {
+    "id": 91,
+    "category": "Cards",
+    "title": "Card reissue",
+    "tags": "replace",
+    "content": "Request new card anytime.",
+    "popularity": 83
+  },
+  {
+    "id": 92,
+    "category": "Security",
+    "title": "Account lock",
+    "tags": "lock",
+    "content": "Triggered after suspicious activity.",
+    "popularity": 87
+  },
+  {
+    "id": 93,
+    "category": "Payments",
+    "title": "Refund time",
+    "tags": "refund",
+    "content": "3–10 business days.",
+    "popularity": 89
+  },
+  {
+    "id": 94,
+    "category": "Business",
+    "title": "Subscriptions",
+    "tags": "subscription",
+    "content": "Manage recurring charges.",
+    "popularity": 76
+  },
+  {
+    "id": 95,
+    "category": "Crypto",
+    "title": "Crypto conversion fees",
+    "tags": "fees",
+    "content": "Displayed before confirmation.",
+    "popularity": 81
+  },
+  {
+    "id": 96,
+    "category": "Savings",
+    "title": "Savings statements",
+    "tags": "statement",
+    "content": "Download anytime.",
+    "popularity": 78
+  },
+  {
+    "id": 97,
+    "category": "Cards",
+    "title": "Card limits reset",
+    "tags": "limits",
+    "content": "Resets daily/monthly.",
+    "popularity": 84
+  },
+  {
+    "id": 98,
+    "category": "Security",
+    "title": "Fraud protection",
+    "tags": "fraud",
+    "content": "Advanced monitoring in place.",
+    "popularity": 93
+  },
+  {
+    "id": 99,
+    "category": "Payments",
+    "title": "Transfer history",
+    "tags": "history",
+    "content": "View all transactions.",
+    "popularity": 88
+  },
+  {
+    "id": 100,
+    "category": "Savings",
+    "title": "Savings overview",
+    "tags": "overview",
+    "content": "See all savings in dashboard.",
+    "popularity": 85
+  }
+]

@@ -1,0 +1,168 @@
+<div class="app-layout-wrapper">
+
+  <header class="help-top-bar">
+    <div class="bar-content">
+      <button class="btn-back" (click)="goBack()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+        <span>Back</span>
+      </button>
+      <div class="bar-title">Support Center</div>
+      <div class="bar-spacer"></div> </div>
+  </header>
+
+  <main class="help-main-content">
+
+    <section class="help-header text-center">
+      <h1>Hi. How can we help?</h1>
+
+      <div class="search-wrapper" #searchContainer>
+        <div class="search-pill">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input
+            #searchInput
+            type="text"
+            placeholder="Search (e.g. PIN, Transfer, Statement)..."
+            [(ngModel)]="searchTerm"
+            (input)="onSearch($event)"
+            (focus)="isResultsVisible = filteredResults.length > 0">
+        </div>
+
+        <div class="search-results" *ngIf="isResultsVisible && filteredResults.length > 0">
+          <div class="result-item" *ngFor="let result of filteredResults" (click)="openArticle(result)">
+            <div class="result-icon">
+              <span *ngIf="result.category === 'Cards'">💳</span>
+              <span *ngIf="result.category === 'Payments'">💸</span>
+              <span *ngIf="result.category === 'Security'">🔒</span>
+              <span *ngIf="result.category === 'Business'">💼</span>
+            </div>
+            <div class="result-text">
+              <span class="res-title">{{ result.title }}</span>
+              <span class="res-cat">{{ result.category }}</span>
+            </div>
+            <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </div>
+        </div>
+
+        <div class="search-results no-results" *ngIf="searchTerm.length > 1 && filteredResults.length === 0">
+          <p>No results found for "<strong>{{ searchTerm }}</strong>"</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="bento-grid">
+
+      <div class="bento-item item-hero bg-dark">
+        <div class="item-content">
+          <div class="pulse-indicator"></div>
+          <h2>Live Chat</h2>
+          <p>We usually reply in under 2 minutes.</p>
+          <button class="btn-primary-white" (click)="openChatModal()">Start a conversation</button>
+        </div>
+        <div class="visual-bg chat-bg">💬</div>
+      </div>
+
+      <div class="bento-item item-standard bg-purple-light" (click)="filterByCategory('Cards')">
+        <div class="icon-circle">💳</div>
+        <h3>Cards & Accounts</h3>
+        <p>Limits, ordering, freezing.</p>
+      </div>
+
+      <div class="bento-item item-standard bg-gray" (click)="filterByCategory('Payments')">
+        <div class="icon-circle">💸</div>
+        <h3>Payments</h3>
+        <p>Fees, delays, IBANs.</p>
+      </div>
+
+      <div class="bento-item item-wide">
+        <div class="faq-mini-header">
+          <h3>Trending topics</h3>
+          <span class="badge">Updated</span>
+        </div>
+        <ul class="clean-list">
+          <li (click)="openTrending('How to block my physical card?')">
+            <span>How to block my physical card?</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </li>
+          <li (click)="openTrending('I suspect fraudulent activity')">
+            <span>I suspect fraudulent activity</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </li>
+          <li (click)="openTrending('How to send money?')">
+            <span>How to send money?</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </li>
+        </ul>
+      </div>
+
+    </section>
+
+    <div class="modal-overlay" [class.active]="isModalOpen" (click)="closeArticle()">
+      <div class="modal-card" [class.active]="isModalOpen" (click)="$event.stopPropagation()">
+
+        <div class="modal-header">
+          <div class="category-tag">{{ selectedArticle?.category }}</div>
+          <button class="btn-close" (click)="closeArticle()">✕</button>
+        </div>
+
+        <div class="modal-body" *ngIf="selectedArticle">
+          <h2>{{ selectedArticle.title }}</h2>
+          <div class="article-content">
+            <p>{{ selectedArticle.content }}</p>
+          </div>
+
+          <div class="article-footer">
+            <p>Was this article helpful?</p>
+            <div class="vote-buttons">
+              <button class="btn-vote" (click)="rateArticle()">👍 Yes</button>
+              <button class="btn-vote" (click)="rateArticle()">👎 No</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="chat-overlay" [class.active]="isChatOpen" (click)="closeChatModal()">
+      <div class="chat-window" [class.active]="isChatOpen" (click)="$event.stopPropagation()">
+
+        <div class="chat-header">
+          <div class="user-info">
+            <div class="status-dot"></div>
+            <div>
+              <p class="name">Support Team</p>
+              <p class="status">Online • Replies in 2m</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="chat-messages" #scrollMe [scrollTop]="scrollMe.scrollHeight">
+          <div *ngFor="let msg of chatMessages"
+               [ngClass]="{'msg-user': msg.sender === 'user', 'msg-admin': msg.sender === 'admin'}">
+            <div class="bubble">
+              {{ msg.text }}
+              <span class="time">{{ msg.time | date:'HH:mm' }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="chat-input-area">
+          <input
+            type="text"
+            placeholder="Type a message..."
+            [(ngModel)]="newMessage"
+            (keyup.enter)="sendMessage()">
+          <button class="btn-send" (click)="sendMessage()" [disabled]="!newMessage.trim()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+</div>

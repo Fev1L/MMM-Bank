@@ -23,7 +23,7 @@ export class Home implements AfterViewInit {
     { title: 'Mechanics', icon: '⚙️', items: ['User Auth', 'Transfers', 'Balances'] },
     { title: 'Financials', icon: '📈', items: ['Credits', 'Deposits', 'History'] },
     { title: 'Social & Fun', icon: '🃏', items: ['Casino mod', 'Friends', 'Inbox'] },
-    { title: 'Angular SPA', icon: '🔥', items: ['UI Overhaul', 'IBANs', 'Piggy Banks'] },
+    { title: 'TOP SECRET', icon: '🤐', items: ['UI Overhaul', 'Angular', 'Piggy Banks'] },
     { title: 'Final', icon: '👑', items: ['Final Release', 'Success', 'Best banking'] }
   ];
 

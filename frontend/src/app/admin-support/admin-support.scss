@@ -1,0 +1,22 @@
+.admin-container {
+  display: flex; height: 100vh; font-family: sans-serif;
+}
+.sidebar {
+  width: 250px; background: #f0f0f0; border-right: 1px solid #ccc; padding: 20px;
+  ul { list-style: none; padding: 0; }
+  li { padding: 10px; cursor: pointer; border-radius: 5px; margin-bottom: 5px;
+    &:hover { background: #e0e0e0; }
+    &.active { background: #007bff; color: white; }
+  }
+}
+.chat-area {
+  flex: 1; display: flex; flex-direction: column; padding: 20px;
+  .messages { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+  .user { align-self: flex-start; .bubble { background: #eee; padding: 10px; border-radius: 10px; } }
+  .admin { align-self: flex-end; .bubble { background: #007bff; color: white; padding: 10px; border-radius: 10px; } }
+  .input-area { margin-top: 20px; display: flex; gap: 10px;
+    input { flex: 1; padding: 10px; border-radius: 5px; border: 1px solid #ccc; }
+    button { padding: 10px 20px; background: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; }
+  }
+}
+.empty { display: flex; align-items: center; justify-content: center; color: #888; }

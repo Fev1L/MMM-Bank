@@ -65,7 +65,8 @@ export class Credits implements OnInit {
     this.isLoading = true;
 
     forkJoin({
-      userData: this.authService.getUserData()
+      userData: this.authService.getUserData(),
+      creditDate: this.authService.getCredits()
     }).subscribe(res => {
       this.user = res.userData.user;
       this.accounts = res.userData.accounts;
@@ -75,15 +76,8 @@ export class Credits implements OnInit {
         this.loanData.currency = this.accounts[0].code;
       }
 
-      this.calculateTotal();
-      this.isLoading = false;
-      this.cdr.detectChanges();
-    });
-
-    forkJoin({
-      creditDate: this.authService.getCredits()
-    }).subscribe(res => {
       this.credits = res.creditDate.credits
+
       this.calculateTotal();
       this.isLoading = false;
       this.cdr.detectChanges();

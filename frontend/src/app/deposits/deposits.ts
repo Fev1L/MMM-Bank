@@ -73,6 +73,7 @@ export class Deposits implements OnInit {
         }
 
         this.rates = res.userData.rates;
+        this.calculateTotal();
         this.isLoading = false;
         this.cdr.detectChanges();
       },

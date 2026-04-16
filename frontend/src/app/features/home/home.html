@@ -77,7 +77,7 @@
                 <div class="sc-info"><strong>No Locks</strong><span>Withdraw anytime</span></div>
               </div>
             </div>
-            <button class="btn-primary" style="margin-top: 32px;">Start Saving</button>
+            <button class="btn-primary" routerLink="/auth" [queryParams]="{ mode: 'signup' }" style="margin-top: 32px;">Start Saving</button>
           </div>
           <div class="visual-block reveal delay-1">
             <div class="digital-jar-container">
@@ -106,14 +106,14 @@
             <h2>Transparent credits,<br>no hidden traps</h2>
             <p>Need a financial boost? Get an instant credit line directly to your card.</p>
             <div class="limit-calculator">
-              <div class="calc-header"><span>Potential Limit</span><span class="limit-amount">Up to 100,000 ₴</span></div>
+              <div class="calc-header"><span>Potential Limit</span><span class="limit-amount">Up to 100,000 $</span></div>
               <div class="progress-track"><div class="progress-bar"></div></div>
               <div class="calc-footer">
                 <div class="promo-badge">0% for 30 days</div>
                 <span class="approval-tag">⚡ Approval in 2 mins</span>
               </div>
             </div>
-            <button class="btn-primary" style="margin-top: 32px;">Calculate my limit</button>
+            <button class="btn-primary" routerLink="/auth" [queryParams]="{ mode: 'signup' }" style="margin-top: 32px;">Calculate my limit</button>
           </div>
           <div class="visual-block reveal delay-1">
             <div class="credit-3d-scene">
@@ -145,7 +145,7 @@
               </div>
               <div class="iban-body">
                 <code>UA 44 322001 000002600...</code>
-                <button class="btn-copy">Copy</button>
+                <button class="btn-copy" routerLink="/auth" [queryParams]="{ mode: 'signup' }">Copy</button>
               </div>
             </div>
           </div>
@@ -167,7 +167,7 @@
           <div class="text-center-block reveal">
             <div class="live-badge"><span class="pulse-dot"></span>We are online now</div>
             <h2>Real people, not bots</h2>
-            <p>Tired of talking to "Smart Assistants"? Our team is 100% human.</p>
+            <p>Tired of talking to "Smart Assistants"? Our team is 99% human.</p>
           </div>
           <div class="support-visual reveal delay-1">
             <div class="avatars-cluster">
@@ -180,7 +180,7 @@
             </div>
           </div>
           <div class="support-action reveal delay-2">
-            <button class="btn-primary">
+            <button class="btn-primary" routerLink="/auth" [queryParams]="{ mode: 'signup' }">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
               Start a conversation
             </button>
