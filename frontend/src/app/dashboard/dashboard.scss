@@ -817,6 +817,48 @@ $border-color: #e5e7eb;
   margin-bottom: 20px;
 }
 
+.qr-section {
+  flex-direction: column; 
+  align-items: center;
+  padding: 24px 0 !important;
+  border-bottom: none !important;
+
+  .label {
+    margin-bottom: 16px;
+    text-align: center;
+    width: 100%;
+  }
+
+  .qr-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: white;
+    padding: 12px;
+    border-radius: 20px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease;
+
+    &:hover {
+      transform: scale(1.05);
+    }
+  }
+
+  .qr-code {
+    width: 140px;
+    height: 140px;
+    display: block;
+    border-radius: 8px;
+  }
+
+  .qr-hint {
+    margin-top: 12px;
+    font-size: 0.75rem;
+    color: $text-muted;
+    font-weight: 500;
+  }
+}
+
 /* =========================================
               MOBILE ADAPTATION
    ========================================= */
