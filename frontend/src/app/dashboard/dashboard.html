@@ -20,7 +20,6 @@
       <a class="active"><i class="fa-solid fa-wallet"></i> Accounts</a>
       <a routerLink="/credits"><i class="fa-solid fa-hand-holding-dollar"></i> Loans</a>
       <a routerLink="/deposits"><i class="fa-solid fa-piggy-bank"></i> Deposits</a>
-      <a routerLink="/more"><i class="fa-solid fa-ellipsis"></i> More</a>
     </nav>
 
     <div class="bottom-nav">
@@ -202,7 +201,17 @@
 
           <div class="modal-actions">
             <button class="btn-cancel" (click)="closeActionModal()">Cancel</button>
-            <button class="btn-confirm" (click)="handleTransfer()">Confirm</button>
+            <button
+              class="btn-confirm"
+              (click)="handleTransfer()"
+              [disabled]="isSubmitting">
+
+              <span *ngIf="isSubmitting">
+                <i class="fa-solid fa-spinner fa-spin"></i> Processing...
+              </span>
+
+              <span *ngIf="!isSubmitting">Confirm</span>
+            </button>
           </div>
         </div>
 
@@ -243,7 +252,17 @@
 
           <div class="modal-actions">
             <button class="btn-cancel" (click)="closeActionModal()">Cancel</button>
-            <button class="btn-confirm" (click)="handleTransfer()">Exchange</button>
+            <button
+              class="btn-confirm"
+              (click)="handleTransfer()"
+              [disabled]="isSubmitting">
+
+              <span *ngIf="isSubmitting">
+                <i class="fa-solid fa-spinner fa-spin"></i> Processing...
+              </span>
+
+              <span *ngIf="!isSubmitting">Confirm</span>
+            </button>
           </div>
         </div>
       </div>

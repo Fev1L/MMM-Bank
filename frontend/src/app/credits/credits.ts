@@ -4,17 +4,19 @@ import { FormsModule } from '@angular/forms';
 import {Router, RouterLink} from '@angular/router';
 import { AuthService } from '../core/services/auth';
 import { AlertService } from '../core/services/alert';
-import {forkJoin} from 'rxjs';
+import { finalize, forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-credits',
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './credits.html',
-  styleUrls: ['./credits.scss']
+  styleUrls: ['./credits.scss'],
 })
 export class Credits implements OnInit {
   isLoading = true;
+  isSubmitting = false;
+
   activeTab = 'loans';
   totalBalance: number = 0;
   viewCurrency: string = 'USD';
@@ -32,7 +34,7 @@ export class Credits implements OnInit {
 
   repaymentData = {
     currency: '',
-    amount: null as number | null
+    amount: null as number | null,
   };
 
   loanData = {
@@ -46,7 +48,7 @@ export class Credits implements OnInit {
     private authService: AuthService,
     private alertService: AlertService,
     private cdr: ChangeDetectorRef,
-    private router: Router
+    private router: Router,
   ) {}
 
   ngOnInit() {
@@ -54,11 +56,11 @@ export class Credits implements OnInit {
   }
 
   get activeCredits(): any[] {
-    return this.credits.filter(c => c.is_active);
+    return this.credits.filter((c) => c.is_active);
   }
 
   get closedCredits(): any[] {
-    return this.credits.filter(c => !c.is_active);
+    return this.credits.filter((c) => !c.is_active);
   }
 
   loadInitialData() {
@@ -66,8 +68,8 @@ export class Credits implements OnInit {
 
     forkJoin({
       userData: this.authService.getUserData(),
-      creditDate: this.authService.getCredits()
-    }).subscribe(res => {
+      creditDate: this.authService.getCredits(),
+    }).subscribe((res) => {
       this.user = res.userData.user;
       this.accounts = res.userData.accounts;
       this.rates = res.userData.rates;
@@ -76,7 +78,7 @@ export class Credits implements OnInit {
         this.loanData.currency = this.accounts[0].code;
       }
 
-      this.credits = res.creditDate.credits
+      this.credits = res.creditDate.credits;
 
       this.calculateTotal();
       this.isLoading = false;
@@ -95,7 +97,7 @@ export class Credits implements OnInit {
       const rate = this.rates[currencyKey];
 
       if (rate) {
-        return total + (acc.amount / rate);
+        return total + acc.amount / rate;
       }
       return total;
     }, 0);
@@ -109,7 +111,7 @@ export class Credits implements OnInit {
   get selectedCurrencyCode(): string {
     if (!this.accounts || !this.loanData.currency) return 'USD';
 
-    const selectedAcc = this.accounts.find(a => a.code == this.loanData.currency);
+    const selectedAcc = this.accounts.find((a) => a.code == this.loanData.currency);
     return selectedAcc ? selectedAcc.code : 'USD';
   }
 
@@ -128,14 +130,20 @@ export class Credits implements OnInit {
   }
 
   applyLoan() {
-    this.authService.applyForCredit(this.loanData).subscribe({
-      next: (res) => {
-        this.alertService.success(res.message);
-        this.loadInitialData();
-        this.closeLoanModal()
-      },
-      error: (err) => this.alertService.error(err.error.message)
-    });
+    this.isSubmitting = true;
+
+    this.authService.applyForCredit(this.loanData)
+      .pipe(
+        finalize(() => (this.isSubmitting = false)),
+      )
+      .subscribe({
+        next: (res) => {
+          this.alertService.success(res.message);
+          this.loadInitialData();
+          this.closeLoanModal();
+        },
+        error: (err) => this.alertService.error(err.error.message),
+      });
   }
 
   onLogout() {
@@ -158,7 +166,7 @@ export class Credits implements OnInit {
       },
       error: (err) => {
         this.alertService.error('Something went wrong when I tried to log out');
-      }
+      },
     });
   }
 
@@ -209,14 +217,20 @@ export class Credits implements OnInit {
       id: this.selectedCredit.id,
     };
 
-    this.authService.repayCredit(payload).subscribe({
+    this.isSubmitting = true;
+
+    this.authService.repayCredit(payload)
+      .pipe(
+        finalize(() => (this.isSubmitting = false)),
+      )
+      .subscribe({
       next: (res) => {
         this.alertService.success(res.message);
         this.closeCreditAction();
         this.closeCreditDetails();
         this.loadInitialData();
       },
-      error: (err) => this.alertService.error(err.error.message)
+      error: (err) => this.alertService.error(err.error.message),
     });
   }
 }

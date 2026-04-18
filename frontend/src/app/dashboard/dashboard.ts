@@ -3,7 +3,7 @@ import { AuthService } from '../core/services/auth';
 import {CommonModule} from '@angular/common';
 import {AlertService} from '../core/services/alert';
 import {Router , RouterLink} from '@angular/router';
-import {Observable, forkJoin} from 'rxjs';
+import { Observable, forkJoin, finalize } from 'rxjs';
 import {FormsModule} from '@angular/forms';
 
 interface GroupedTransactions {
@@ -16,12 +16,12 @@ interface GroupedTransactions {
   standalone: true,
   templateUrl: './dashboard.html',
   styleUrls: ['./dashboard.scss'],
-  imports: [CommonModule, FormsModule, RouterLink]
+  imports: [CommonModule, FormsModule, RouterLink],
 })
-
 export class Dashboard implements OnInit {
   isLoading = true;
   activeTab = 'accounts';
+  isSubmitting = false;
 
   availableCurrencies: any[] = [];
   user: any = null;
@@ -43,19 +43,19 @@ export class Dashboard implements OnInit {
     user: '',
     amount: 0,
     currency: '',
-    message: ''
+    message: '',
   };
   exchangeData = {
     amount: 0,
     from_currency: '',
-    to_currency: ''
+    to_currency: '',
   };
 
   constructor(
     public authService: AuthService,
     private cdr: ChangeDetectorRef,
     private router: Router,
-    private alertService: AlertService
+    private alertService: AlertService,
   ) {}
 
   ngOnInit() {
@@ -82,7 +82,7 @@ export class Dashboard implements OnInit {
       },
       error: (err) => {
         this.alertService.error('Something went wrong when I tried to log out');
-      }
+      },
     });
   }
 
@@ -90,7 +90,7 @@ export class Dashboard implements OnInit {
     this.isLoading = true;
 
     forkJoin({
-      userData: this.authService.getUserData()
+      userData: this.authService.getUserData(),
     }).subscribe({
       next: (res: any) => {
         this.user = res.userData.user;
@@ -104,7 +104,7 @@ export class Dashboard implements OnInit {
       },
       error: (err) => {
         this.alertService.error(err.error.message || 'Error loading profile');
-      }
+      },
     });
   }
 
@@ -116,36 +116,47 @@ export class Dashboard implements OnInit {
       },
       error: (err) => {
         this.alertService.error('Unable to load transaction history');
-      }
+      },
     });
   }
 
   groupTransactions(transactions: any[]): GroupedTransactions[] {
-    const groups = transactions.reduce((acc, transaction) => {
-      const date = new Date(transaction.date).toLocaleDateString('en-GB', {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric'
-      });
+    const groups = transactions.reduce(
+      (acc, transaction) => {
+        const date = new Date(transaction.date).toLocaleDateString('en-GB', {
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric',
+        });
 
-      if (!acc[date]) {
-        acc[date] = [];
-      }
-      acc[date].push(transaction);
-      return acc;
-    }, {} as { [key: string]: any[] });
+        if (!acc[date]) {
+          acc[date] = [];
+        }
+        acc[date].push(transaction);
+        return acc;
+      },
+      {} as { [key: string]: any[] },
+    );
 
-    return Object.keys(groups).map(date => ({
+    return Object.keys(groups).map((date) => ({
       date: this.formatDateLabel(date),
-      items: groups[date]
+      items: groups[date],
     }));
   }
 
   formatDateLabel(dateStr: string): string {
-    const today = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+    const today = new Date().toLocaleDateString('en-GB', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    });
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
-    const yesterdayStr = yesterday.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+    const yesterdayStr = yesterday.toLocaleDateString('en-GB', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    });
 
     if (dateStr === today) return 'Today';
     if (dateStr === yesterdayStr) return 'Yesterday';
@@ -161,9 +172,9 @@ export class Dashboard implements OnInit {
   }
 
   get filteredCurrencies() {
-    const ownedCodes = this.accounts.map(acc => acc.code);
+    const ownedCodes = this.accounts.map((acc) => acc.code);
 
-    return this.availableCurrencies.filter(curr => !ownedCodes.includes(curr.code));
+    return this.availableCurrencies.filter((curr) => !ownedCodes.includes(curr.code));
   }
 
   createNewAccount(currencyCode: string) {
@@ -176,7 +187,7 @@ export class Dashboard implements OnInit {
       },
       error: (err) => {
         this.alertService.error(err.error.message || 'Error opening an account');
-      }
+      },
     });
 
     this.closeAddAccountModal();
@@ -193,7 +204,7 @@ export class Dashboard implements OnInit {
       const rate = this.rates[currencyKey];
 
       if (rate) {
-        return total + (acc.balance / rate);
+        return total + acc.balance / rate;
       }
       return total;
     }, 0);
@@ -210,7 +221,7 @@ export class Dashboard implements OnInit {
     if (type === 'exchange' && this.accounts.length >= 2) {
       if (this.selectedAccount) {
         this.exchangeData.from_currency = this.selectedAccount.code;
-        const otherAcc = this.accounts.find(a => a.code !== this.exchangeData.from_currency);
+        const otherAcc = this.accounts.find((a) => a.code !== this.exchangeData.from_currency);
         if (otherAcc) this.exchangeData.to_currency = otherAcc.code;
       } else {
         this.exchangeData.from_currency = this.accounts[0].code;
@@ -218,15 +229,20 @@ export class Dashboard implements OnInit {
       }
     }
 
-    if(this.selectedAccount) {
+    if (this.selectedAccount) {
       this.transferData.currency = this.selectedAccount.code;
-    }else if (this.accounts.length > 0) {
+    } else if (this.accounts.length > 0) {
       this.transferData.currency = this.accounts[0].code;
     }
   }
 
   get estimatedExchangeAmount(): number {
-    if (!this.exchangeData.amount || !this.exchangeData.from_currency || !this.exchangeData.to_currency) return 0;
+    if (
+      !this.exchangeData.amount ||
+      !this.exchangeData.from_currency ||
+      !this.exchangeData.to_currency
+    )
+      return 0;
 
     const rateFrom = this.rates[this.exchangeData.from_currency];
     const rateTo = this.rates[this.exchangeData.to_currency];
@@ -244,23 +260,31 @@ export class Dashboard implements OnInit {
 
   handleTransfer() {
     let request: Observable<any>;
+    this.isSubmitting = true;
 
-    if (this.activeModal === 'send') request = this.authService.sendMoney(this.transferData);
-    else if (this.activeModal === 'request') request = this.authService.requestMoney(this.transferData);
-    else if (this.activeModal === 'exchange') request = this.authService.exchangeMoney(this.exchangeData);
+    if (this.activeModal === 'send')
+      request = this.authService.sendMoney(this.transferData);
+    else if (this.activeModal === 'request')
+      request = this.authService.requestMoney(this.transferData);
+    else if (this.activeModal === 'exchange')
+      request = this.authService.exchangeMoney(this.exchangeData);
     else request = this.authService.sendGift(this.transferData);
 
-    request.subscribe({
-      next: (res) => {
-        this.alertService.success(res.message);
-        this.closeActionModal();
-        this.loadUserData();
-        this.loadTransactions();
-        this.cdr.detectChanges();
-      },
-      error: (err) => {
-        this.alertService.error(err.error.message || 'An error has occurred');
-      }
+    request
+      .pipe(
+        finalize(() => (this.isSubmitting = false))
+      )
+      .subscribe({
+        next: (res) => {
+          this.alertService.success(res.message);
+          this.closeActionModal();
+          this.loadUserData();
+          this.loadTransactions();
+          this.cdr.detectChanges();
+        },
+        error: (err) => {
+          this.alertService.error(err.error.message || 'An error has occurred');
+        },
     });
   }
 
@@ -286,7 +310,7 @@ export class Dashboard implements OnInit {
     if (this.selectedAccount.balance > 0) {
       this.alertService.error('You cannot delete an account that contains funds!');
       return;
-    }else{
+    } else {
       this.authService.deleteAccount(currencyCode).subscribe({
         next: (res) => {
           this.alertService.success(res.message);
@@ -296,7 +320,7 @@ export class Dashboard implements OnInit {
         },
         error: (err) => {
           this.alertService.error(err.error.message || 'Deletion error');
-        }
+        },
       });
     }
   }
@@ -310,11 +334,14 @@ export class Dashboard implements OnInit {
   }
 
   copyToClipboard(text: string, fieldName: string) {
-    navigator.clipboard.writeText(text).then(() => {
-      this.alertService.success(`${fieldName} copied to clipboard!`);
-    }).catch(err => {
-      this.alertService.error('Failed to copy');
-    });
+    navigator.clipboard
+      .writeText(text)
+      .then(() => {
+        this.alertService.success(`${fieldName} copied to clipboard!`);
+      })
+      .catch((err) => {
+        this.alertService.error('Failed to copy');
+      });
   }
 
   protected readonly length = length;

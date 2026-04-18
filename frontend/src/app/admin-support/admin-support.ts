@@ -10,7 +10,9 @@ import {
   addDoc,
   Timestamp,
   collectionGroup,
-  collectionData
+  collectionData,
+  doc,
+  setDoc,
 } from '@angular/fire/firestore';
 
 @Component({
@@ -18,7 +20,7 @@ import {
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './admin-support.html',
-  styleUrls: ['./admin-support.scss']
+  styleUrls: ['./admin-support.scss'],
 })
 export class AdminSupport implements OnInit {
   private cdr = inject(ChangeDetectorRef);
@@ -28,9 +30,9 @@ export class AdminSupport implements OnInit {
   messages: any[] = [];
   replyText: string = '';
 
-  constructor(
-    private firestore: Firestore
-  ) {}
+  isSendingReply = false;
+
+  constructor(private firestore: Firestore) {}
 
   ngOnInit() {
     this.loadAllChats();
@@ -50,29 +52,49 @@ export class AdminSupport implements OnInit {
     const q = query(msgRef, orderBy('time', 'asc'));
 
     collectionData(q, { idField: 'id' }).subscribe((messages: any[]) => {
-      this.messages = messages.map(msg => ({
+      this.messages = messages.map((msg) => ({
         ...msg,
-        time: msg.time?.toDate?.()
+        time: msg.time?.toDate?.(),
       }));
       this.cdr.detectChanges();
     });
   }
 
   async sendReply() {
-    if (!this.replyText.trim() || !this.selectedChatId) return;
+    if (!this.replyText.trim() || !this.selectedChatId || this.isSendingReply) return;
 
-    const messageData = {
-      sender: 'admin',
-      text: this.replyText,
-      time: Timestamp.now()
-    };
+    this.isSendingReply = true;
+
+    const deleteTime = new Date();
+    deleteTime.setHours(deleteTime.getHours() + 1);
+
+    const chatDocRef = doc(this.firestore, `chats/${this.selectedChatId}`);
+    const messagesColRef = collection(this.firestore, `chats/${this.selectedChatId}/messages`);
 
     try {
-      await addDoc(collection(this.firestore, `chats/${this.selectedChatId}/messages`), messageData);
+      await Promise.all([
+        addDoc(messagesColRef, {
+          sender: 'admin',
+          text: this.replyText,
+          time: Timestamp.now(),
+        }),
+        setDoc(
+          chatDocRef,
+          {
+            expireAt: Timestamp.fromDate(deleteTime),
+            lastUpdate: Timestamp.now(),
+            status: 'answered',
+          },
+          { merge: true },
+        ),
+      ]);
+
       this.replyText = '';
-      this.cdr.detectChanges();
     } catch (err) {
       console.error('Error sending reply:', err);
+    } finally {
+      this.isSendingReply = false;
+      this.cdr.detectChanges();
     }
   }
 }

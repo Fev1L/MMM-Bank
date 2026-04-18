@@ -8,7 +8,6 @@ import {PayRequest} from './components/pay-request/pay-request';
 import {Credits} from './credits/credits';
 import {Deposits} from './deposits/deposits';
 import { Helpage } from "./helpage/helpage";
-import {More} from './more/more';
 import {AdminSupport} from './admin-support/admin-support';
 
 export const routes: Routes = [
@@ -25,6 +24,5 @@ export const routes: Routes = [
   { path: 'deposits', component: Deposits },
   { path: 'helpage', component: Helpage },
   { path: 'admin/support', component: AdminSupport },
-  { path: 'more', component: More },
   { path: '**', redirectTo: '' }
 ];

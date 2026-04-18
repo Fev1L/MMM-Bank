@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { AuthService } from '../core/services/auth';
 import { AlertService } from '../core/services/alert';
 import {Router, RouterLink} from '@angular/router';
-import {forkJoin} from 'rxjs';
+import { finalize, forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-deposits',
@@ -15,6 +15,7 @@ import {forkJoin} from 'rxjs';
 })
 export class Deposits implements OnInit {
   isLoading = true;
+  isSubmitting = false;
   activeTab: 'piggy' | 'deposits' = 'piggy';
 
   user: any = null;
@@ -56,9 +57,9 @@ export class Deposits implements OnInit {
     this.isLoading = true;
 
     forkJoin({
-      userData: this.authService.getUserData()
+      userData: this.authService.getUserData(),
     }).subscribe({
-      next: (res : any) => {
+      next: (res: any) => {
         this.user = res.userData.user;
         this.accounts = res.userData.accounts;
 
@@ -79,7 +80,7 @@ export class Deposits implements OnInit {
       },
       error: (err) => {
         this.alertService.error(err.error.message || 'Error loading profile');
-      }
+      },
     });
   }
 
@@ -95,7 +96,7 @@ export class Deposits implements OnInit {
       total += this.piggies.reduce((sum, acc) => {
         const rate = this.rates[acc.currency];
         const amount = acc.balance || 0;
-        return rate ? sum + (amount / rate) : sum;
+        return rate ? sum + amount / rate : sum;
       }, 0);
     }
 
@@ -103,7 +104,7 @@ export class Deposits implements OnInit {
       total += this.activeDeposits.reduce((sum, acc) => {
         const rate = this.rates[acc.currency];
         const amount = acc.amount || 0;
-        return rate ? sum + (amount / rate) : sum;
+        return rate ? sum + amount / rate : sum;
       }, 0);
     }
 
@@ -116,13 +117,13 @@ export class Deposits implements OnInit {
   }
 
   loadSavingsData() {
-    this.authService.getPiggyBanks().subscribe(res => {
+    this.authService.getPiggyBanks().subscribe((res) => {
       this.piggies = res.piggies;
       this.calculateTotal();
       this.cdr.detectChanges();
     });
 
-    this.authService.getDeposits().subscribe(res => {
+    this.authService.getDeposits().subscribe((res) => {
       this.activeDeposits = res.active_deposits;
       this.calculateTotal();
       this.cdr.detectChanges();
@@ -131,15 +132,21 @@ export class Deposits implements OnInit {
 
   createPiggy() {
     const payload = { action: 'create', ...this.newPiggyData };
-    this.authService.managePiggyBank(payload).subscribe({
-      next: (res) => {
-        this.alertService.success(res.message);
-        this.showPiggyModal = false;
-        this.newPiggyData = { name: '', goal: null , currency: '' };
-        this.loadSavingsData();
-      },
-      error: (err) => this.alertService.error(err.error.message)
-    });
+    this.isSubmitting = true;
+
+    this.authService.managePiggyBank(payload)
+      .pipe(
+        finalize(() => (this.isSubmitting = false)),
+      )
+      .subscribe({
+        next: (res) => {
+          this.alertService.success(res.message);
+          this.showPiggyModal = false;
+          this.newPiggyData = { name: '', goal: null, currency: '' };
+          this.loadSavingsData();
+        },
+        error: (err) => this.alertService.error(err.error.message),
+      });
   }
 
   openManagePiggy(piggy: any, action: 'add' | 'withdraw') {
@@ -152,15 +159,21 @@ export class Deposits implements OnInit {
 
   submitManagePiggy() {
     this.managePiggyData.action = this.piggyAction;
-    this.authService.managePiggyBank(this.managePiggyData).subscribe({
-      next: (res) => {
-        this.alertService.success(res.message);
-        this.showManagePiggyModal = false;
-        this.loadSavingsData();
-        this.loadUserData();
-      },
-      error: (err) => this.alertService.error(err.error.message)
-    });
+    this.isSubmitting = true;
+
+    this.authService.managePiggyBank(this.managePiggyData)
+      .pipe(
+        finalize(() => (this.isSubmitting = false))
+      )
+      .subscribe({
+        next: (res) => {
+          this.alertService.success(res.message);
+          this.showManagePiggyModal = false;
+          this.loadSavingsData();
+          this.loadUserData();
+        },
+        error: (err) => this.alertService.error(err.error.message),
+      });
   }
 
   get expectedProfit() {
@@ -170,16 +183,21 @@ export class Deposits implements OnInit {
   }
 
   openDeposit() {
-    this.authService.openDeposit(this.newDepositData).subscribe({
-      next: (res) => {
-        this.alertService.success(res.message);
-        this.showDepositModal = false;
-        this.newDepositData.amount = null;
-        this.loadSavingsData();
-        this.loadUserData();
-      },
-      error: (err) => this.alertService.error(err.error.message)
-    });
+    this.isSubmitting = true;
+    this.authService.openDeposit(this.newDepositData)
+      .pipe(
+        finalize(() => (this.isSubmitting = false))
+      )
+      .subscribe({
+        next: (res) => {
+          this.alertService.success(res.message);
+          this.showDepositModal = false;
+          this.newDepositData.amount = null;
+          this.loadSavingsData();
+          this.loadUserData();
+        },
+        error: (err) => this.alertService.error(err.error.message),
+      });
   }
 
   onLogout() {
@@ -202,7 +220,7 @@ export class Deposits implements OnInit {
       },
       error: (err) => {
         this.alertService.error('Something went wrong when I tried to log out');
-      }
+      },
     });
   }
 
@@ -214,15 +232,20 @@ export class Deposits implements OnInit {
 
   confirmClosePiggy() {
     const payload = { currency: this.returnCurrency };
+    this.isSubmitting = true;
 
-    this.authService.closePiggyBank( payload, this.selectedPiggy.id).subscribe({
+    this.authService.closePiggyBank(payload, this.selectedPiggy.id)
+      .pipe(
+        finalize(() => (this.isSubmitting = false)),
+      )
+      .subscribe({
       next: (res: any) => {
         this.alertService.success(res.message);
         this.showClosePiggyModal = false;
         this.loadSavingsData();
         this.loadUserData();
       },
-      error: (err) => this.alertService.error('Failed to close piggy bank')
+      error: (err) => this.alertService.error('Failed to close piggy bank'),
     });
   }
 }

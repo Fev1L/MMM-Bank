@@ -35,6 +35,7 @@ import {
 export class Helpage implements OnInit {
   user: any = null;
   isUserLoggedIn: boolean = false;
+  isSending = false;
 
   allQuestions: any[] = [];
   filteredResults: any[] = [];
@@ -61,7 +62,7 @@ export class Helpage implements OnInit {
     private cdr: ChangeDetectorRef,
     private eRef: ElementRef,
     private http: HttpClient,
-    private firestore: Firestore
+    private firestore: Firestore,
   ) {}
 
   ngOnInit() {
@@ -85,7 +86,7 @@ export class Helpage implements OnInit {
       next: (data) => {
         this.allQuestions = data;
       },
-      error: (err) => console.error('Could not load FAQ data', err)
+      error: (err) => console.error('Could not load FAQ data', err),
     });
   }
 
@@ -104,7 +105,7 @@ export class Helpage implements OnInit {
     }, 300);
   }
 
-  rateArticle(){
+  rateArticle() {
     this.closeArticle();
     this.alertService.success(`Thank you for your feedback!`);
   }
@@ -122,13 +123,15 @@ export class Helpage implements OnInit {
     const query = this.searchTerm.toLowerCase().trim();
 
     if (query.length > 1) {
-      this.filteredResults = this.allQuestions.filter(item => {
-        const titleMatch = item.title?.toLowerCase().includes(query);
-        const tagsMatch = item.tags?.toLowerCase().includes(query);
-        const categoryMatch = item.category?.toLowerCase().includes(query);
+      this.filteredResults = this.allQuestions
+        .filter((item) => {
+          const titleMatch = item.title?.toLowerCase().includes(query);
+          const tagsMatch = item.tags?.toLowerCase().includes(query);
+          const categoryMatch = item.category?.toLowerCase().includes(query);
 
-        return titleMatch || tagsMatch || categoryMatch;
-      }).slice(0, 6);
+          return titleMatch || tagsMatch || categoryMatch;
+        })
+        .slice(0, 6);
 
       this.isResultsVisible = this.filteredResults.length > 0;
     } else {
@@ -158,28 +161,40 @@ export class Helpage implements OnInit {
   }
 
   async sendMessage() {
-    if (!this.newMessage.trim()) return;
+    if (this.isSending || !this.newMessage.trim()) return;
+
+    this.isSending = true;
+    const deleteTime = new Date();
+    deleteTime.setHours(deleteTime.getHours() + 1);
 
     const chatDocRef = doc(this.firestore, `chats/${this.chatId}`);
     const messagesColRef = collection(this.firestore, `chats/${this.chatId}/messages`);
 
     try {
-      await setDoc(chatDocRef, {
-        lastUpdate: Timestamp.now(),
-        userId: this.chatId,
-        status: 'active'
-      }, { merge: true });
-
-      await addDoc(messagesColRef, {
-        sender: 'user',
-        text: this.newMessage,
-        time: Timestamp.now(),
-      });
+      await Promise.all([
+        setDoc(
+          chatDocRef,
+          {
+            lastUpdate: Timestamp.now(),
+            expireAt: Timestamp.fromDate(deleteTime),
+            userId: this.chatId,
+            status: 'active',
+          },
+          { merge: true },
+        ),
+        addDoc(messagesColRef, {
+          sender: 'user',
+          text: this.newMessage,
+          time: Timestamp.now(),
+        }),
+      ]);
 
       this.newMessage = '';
-      this.cdr.detectChanges();
     } catch (e) {
-      console.error("Error:", e);
+      console.error('Error:', e);
+    } finally {
+      this.isSending = false;
+      this.cdr.detectChanges();
     }
   }
 
@@ -188,9 +203,9 @@ export class Helpage implements OnInit {
     const q = query(msgCollection, orderBy('time', 'asc'));
 
     collectionData(q, { idField: 'id' }).subscribe((messages: any[]) => {
-      this.chatMessages = messages.map(msg => ({
+      this.chatMessages = messages.map((msg) => ({
         ...msg,
-        time: msg.time?.toDate?.()
+        time: msg.time?.toDate?.(),
       }));
     });
   }
@@ -198,9 +213,10 @@ export class Helpage implements OnInit {
   scrollToBottom(): void {
     try {
       setTimeout(() => {
-        this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;
+        this.myScrollContainer.nativeElement.scrollTop =
+          this.myScrollContainer.nativeElement.scrollHeight;
       }, 100);
-    } catch(err) { }
+    } catch (err) {}
   }
 
   filterByCategory(category: string) {
@@ -215,7 +231,7 @@ export class Helpage implements OnInit {
   }
 
   openTrending(title: string) {
-    const article = this.allQuestions.find(q => q.title.toLowerCase() === title.toLowerCase());
+    const article = this.allQuestions.find((q) => q.title.toLowerCase() === title.toLowerCase());
 
     if (article) {
       this.openArticle(article);
@@ -237,7 +253,7 @@ export class Helpage implements OnInit {
       error: () => {
         this.isUserLoggedIn = false;
         this.initGuestChat();
-      }
+      },
     });
   }
 

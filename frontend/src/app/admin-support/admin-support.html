@@ -1,6 +1,6 @@
 <div class="admin-container">
   <div class="sidebar">
-    <h3>Активні чати</h3>
+    <h3>Active chats</h3>
     <ul>
       <li *ngFor="let chat of chats"
           [class.active]="chat.id === selectedChatId"
@@ -21,12 +21,15 @@
     </div>
 
     <div class="input-area">
-      <input [(ngModel)]="replyText" (keyup.enter)="sendReply()" placeholder="Напишіть відповідь...">
-      <button (click)="sendReply()">Відповісти</button>
+      <input [(ngModel)]="replyText" (keyup.enter)="sendReply()" placeholder="Write your answer...">
+      <button (click)="sendReply()" [disabled]="isSendingReply || !replyText.trim()">
+        <span *ngIf="!isSendingReply">Reply</span>
+        <i *ngIf="isSendingReply" class="fa-solid fa-circle-notch fa-spin"></i>
+      </button>
     </div>
   </div>
 
   <ng-template #noSelect>
-    <div class="chat-area empty">Виберіть чат, щоб почати спілкування</div>
+    <div class="chat-area empty">Select a chat to start chatting</div>
   </ng-template>
 </div>

@@ -19,7 +19,6 @@
       <a routerLink="/dashboard"><i class="fa-solid fa-wallet"></i> Accounts</a>
       <a class="active"><i class="fa-solid fa-hand-holding-dollar"></i> Loans</a>
       <a routerLink="/deposits"><i class="fa-solid fa-piggy-bank"></i> Deposits</a>
-      <a routerLink="/more"><i class="fa-solid fa-ellipsis"></i> More</a>
     </nav>
 
     <div class="bottom-nav">
@@ -153,7 +152,17 @@
 
         <div class="modal-actions">
           <button class="btn-secondary" (click)="closeLoanModal()">Cancel</button>
-          <button class="btn-confirm w-100" (click)="applyLoan()">Confirm Loan</button>
+          <button
+            class="btn-confirm w-100"
+            (click)="applyLoan()"
+            [disabled]="isSubmitting">
+
+            <span *ngIf="isSubmitting">
+              <i class="fa-solid fa-spinner fa-spin"></i> Processing...
+            </span>
+
+            <span *ngIf="!isSubmitting">Confirm Loan</span>
+          </button>
         </div>
       </div>
     </div>
@@ -257,8 +266,16 @@
 
           <div class="modal-actions">
             <button class="btn-secondary" (click)="closeCreditAction()">Cancel</button>
-            <button class="btn-confirm w-100" (click)="processRepayment()">
-              Confirm Payment
+            <button
+              class="btn-confirm"
+              (click)="processRepayment()"
+              [disabled]="isSubmitting">
+
+              <span *ngIf="isSubmitting">
+                <i class="fa-solid fa-spinner fa-spin"></i> Processing...
+              </span>
+
+              <span *ngIf="!isSubmitting">Confirm Payment</span>
             </button>
           </div>
         </div>
