@@ -17,16 +17,16 @@ db.sqlite3
 
 /backend/staticfiles/
 
-/node_modules/
-/.angular/
-/dist/
-/tmp/
-/out-tsc/
-/bazel-out/
+**/node_modules/
+**/.angular/
+**/dist/
+**/tmp/
+**/out-tsc/
+**/bazel-out/
 
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-/frontend/src/environments/environment.ts
-/frontend/src/environments/environment.prod.ts
+**/src/environments/environment.development.ts
+**/src/environments/environment.ts
