@@ -37,42 +37,101 @@
 
 ---
 
-## 🚀 How to Run
+## 🚀 How to Run (Complete instructions)
+This section will help you set up MMM-Bank on your local computer. Follow the steps in order.
 
-### 0. Clone Project
+### 0. Prerequisites
+
+Before you begin, make sure you have the following installed:
+
+Python (version 3.10 or later) — [Download here](https://www.python.org/downloads/)
+
+Node.js (version 20 or later) — [Download here](https://nodejs.org/en/download)
+
+Git — [Download here](https://git-scm.com/install/)
+
+### 1. Clone Project
+Open the terminal (or command prompt) and run the following:
 ```console
 # Clone the repository
-git clone https://github.com/Fev1L/MMM-Bank.git
-cd MMM-Bank
 
-# Setup environment
-python -m venv .venv
-source .venv/bin/activate  # Linux/Mac OR .venv\Scripts\activate for Windows
+git clone https://github.com/Fev1L/MMM-Bank.git
+
+cd MMM-Bank
+```
+### 2. Backend (Django)
+
+1. Create a virtual environment (this is an isolated “box” to prevent the project's libraries from interfering with others):
+```console
+# For Windows:
+python3 -m venv .venv
+.venv\Scripts\activate
+
+# For macOS/Linux:
+python3 -m venv .venv
+source .venv/bin/activate
+```
+2. CInstall the required libraries:
+```console
 pip install -r requirements.txt
 ```
-### 1. Backend (Django)
+3. Prepare the database:
+Navigate to the backend folder and run the “migration” commands (this will create tables for users and accounts):
 ```console
-# Install & Migrate
 cd backend
-python manage.py migrate
-python manage.py runserver
+python3 manage.py migrate
 ```
-### 1.1 Create Superuser (Admin Access)
-To access the Django Administration panel and manage users/accounts manually:
+4. Create an Administrator (Superuser):
+This will allow you to access the bank's control panel.
 ```console
-# Ensure you are in the backend directory with active venv
 python manage.py createsuperuser
-```
-### 2. Frontend (Angular)
-```console
-# Navigate to frontend directory
-cd frontend
-npm install
 
-# Start development server
+# Enter your username, email address, and password (the characters in your password wont appear as you type—this is normal).
+```
+5. Run server
+```console
+python3 manage.py runserver
+
+# Do not close this terminal window! The server must run continuously.
+```
+
+### 3. Frontend (Angular)
+The front end is the attractive interface that users see.
+1. Open a NEW terminal window (without closing the first one) and navigate to the frontend folder:
+```console
+cd MMM-Bank/frontend
+```
+2. Install the dependencies (Important!):
+```console
+npm install --legacy-peer-deps
+```
+3. Run website:
+```console
+npm start
+
+or
+
 ng serve
 ```
-### Visit http://localhost:4200 to see the app in action!
+### 4. How to use it?
+
+Copy .env.EXAMPLE to .env and fill in your credentials.
+
+Copy environment.EXAMPLE to environment and fill in your credentials.
+
+Now that both servers are running:
+
+The website itself: Open http://localhost:4200 in your browser
+
+The admin panel (Django): http://localhost:8000/admin (log in using the superuser credentials you created earlier).
+
+### FAQ
+
+ - “Port 4200 already in use” error: This means that Angular is already running. Just close the terminal and try again.
+
+ - Red text during npm install: If you forgot to add --legacy-peer-deps, Firebase libraries may conflict. Just delete the node_modules folder and run the command correctly.
+
+ - Images (Avatars) are not displayed: Make sure the backend server is running on port 8000, since images are loaded from there.
 
 ---
 
@@ -89,10 +148,6 @@ ng serve
 [x] Deposits: High-interest savings accounts.
 
 [X] More: There’s plenty of interesting stuff to enhance the ecosystem.
-
-[ ] 🚧 Profile: Advanced profile settings.
-
-[ ] 🚧 Dark Mode: System-wide dark UI support.
 
 ---
 
