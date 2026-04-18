@@ -1,26 +1,32 @@
-# Python bytecode
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+.venv/
+env/
+venv/
+ENV/
+__pycache__/
 **/__pycache__/
-**/*.py[cod]
-**/*$py.class
+*.py[cod]
+*$py.class
+db.sqlite3
+.env
+*.log
 
-# Distribution / packaging
-/build/
-/develop-eggs/
+/backend/staticfiles/
+
+/node_modules/
+/.angular/
 /dist/
-/downloads/
-/eggs/
-/.eggs/
-/lib/
-/lib64/
-/parts/
-/sdist/
-/var/
-/wheels/
-/*.egg-info/
-/.installed.cfg
-/*.egg
+/tmp/
+/out-tsc/
+/bazel-out/
 
-# Pytest / Unit test
-.pytest_cache/
-.coverage
-htmlcov/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+/frontend/src/environments/environment.ts
+/frontend/src/environments/environment.prod.ts
