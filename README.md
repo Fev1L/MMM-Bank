@@ -31,7 +31,7 @@
 - **FontAwesome:** Professional iconography.
 
 ### **Backend**
-- **Django 5:** REST API architecture and secure authentication.
+- **Django 6:** REST API architecture and secure authentication.
 - **Atomic Transactions:** Ensures database integrity during complex money transfers.
 - **Custom Logic:** Automated IBAN and BIC/SWIFT generation.
 
@@ -40,15 +40,38 @@
 ## 🚀 How to Run (Complete instructions)
 This section will help you set up MMM-Bank on your local computer. Follow the steps in order.
 
-### 0. Prerequisites
+## 0. Prerequisites
 
 Before you begin, make sure you have the following installed:
 
-Python (version 3.10 or later) — [Download here](https://www.python.org/downloads/)
+Python (version 3.12 or later) — [Download here](https://www.python.org/downloads/)
 
 Node.js (version 20 or later) — [Download here](https://nodejs.org/en/download)
 
 Git — [Download here](https://git-scm.com/install/)
+
+## ⚙️ Mandatory Configuration (Environment Setup)
+
+The project uses environment variables for security. You must create the 
+actual configuration files by copying the provided examples and filling in your own credentials.
+
+### 1. Backend Setup
+
+   Navigate to the backend/ directory.
+
+   Copy .env.example to a new file named .env
+
+   Open .env and provide your SECRET_KEY (you can generate one or use a temporary development string) and ensure the DATABASE_URL is correct.
+
+### 2. Frontend Setup
+
+   Navigate to frontend/src/environments/.
+
+   Create the environments folder if it doesn't exist.
+
+   Copy environment.example.ts to create two files: environment.ts and environment.development.ts:
+
+   Open these files and replace the placeholder values with your actual Firebase API keys and project IDs.
 
 ### 1. Clone Project
 Open the terminal (or command prompt) and run the following:
@@ -114,10 +137,6 @@ or
 ng serve
 ```
 ### 4. How to use it?
-
-Copy .env.EXAMPLE to .env and fill in your credentials.
-
-Copy environment.EXAMPLE to environment and fill in your credentials.
 
 Now that both servers are running:
 

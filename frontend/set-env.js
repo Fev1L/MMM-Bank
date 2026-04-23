@@ -16,9 +16,9 @@ export const environment = {
     storageBucket: '${process.env.FIREBASE_STORAGE_BUCKET}',
     messagingSenderId: '${process.env.FIREBASE_MESSAGING_SENDER_ID}',
     appId: '${process.env.FIREBASE_APP_ID}',
-    measurementId: '${process.env.FIREBASE_MEASURMENT_ID}'
+    measurementId: '${process.env.FIREBASE_MEASUREMENT_ID}'
   },
-  apiUrl: 'https://mmm-bank.vercel.app/api'
+  apiUrl: 'https://fev1l.pythonanywhere.com'
 };
 `;
 
