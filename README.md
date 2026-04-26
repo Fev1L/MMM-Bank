@@ -50,28 +50,8 @@ Node.js (version 20 or later) — [Download here](https://nodejs.org/en/download
 
 Git — [Download here](https://git-scm.com/install/)
 
-## ⚙️ Mandatory Configuration (Environment Setup)
-
 The project uses environment variables for security. You must create the 
 actual configuration files by copying the provided examples and filling in your own credentials.
-
-### 1. Backend Setup
-
-   Navigate to the backend/ directory.
-
-   Copy .env.example to a new file named .env
-
-   Open .env and provide your SECRET_KEY (you can generate one or use a temporary development string) and ensure the DATABASE_URL is correct.
-
-### 2. Frontend Setup
-
-   Navigate to frontend/src/environments/.
-
-   Create the environments folder if it doesn't exist.
-
-   Copy environment.example.ts to create two files: environment.ts and environment.development.ts:
-
-   Open these files and replace the placeholder values with your actual Firebase API keys and project IDs.
 
 ### 1. Clone Project
 Open the terminal (or command prompt) and run the following:
@@ -98,20 +78,30 @@ source .venv/bin/activate
 ```console
 pip install -r requirements.txt
 ```
-3. Prepare the database:
+3. Create .env file:
+```console
+Navigate to the backend/ directory.
+
+Copy .env.example to a new file named .env
+
+Open .env and provide your SECRET_KEY (you can generate one or use a temporary development string) and ensure the EMAIL_HOST_PASSWORD is correct.
+
+If you don't have your EMAIL_HOST_PASSWORD, you'll find instructions later in this tutorial
+```   
+5. Prepare the database:
 Navigate to the backend folder and run the “migration” commands (this will create tables for users and accounts):
 ```console
 cd backend
 python3 manage.py migrate
 ```
-4. Create an Administrator (Superuser):
+5. Create an Administrator (Superuser):
 This will allow you to access the bank's control panel.
 ```console
 python manage.py createsuperuser
 
 # Enter your username, email address, and password (the characters in your password wont appear as you type—this is normal).
 ```
-5. Run server
+6. Run server
 ```console
 python3 manage.py runserver
 
@@ -128,6 +118,18 @@ cd MMM-Bank/frontend
 ```console
 npm install --legacy-peer-deps
 ```
+3. Create environments files
+```console
+Navigate to frontend/src/environments/.
+
+Create the environments folder if it doesn't exist.
+
+Copy environment.example.ts to create two files: environment.ts and environment.development.ts:
+
+Open these files and replace the placeholder values with your actual Firebase API keys and project IDs.
+
+If you don't have your own Firebase API keys and project IDs, you'll find instructions later in this tutorial
+```
 3. Run website:
 ```console
 npm start
@@ -143,6 +145,28 @@ Now that both servers are running:
 The website itself: Open http://localhost:4200 in your browser
 
 The admin panel (Django): http://localhost:8000/admin (log in using the superuser credentials you created earlier).
+
+### 5. 📖 Appendix: Detailed Setup Guides
+
+#### A. How to Get an Email App Password (for backend `.env`)
+If you are using Gmail to send emails from Django (e.g., for password resets), you cannot use your regular Google password due to security restrictions. You need an "App Password":
+1. Go to your [Google Account](https://myaccount.google.com/).
+2. Navigate to **Security** on the left-hand panel.
+3. Ensure **2-Step Verification** is turned **ON**.
+4. Click on **2-Step Verification**, scroll to the bottom, and select **App Passwords**.
+5. Enter a name for the app (e.g., "MMM-Bank") and click **Create**.
+6. A window will appear with a 16-character password. Copy it and paste it into your `backend/.env` file (e.g., `EMAIL_HOST_PASSWORD=your-16-char-password`).
+
+#### B. How to Set Up a Firestore Database (for frontend `environment.ts`)
+If you are setting up the project from scratch and need your own Firebase database for the real-time chat:
+1. Go to the [Firebase Console](https://console.firebase.google.com/).
+2. Click **Add project**, enter a name (e.g., "mmm-bank"), and follow the setup steps.
+3. On the left menu, expand **Build** and click **Firestore Database**.
+4. Click **Create database**. 
+5. Select **Start in test mode** (this allows you to read/write data easily during local development) and click **Next** -> **Enable**.
+6. **To get your API keys:** Go back to the **Project Overview** (home icon), click the **⚙️ Gear icon** -> **Project settings**.
+7. Scroll down to the **Your apps** section, click the **Web icon (`</>`)**, and register the app.
+8. Copy the generated `firebaseConfig` variables into your `frontend/src/environments/environment.ts` and `environment.development.ts` files.
 
 ### FAQ
 
