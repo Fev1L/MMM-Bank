@@ -1,5 +1,5 @@
 export const environment = {
-  production: false,
+  production: true,   In the environment.development file, you need to set the value to false
   firebase: {
     apiKey: "YOUR_API_KEY",
     authDomain: "your-project.firebaseapp.com",
@@ -8,5 +8,5 @@ export const environment = {
     messagingSenderId: "your-id",
     appId: "your-app-id"
   },
-  apiUrl: 'http://localhost:8000/api' // URL to your Django backend
+  apiUrl: 'http://localhost:8000' // URL to your Django backend
 };
